@@ -2505,7 +2505,13 @@ export default function QuotationApp() {
       }
 
       doc.setFontSize(10);
+
+      // --- התחלת הדגשה ---
+      doc.setFont("helvetica", "bold");
       doc.text("Commercial Terms:", 14, finalY);
+      doc.setFont("helvetica", "normal");
+      // --- סיום הדגשה ---
+
       finalY += 5;
       doc.setFontSize(9);
       doc.text(`Payment: ${terms.payment}`, 14, finalY);
