@@ -3331,4 +3331,4 @@ export default function QuotationApp() {
       </div>
     </div>
   );
-}
+} // Update price fix
