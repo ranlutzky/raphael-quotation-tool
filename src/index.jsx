@@ -1,13 +1,13 @@
-import { StrictMode } from "react";
+import React from "react";
 import { createRoot } from "react-dom/client";
-
-import App from "./App";
+import QuotationApp from "./App"; // וודא שהקוד ששלחת שמור בקובץ App.js
+import "./styles.css"; // (אופציונלי - ראה הערה למטה על Tailwind)
 
 const rootElement = document.getElementById("root");
 const root = createRoot(rootElement);
 
 root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
+  <React.StrictMode>
+    <QuotationApp />
+  </React.StrictMode>
 );
