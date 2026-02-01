@@ -77,7 +77,15 @@ const addSize2_5 = (priceList) => {
   return newPriceList;
 };
 
-// פונקציה לפורמט תאריך מהודר (February 1st, 2026)
+// Helper to ensure strict 2 decimal places display
+const formatCurrency = (amount, symbol = "") => {
+  const num = Number(amount) || 0;
+  return `${symbol}${num.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+};
+
 const getFormattedDate = () => {
   const date = new Date();
   const day = date.getDate();
@@ -181,7 +189,6 @@ const ACCESSORIES_DB = {
   "Solenoid Ex-Proof 120VAC 3way": 750,
 };
 
-// מיון מפתחות האביזרים לפי סדר אלפביתי
 const SORTED_ACCESSORIES_KEYS = Object.keys(ACCESSORIES_DB).sort((a, b) =>
   a.localeCompare(b)
 );
@@ -2464,9 +2471,11 @@ export default function QuotationApp() {
           item.qty,
           financials.unitPrice.toLocaleString(undefined, {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           }),
           financials.total.toLocaleString(undefined, {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           }),
         ];
       });
@@ -2482,6 +2491,7 @@ export default function QuotationApp() {
           "Subtotal:",
           `${currencySymbol}${subTotal.toLocaleString(undefined, {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`,
         ],
       ];
@@ -2496,6 +2506,7 @@ export default function QuotationApp() {
           "Packing & Handling (3.5%):",
           `${currencySymbol}${packingCost.toLocaleString(undefined, {
             minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
           })}`,
         ]);
       }
@@ -2509,6 +2520,7 @@ export default function QuotationApp() {
         "GRAND TOTAL:",
         `${currencySymbol}${grandTotal.toLocaleString(undefined, {
           minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
         })}`,
       ]);
 
@@ -2668,13 +2680,13 @@ export default function QuotationApp() {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 p-8 font-sans text-gray-900"
+      className="min-h-screen bg-gray-50 p-2 md:p-8 font-sans text-gray-900"
       dir="ltr"
     >
       <div className="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
         {/* Header */}
-        <div className="bg-blue-900 text-white p-6 flex justify-between items-center">
-          <div className="flex flex-col">
+        <div className="bg-blue-900 text-white p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <div className="flex flex-col items-center md:items-start w-full md:w-auto">
             <img
               src="/raphael_logo_final.png"
               alt="Raphael Valves Logo"
@@ -2683,12 +2695,12 @@ export default function QuotationApp() {
                 e.target.style.display = "none";
               }}
             />
-            <h1 className="text-3xl font-bold uppercase">
+            <h1 className="text-2xl md:text-3xl font-bold uppercase text-center md:text-left">
               RAPHAEL VALVES QUOTATION FORM
             </h1>
 
-            <div className="flex flex-col gap-2 mt-2 bg-blue-800 p-2 rounded">
-              <div className="flex items-center gap-2">
+            <div className="flex flex-col gap-2 mt-2 bg-blue-800 p-2 rounded w-full md:w-auto">
+              <div className="flex items-center gap-2 justify-between md:justify-start">
                 <span className="text-blue-200 text-xs">Ref:</span>
                 <span className="font-mono font-bold text-white">{ref}</span>
                 <button
@@ -2698,7 +2710,7 @@ export default function QuotationApp() {
                   + ID
                 </button>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 justify-between md:justify-start">
                 <span className="text-blue-200 text-xs">Prepared By:</span>
                 <select
                   className="text-black text-xs rounded p-1"
@@ -2715,8 +2727,8 @@ export default function QuotationApp() {
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="text-right">
+          <div className="flex flex-col items-end gap-4 w-full md:w-auto">
+            <div className="text-right w-full flex justify-between md:block">
               <label className="block text-xs text-blue-200">Currency</label>
               <select
                 className="text-black rounded px-2 py-1 text-sm font-bold"
@@ -2728,16 +2740,16 @@ export default function QuotationApp() {
               </select>
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div className="flex gap-2 w-full justify-center md:justify-end">
               <button
                 onClick={handleExportPDF}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm"
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
               >
                 Export PDF
               </button>
               <button
                 onClick={handleExportExcel}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow text-sm"
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
               >
                 Export Excel
               </button>
@@ -2746,11 +2758,11 @@ export default function QuotationApp() {
         </div>
 
         {/* Customer Info */}
-        <div className="p-6 bg-gray-100 border-b">
+        <div className="p-4 md:p-6 bg-gray-100 border-b">
           <h3 className="text-sm font-bold text-black mb-3 uppercase">
             Customer Details
           </h3>
-          <div className="grid grid-cols-5 gap-4 items-end">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
             <div>
               <label className="block text-[10px] text-gray-500">
                 Company Name
@@ -2817,47 +2829,49 @@ export default function QuotationApp() {
         </div>
 
         {/* Action Bar */}
-        <div className="p-4 flex gap-4 border-b bg-white">
-          <button
-            onClick={() => addItem(CATEGORIES.VALVES)}
-            className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded shadow flex items-center gap-2"
-          >
-            <span>+ Add Valve</span>
-          </button>
-          <button
-            onClick={() => addItem(CATEGORIES.ACCESSORIES)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded shadow"
-          >
-            + Add Accessory
-          </button>
-          <button
-            onClick={() => addItem(CATEGORIES.SPARE_PARTS)}
-            className="bg-amber-800 hover:bg-amber-900 text-white px-4 py-2 rounded shadow"
-          >
-            + Add Spare Part
-          </button>
-          <button
-            onClick={() => addItem(CATEGORIES.DIAPHRAGMS)}
-            className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded shadow"
-          >
-            + Add Diaphragm
-          </button>
-          <button
-            onClick={() => addItem(CATEGORIES.FREE_TEXT)}
-            className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded shadow"
-          >
-            + Add Free Text
-          </button>
+        <div className="p-4 bg-white border-b">
+          <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:gap-4">
+            <button
+              onClick={() => addItem(CATEGORIES.VALVES)}
+              className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded shadow flex items-center justify-center gap-1 text-xs md:text-sm"
+            >
+              <span>+ Add Valve</span>
+            </button>
+            <button
+              onClick={() => addItem(CATEGORIES.ACCESSORIES)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
+            >
+              + Add Accessory
+            </button>
+            <button
+              onClick={() => addItem(CATEGORIES.SPARE_PARTS)}
+              className="bg-amber-800 hover:bg-amber-900 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
+            >
+              + Add Spare Part
+            </button>
+            <button
+              onClick={() => addItem(CATEGORIES.DIAPHRAGMS)}
+              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
+            >
+              + Add Diaphragm
+            </button>
+            <button
+              onClick={() => addItem(CATEGORIES.FREE_TEXT)}
+              className="bg-teal-500 hover:bg-teal-600 text-white px-3 py-2 rounded shadow text-xs md:text-sm col-span-2 md:col-span-1"
+            >
+              + Add Free Text
+            </button>
+          </div>
         </div>
 
         {/* Items Table */}
-        <div className="p-6 overflow-x-auto min-h-[400px]">
+        <div className="p-2 md:p-6 overflow-x-auto min-h-[400px]">
           {items.length === 0 ? (
             <div className="text-center text-gray-400 py-10">
               Start by adding items from the menu above
             </div>
           ) : (
-            <table className="w-full text-sm text-left border-collapse">
+            <table className="w-full text-sm text-left border-collapse min-w-[800px]">
               <thead className="text-xs text-black uppercase bg-gray-200">
                 <tr>
                   <th className="px-2 py-3 border-b border-gray-300 w-20">
@@ -3106,11 +3120,10 @@ export default function QuotationApp() {
                         ) : (
                           <>
                             <div className="font-mono font-bold text-blue-900">
-                              {currencySymbol}
-                              {financials.unitPrice.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                              })}
+                              {formatCurrency(
+                                financials.unitPrice,
+                                currencySymbol
+                              )}
                             </div>
                             {(financials.bodyAdder > 0 ||
                               financials.trimAdder > 0) && (
@@ -3144,11 +3157,7 @@ export default function QuotationApp() {
                       </td>
 
                       <td className="px-2 py-3 text-right font-bold text-lg text-black">
-                        {currencySymbol}
-                        {financials.total.toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
+                        {formatCurrency(financials.total, currencySymbol)}
                       </td>
 
                       <td className="px-2 py-3 text-center">
@@ -3168,11 +3177,11 @@ export default function QuotationApp() {
         </div>
 
         {/* Commercial Terms Editor */}
-        <div className="bg-gray-100 p-6 border-t mt-4">
+        <div className="bg-gray-100 p-4 md:p-6 border-t mt-4">
           <h4 className="text-sm font-bold text-black mb-2 uppercase">
             Commercial Terms
           </h4>
-          <div className="grid grid-cols-4 gap-4 text-sm">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
             {/* Payment Term - Select + Custom Input Logic */}
             <div>
               <label className="block text-xs font-bold text-black">
@@ -3276,19 +3285,16 @@ export default function QuotationApp() {
         </div>
 
         {/* Footer Totals */}
-        <div className="bg-gray-200 p-6 border-t">
+        <div className="bg-gray-200 p-4 md:p-6 border-t">
           <div className="flex flex-col items-end gap-2">
-            <div className="flex justify-between w-64 text-sm text-black">
+            <div className="flex justify-between w-full md:w-64 text-sm text-black">
               <span>Subtotal:</span>
               <span className="font-mono">
-                {currencySymbol}
-                {subTotal.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                })}
+                {formatCurrency(subTotal, currencySymbol)}
               </span>
             </div>
 
-            <div className="flex justify-between w-64 text-sm text-black border-b border-gray-400 pb-2">
+            <div className="flex justify-between w-full md:w-64 text-sm text-black border-b border-gray-400 pb-2">
               <div className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -3303,21 +3309,13 @@ export default function QuotationApp() {
                   !includePacking ? "text-gray-400 line-through" : ""
                 }`}
               >
-                {currencySymbol}
-                {packingCost.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                })}
+                {formatCurrency(packingCost, currencySymbol)}
               </span>
             </div>
 
-            <div className="flex justify-between w-64 text-xl font-bold text-blue-900 pt-1">
+            <div className="flex justify-between w-full md:w-64 text-xl font-bold text-blue-900 pt-1">
               <span>Grand Total:</span>
-              <span>
-                {currencySymbol}
-                {grandTotal.toLocaleString(undefined, {
-                  minimumFractionDigits: 2,
-                })}
-              </span>
+              <span>{formatCurrency(grandTotal, currencySymbol)}</span>
             </div>
 
             <button
@@ -3331,4 +3329,4 @@ export default function QuotationApp() {
       </div>
     </div>
   );
-} // Update price fix
+}
