@@ -9,9 +9,30 @@
 
   // These tasks can be run from CodeSandbox. Running one will open a log in the app.
   "tasks": {
-    "install": {
-      "name": "install dependencies",
-      "command": "pnpm install"
+    "start": {
+      "name": "start",
+      "command": "pnpm start",
+      "runAtStart": true
+    },
+    "build": {
+      "name": "build",
+      "command": "pnpm build"
+    },
+    "test": {
+      "name": "test",
+      "command": "pnpm test"
+    },
+    "eject": {
+      "name": "eject",
+      "command": "pnpm eject"
+    },
+    "Development": {
+      "name": "Development",
+      "command": "pnpm dev",
+      "runAtStart": true,
+      "preview": {
+        "port": 5173
+      }
     }
   }
 }
