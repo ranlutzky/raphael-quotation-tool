@@ -172,7 +172,6 @@ const SIGNATURES = {
 const PAYMENT_PRESETS = ["AS USUAL", "ADVANCED", "NET +30", "NET +60"];
 const DELIVERY_PRESETS = ["EXW", "FOB", "C&F"];
 
-// פונקציית עזר לחישוב מחירים - מוגדרת בהתחלה כדי למנוע שגיאות
 const addSize2_5 = (priceList) => {
   if (!priceList) return {};
   const newPriceList = { ...priceList };
@@ -817,467 +816,6 @@ const PRICES_STD_USD_RAW = {
   "FPS-SCE1": {
     '1.5"': 3721,
     '2"': 3721,
-    '3"': 3934,
-    '4"': 4936,
-    '6"': 6303,
-    '8"': 8885,
-    '10"': 10526,
-  },
-  "FPS-DIE0": {
-    '1.5"': 3113,
-    '2"': 3113,
-    '3"': 3463,
-    '4"': 4113,
-    '6"': 5239,
-    '8"': 7365,
-    '10"': 8716,
-  },
-  "FPS-DIC0": {
-    '1.5"': 3706,
-    '2"': 3706,
-    '3"': 4225,
-    '4"': 5188,
-    '6"': 6856,
-    '8"': 10005,
-    '10"': 12007,
-  },
-  "FPS-DCE0": {
-    '1.5"': 3558,
-    '2"': 3589,
-    '3"': 3999,
-    '4"': 4720,
-    '6"': 6134,
-    '8"': 8913,
-    '10"': 10603,
-  },
-  "FPS-DCE1": {
-    '1.5"': 3808,
-    '2"': 3808,
-    '3"': 4256,
-    '4"': 5087,
-    '6"': 6525,
-    '8"': 9243,
-    '10"': 10969,
-  },
-  "FPS-DIE1": {
-    '1.5"': 2744,
-    '2"': 2744,
-    '3"': 3043,
-    '4"': 3597,
-    '6"': 4557,
-    '8"': 6370,
-    '10"': 7522,
-  },
-  "FDV-R-PN2": {
-    '1.5"': 1284,
-    '2"': 1284,
-    '3"': 1531,
-    '4"': 1863,
-    '6"': 3192,
-    '8"': 4344,
-    '10"': 5145,
-    '12"': 7547,
-  },
-  "FDV-R-RN2": {
-    '1.5"': 1741,
-    '2"': 1741,
-    '3"': 1872,
-    '4"': 1915,
-    '6"': 3352,
-    '8"': 4501,
-    '10"': 5333,
-    '12"': 7829,
-  },
-  "FDV-R-LE2": {
-    '1.5"': 1238,
-    '2"': 1238,
-    '3"': 1611,
-    '4"': 1799,
-    '6"': 3020,
-    '8"': 3848,
-    '10"': 4549,
-    '12"': 6654,
-  },
-  "FDV-R-LF2": {
-    '1.5"': 2532,
-    '2"': 2532,
-    '3"': 2733,
-    '4"': 2972,
-    '6"': 4381,
-    '8"': 5276,
-    '10"': 6079,
-    '12"': 8489,
-  },
-  "FDV-R-LA2": {
-    '1.5"': 3020,
-    '2"': 3020,
-    '3"': 3224,
-    '4"': 3939,
-    '6"': 4708,
-    '8"': 5999,
-    '10"': 6946,
-    '12"': 9790,
-  },
-};
-
-const PRICES_HG_USD_RAW = {
-  "FDV-DE0": {
-    '1.5"': 2906,
-    '2"': 2906,
-    '2.5"': 3083,
-    '3"': 3260,
-    '4"': 3917,
-    '6"': 5055,
-    '8"': 7204,
-    '10"': 8569,
-  },
-  "FDV-DP0": {
-    '1.5"': 3011,
-    '2"': 3011,
-    '2.5"': 3188,
-    '3"': 3365,
-    '4"': 4022,
-    '6"': 5159,
-    '8"': 7308,
-    '10"': 8673,
-  },
-  "FDV-DC0": {
-    '1.5"': 3645,
-    '2"': 3645,
-    '2.5"': 3865,
-    '3"': 4085,
-    '4"': 4902,
-    '6"': 6315,
-    '8"': 8985,
-    '10"': 10681,
-  },
-  "FDV-DH0": {
-    '1.5"': 2520,
-    '2"': 2520,
-    '2.5"': 2670,
-    '3"': 2820,
-    '4"': 3377,
-    '6"': 4341,
-    '8"': 6162,
-    '10"': 7318,
-  },
-  "FDV-DA0": {
-    '1.5"': 3043,
-    '2"': 3043,
-    '2.5"': 3229,
-    '3"': 3416,
-    '4"': 4109,
-    '6"': 5308,
-    '8"': 7573,
-    '10"': 9012,
-  },
-  "FDV-DE1": {
-    '1.5"': 2509,
-    '2"': 2509,
-    '2.5"': 2663,
-    '3"': 2816,
-    '4"': 3387,
-    '6"': 4374,
-    '8"': 6240,
-    '10"': 7424,
-  },
-  "FDV-3W-DE1": {
-    '1.5"': 2667,
-    '2"': 2667,
-    '2.5"': 2820,
-    '3"': 2974,
-    '4"': 3545,
-    '6"': 4532,
-    '8"': 6397,
-    '10"': 7582,
-  },
-  "FDV-DP1": {
-    '1.5"': 2614,
-    '2"': 2614,
-    '2.5"': 2768,
-    '3"': 2921,
-    '4"': 3492,
-    '6"': 4479,
-    '8"': 6345,
-    '10"': 7529,
-  },
-  "FDV-DC1": {
-    '1.5"': 3119,
-    '2"': 3119,
-    '2.5"': 3316,
-    '3"': 3512,
-    '4"': 4241,
-    '6"': 5503,
-    '8"': 7887,
-    '10"': 9401,
-  },
-  "FDV-DH1": {
-    '1.5"': 2186,
-    '2"': 2186,
-    '2.5"': 2317,
-    '3"': 2448,
-    '4"': 2935,
-    '6"': 3777,
-    '8"': 5367,
-    '10"': 6377,
-  },
-  "FDV-3W-DH1": {
-    '1.5"': 2186,
-    '2"': 2186,
-    '2.5"': 2317,
-    '3"': 2448,
-    '4"': 2935,
-    '6"': 3777,
-    '8"': 5367,
-    '10"': 6377,
-  },
-  "FDV-DA1": {
-    '1.5"': 2647,
-    '2"': 2647,
-    '2.5"': 2810,
-    '3"': 2973,
-    '4"': 3579,
-    '6"': 4628,
-    '8"': 6610,
-    '10"': 7869,
-  },
-  "FDV-PE0": {
-    '1.5"': 3473,
-    '2"': 3473,
-    '2.5"': 3746,
-    '3"': 4018,
-    '4"': 4484,
-    '6"': 5622,
-    '8"': 7998,
-    '10"': 9522,
-  },
-  "FDV-PP0": {
-    '1.5"': 3746,
-    '2"': 3746,
-    '2.5"': 3923,
-    '3"': 4100,
-    '4"': 4757,
-    '6"': 5894,
-    '8"': 8270,
-    '10"': 9793,
-  },
-  "FDV-PC0": {
-    '1.5"': 4212,
-    '2"': 4212,
-    '2.5"': 4432,
-    '3"': 4652,
-    '4"': 5469,
-    '6"': 6882,
-    '8"': 9779,
-    '10"': 11634,
-  },
-  "FDV-PH0": {
-    '1.5"': 3087,
-    '2"': 3087,
-    '2.5"': 3237,
-    '3"': 3387,
-    '4"': 3944,
-    '6"': 4908,
-    '8"': 6956,
-    '10"': 8271,
-  },
-  "FDV-PA0": {
-    '1.5"': 3610,
-    '2"': 3610,
-    '2.5"': 3796,
-    '3"': 3983,
-    '4"': 4676,
-    '6"': 5875,
-    '8"': 8367,
-    '10"': 9965,
-  },
-  "FDV-PE1": {
-    '1.5"': 3076,
-    '2"': 3076,
-    '2.5"': 3230,
-    '3"': 3383,
-    '4"': 3954,
-    '6"': 4941,
-    '8"': 7033,
-    '10"': 8377,
-  },
-  "FDV-PP1": {
-    '1.5"': 3349,
-    '2"': 3349,
-    '2.5"': 3503,
-    '3"': 3656,
-    '4"': 4227,
-    '6"': 5214,
-    '8"': 7306,
-    '10"': 8650,
-  },
-  "FDV-PC1": {
-    '1.5"': 3686,
-    '2"': 3686,
-    '2.5"': 3883,
-    '3"': 4079,
-    '4"': 4808,
-    '6"': 6070,
-    '8"': 8680,
-    '10"': 10354,
-  },
-  "FDV-PH1": {
-    '1.5"': 2478,
-    '2"': 2478,
-    '3"': 2714,
-    '4"': 3151,
-    '6"': 3909,
-    '8"': 5545,
-    '10"': 6597,
-  },
-  "FDV-PA1": {
-    '1.5"': 2892,
-    '2"': 2892,
-    '3"': 3186,
-    '4"': 3731,
-    '6"': 4676,
-    '8"': 6663,
-    '10"': 7939,
-  },
-  "FDV-AE1": {
-    '1.5"': 2112,
-    '2"': 2112,
-    '2.5"': 2233,
-    '3"': 2355,
-    '4"': 2806,
-    '6"': 3790,
-    '8"': 5774,
-    '10"': 6853,
-  },
-  "FDV-3W-AE1": {
-    '1.5"': 2269,
-    '2"': 2269,
-    '2.5"': 2391,
-    '3"': 2512,
-    '4"': 2963,
-    '6"': 3948,
-    '8"': 5932,
-    '10"': 7011,
-  },
-  "FDV-AP1": {
-    '1.5"': 2217,
-    '2"': 2217,
-    '2.5"': 2338,
-    '3"': 2460,
-    '4"': 2911,
-    '6"': 3895,
-    '8"': 5879,
-    '10"': 6958,
-  },
-  "FDV-AC1": {
-    '1.5"': 2589,
-    '2"': 2589,
-    '2.5"': 2743,
-    '3"': 2898,
-    '4"': 3473,
-    '6"': 4672,
-    '8"': 7061,
-    '10"': 8398,
-  },
-  "FDV-AH1": {
-    '1.5"': 1887,
-    '2"': 1887,
-    '2.5"': 1993,
-    '3"': 2099,
-    '4"': 2797,
-    '6"': 3375,
-    '8"': 5168,
-    '10"': 6126,
-  },
-  "FDV-3W-AH1": {
-    '1.5"': 1887,
-    '2"': 1887,
-    '2.5"': 1993,
-    '3"': 2099,
-    '4"': 2797,
-    '6"': 3375,
-    '8"': 5168,
-    '10"': 6126,
-  },
-  "FDV-R-HH0": { '1.5"': 1697, '2"': 1697, '2.5"': 1798, '3"': 1899 },
-  "FDV-R-HHP": { '1.5"': 2163, '2"': 2163, '2.5"': 2264, '3"': 2365 },
-  "FDV-R-MH0": {
-    '1.5"': 1439,
-    '2"': 1439,
-    '2.5"': 1521,
-    '3"': 1603,
-    '4"': 2146,
-    '6"': 2595,
-    '8"': 3990,
-    '10"': 4735,
-    '12"': 6914,
-  },
-  "FDV-R-MH1": {
-    '1.5"': 1552,
-    '2"': 1552,
-    '2.5"': 1634,
-    '3"': 1716,
-    '4"': 2260,
-    '6"': 2709,
-    '8"': 4104,
-    '10"': 4849,
-    '12"': 7084,
-  },
-  "FDV-R-ME1": {
-    '1.5"': 1727,
-    '2"': 1727,
-    '2.5"': 1821,
-    '3"': 1915,
-    '4"': 2266,
-    '6"': 3032,
-    '8"': 4575,
-    '10"': 5414,
-    '12"': 7933,
-  },
-  "FPS-SIE0": {
-    '1.5"': 3565,
-    '2"': 3565,
-    '2.5"': 3767,
-    '3"': 3968,
-    '4"': 4718,
-    '6"': 6015,
-    '8"': 8465,
-    '10"': 10021,
-  },
-  "FPS-SIP0": {
-    '1.5"': 3564,
-    '2"': 3564,
-    '2.5"': 3766,
-    '3"': 3968,
-    '4"': 4717,
-    '6"': 6014,
-    '8"': 8463,
-    '10"': 10019,
-  },
-  "FPS-SCE0": {
-    '1.5"': 4407,
-    '2"': 4407,
-    '2.5"': 4658,
-    '3"': 4909,
-    '4"': 5840,
-    '6"': 7451,
-    '8"': 10495,
-    '10"': 12429,
-  },
-  "FPS-SIE1": {
-    '1.5"': 3125,
-    '2"': 3125,
-    '2.5"': 3296,
-    '3"': 3467,
-    '4"': 4102,
-    '6"': 5201,
-    '8"': 7276,
-    '10"': 8595,
-  },
-  "FPS-SCE1": {
-    '1.5"': 3721,
-    '2"': 3721,
-    '2.5"': 3934,
     '3"': 4146,
     '4"': 4936,
     '6"': 6303,
@@ -1287,7 +825,6 @@ const PRICES_HG_USD_RAW = {
   "FPS-DIE0": {
     '1.5"': 3113,
     '2"': 3113,
-    '2.5"': 3288,
     '3"': 3463,
     '4"': 4113,
     '6"': 5239,
@@ -1297,7 +834,6 @@ const PRICES_HG_USD_RAW = {
   "FPS-DIC0": {
     '1.5"': 3706,
     '2"': 3706,
-    '2.5"': 3965,
     '3"': 4225,
     '4"': 5188,
     '6"': 6856,
@@ -1307,7 +843,6 @@ const PRICES_HG_USD_RAW = {
   "FPS-DCE0": {
     '1.5"': 3558,
     '2"': 3589,
-    '2.5"': 3794,
     '3"': 3999,
     '4"': 4720,
     '6"': 6134,
@@ -1317,7 +852,6 @@ const PRICES_HG_USD_RAW = {
   "FPS-DCE1": {
     '1.5"': 3808,
     '2"': 3808,
-    '2.5"': 4032,
     '3"': 4256,
     '4"': 5087,
     '6"': 6525,
@@ -1327,7 +861,6 @@ const PRICES_HG_USD_RAW = {
   "FPS-DIE1": {
     '1.5"': 2744,
     '2"': 2744,
-    '2.5"': 2893,
     '3"': 3043,
     '4"': 3597,
     '6"': 4557,
@@ -1335,20 +868,18 @@ const PRICES_HG_USD_RAW = {
     '10"': 7522,
   },
   "FDV-R-PN2": {
-    '1.5"': 1284,
-    '2"': 1284,
-    '2.5"': 1492,
-    '3"': 1701,
-    '4"': 2070,
-    '6"': 3546,
-    '8"': 4827,
-    '10"': 5717,
-    '12"': 8386,
+    '1.5"': 830,
+    '2"': 830,
+    '3"': 1213,
+    '4"': 1551,
+    '6"': 2904,
+    '8"': 4078,
+    '10"': 4894,
+    '12"': 7340,
   },
   "FDV-R-RN2": {
     '1.5"': 1741,
     '2"': 1741,
-    '2.5"': 1807,
     '3"': 1872,
     '4"': 2128,
     '6"': 3725,
@@ -1359,7 +890,6 @@ const PRICES_HG_USD_RAW = {
   "FDV-R-LE2": {
     '1.5"': 1238,
     '2"': 1238,
-    '2.5"': 1425,
     '3"': 1611,
     '4"': 1999,
     '6"': 3355,
@@ -1370,7 +900,6 @@ const PRICES_HG_USD_RAW = {
   "FDV-R-LF2": {
     '1.5"': 2532,
     '2"': 2532,
-    '2.5"': 2633,
     '3"': 2733,
     '4"': 2972,
     '6"': 4381,
@@ -1381,7 +910,6 @@ const PRICES_HG_USD_RAW = {
   "FDV-R-LA2": {
     '1.5"': 3020,
     '2"': 3020,
-    '2.5"': 3122,
     '3"': 3224,
     '4"': 3939,
     '6"': 4708,
@@ -1878,7 +1406,7 @@ const OPTIONS = {
 export default function QuotationApp() {
   const loadSavedData = () => {
     try {
-      const saved = localStorage.getItem("RAPHAEL_APP_V3"); // Changed key
+      const saved = localStorage.getItem("RAPHAEL_QUOTATION_DATA");
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
       console.error("Local Storage Error", e);
@@ -1888,7 +1416,7 @@ export default function QuotationApp() {
 
   const loadSavedCustomers = () => {
     try {
-      const saved = localStorage.getItem("RAPHAEL_CUSTOMERS_V3"); // Changed key
+      const saved = localStorage.getItem("RAPHAEL_CUSTOMERS");
       return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
     } catch (e) {
       console.error("Local Storage Customers Error", e);
@@ -1938,7 +1466,7 @@ export default function QuotationApp() {
       refSuffix,
       includePacking,
     };
-    localStorage.setItem("RAPHAEL_APP_V3", JSON.stringify(dataToSave)); // Changed key
+    localStorage.setItem("RAPHAEL_QUOTATION_DATA", JSON.stringify(dataToSave));
   }, [items, cust, salesPerson, currency, terms, refSuffix, includePacking]);
 
   const saveCustomerToList = (customerName) => {
@@ -1949,7 +1477,7 @@ export default function QuotationApp() {
         a.localeCompare(b)
       );
       setCustomerList(newList);
-      localStorage.setItem("RAPHAEL_CUSTOMERS_V3", JSON.stringify(newList)); // Changed key
+      localStorage.setItem("RAPHAEL_CUSTOMERS", JSON.stringify(newList));
     }
   };
 
@@ -1982,14 +1510,13 @@ export default function QuotationApp() {
       size: "",
       qty: 1,
       discount: initialDiscount,
-      isHighGrade: false,
       bodyMat: "",
-      trimMat: "Copper/Brass", // Default value
+      trimMat: "Copper/Brass", // Default value for new items
       connType: "",
-      isIncluded: false, // Default: not included/merged
-      isEditing: false, // Default: not editing
-      customDesc: "", // Stores manual description overrides
-      customPrice: 0, // Stores manual price overrides (if any)
+      isIncluded: false, // Default
+      isEditing: false, // Default
+      customDesc: "",
+      customPrice: 0,
     };
     setItems([...items, newItem]);
   };
@@ -2019,15 +1546,13 @@ export default function QuotationApp() {
         validity: "30 Days",
       });
       setIncludePacking(true);
-      // We don't remove the key, just clear state to avoid refresh issues
-      // localStorage.removeItem("RAPHAEL_APP_V3");
+      localStorage.removeItem("RAPHAEL_QUOTATION_DATA");
     }
   };
 
   const calculateRow = (item) => {
-    // If the user manually edited the price, use that.
-    if (item.customPrice > 0) {
-      // Assuming custom price entered is the UNIT NET PRICE
+    // Manually edited price overrides calculation
+    if (item.customPrice && item.customPrice > 0) {
       return {
         basePrice: item.customPrice,
         unitPrice: item.customPrice,
@@ -2056,9 +1581,12 @@ export default function QuotationApp() {
       let isHG = false;
       let isSeaWater = false;
 
-      if (item.trimMat === "Full Sea Water Trim") {
+      // Safety check for trimMat (handle old data)
+      const currentTrim = item.trimMat || "Copper/Brass";
+
+      if (currentTrim === "Full Sea Water Trim") {
         isSeaWater = true;
-      } else if (item.trimMat && item.trimMat !== "Copper/Brass") {
+      } else if (currentTrim !== "Copper/Brass") {
         isHG = true;
       }
 
@@ -2130,7 +1658,7 @@ export default function QuotationApp() {
       if (index === -1) return currentItems;
 
       const item = currentItems[index];
-      const newStatus = !item.isIncluded;
+      const newStatus = !item.isIncluded; // Toggle
 
       // Check if there is a valve above
       if (newStatus) {
@@ -2155,7 +1683,6 @@ export default function QuotationApp() {
 
   const removeItem = (id) => setItems(items.filter((i) => i.id !== id));
 
-  // --- Calculate Grand Total (Includes merged items) ---
   const subTotal = items.reduce(
     (sum, item) => sum + calculateRow(item).total,
     0
@@ -2164,7 +1691,7 @@ export default function QuotationApp() {
   const grandTotal = subTotal + packingCost;
   const currencySymbol = currency === "USD" ? "$" : "€";
 
-  // --- Export Logic with Merge ---
+  // --- Export Logic Helper ---
   const getExportData = () => {
     const exportItems = [];
     let lastValveIndex = -1;
@@ -2172,7 +1699,8 @@ export default function QuotationApp() {
     items.forEach((item) => {
       const financials = calculateRow(item);
       let desc = item.customDesc || item.code;
-      // Default description logic if no custom override
+
+      // Generate default description if no custom override
       if (!item.customDesc) {
         if (item.category === CATEGORIES.VALVES) {
           desc = PRODUCTS_DB[item.code]?.desc || item.code;
@@ -2192,8 +1720,7 @@ export default function QuotationApp() {
         // Merge into the last valve
         const valveItem = exportItems[lastValveIndex];
         valveItem.totalPrice += financials.total; // Add total price
-        // Append description
-        valveItem.desc += ` + ${desc} (Qty: ${item.qty})`;
+        valveItem.desc += ` + ${desc} (Qty: ${item.qty})`; // Append description
       } else {
         // Add as new row
         const newItem = {
@@ -2240,7 +1767,7 @@ export default function QuotationApp() {
           item.desc,
           item.size || "-",
           item.qty,
-          formatCurrency(item.unitPrice), // Note: Unit price for merged items shows original valve unit price usually, but total is updated.
+          formatCurrency(item.unitPrice),
           formatCurrency(item.totalPrice),
         ];
       });
@@ -2447,6 +1974,7 @@ export default function QuotationApp() {
         `Unit Price (${currencySymbol})`,
         `Total (${currencySymbol})`,
       ]);
+
       const exportItems = getExportData();
       exportItems.forEach((item, index) => {
         wsData.push([
@@ -2459,6 +1987,7 @@ export default function QuotationApp() {
           item.totalPrice,
         ]);
       });
+
       wsData.push([]);
       wsData.push(["", "", "", "", "Subtotal:", subTotal]);
       if (includePacking)
@@ -2867,9 +2396,12 @@ export default function QuotationApp() {
                   <th className="px-2 py-3 border-b border-gray-300 w-20 text-center">
                     Qty
                   </th>
+
+                  {/* CHANGED COLUMN HEADER */}
                   <th className="px-2 py-3 border-b border-gray-300 w-16 text-center">
                     Include
                   </th>
+
                   <th className="px-2 py-3 border-b border-gray-300 w-28 text-right bg-blue-50">
                     Unitary Price
                     <br />
@@ -2913,7 +2445,7 @@ export default function QuotationApp() {
                           <div className="flex flex-col gap-2">
                             <input
                               className="border p-1 text-black font-bold"
-                              value={item.code}
+                              value={item.code || ""}
                               onChange={(e) =>
                                 updateItem(item.id, "code", e.target.value)
                               }
@@ -2922,10 +2454,11 @@ export default function QuotationApp() {
                               className="border p-1 text-black w-full"
                               rows="2"
                               value={
-                                item.customDesc ||
-                                PRODUCTS_DB[item.code]?.desc ||
-                                item.code ||
-                                ""
+                                item.customDesc !== undefined
+                                  ? item.customDesc
+                                  : PRODUCTS_DB[item.code]?.desc ||
+                                    item.code ||
+                                    ""
                               }
                               onChange={(e) =>
                                 updateItem(
@@ -2971,8 +2504,8 @@ export default function QuotationApp() {
                                 value={item.code || ""}
                                 onChange={(e) => {
                                   updateItem(item.id, "code", e.target.value);
-                                  updateItem(item.id, "customDesc", ""); // Reset custom desc when code changes
-                                  updateItem(item.id, "customPrice", 0); // Reset custom price when code changes
+                                  updateItem(item.id, "customDesc", "");
+                                  updateItem(item.id, "customPrice", 0);
                                 }}
                               >
                                 <option value="">Select Item...</option>
@@ -2983,6 +2516,7 @@ export default function QuotationApp() {
                                 ))}
                               </select>
                             )}
+
                             {isValve && !item.isEditing && (
                               <div className="text-xs text-black mt-1 font-medium">
                                 {item.customDesc ||
@@ -2990,6 +2524,7 @@ export default function QuotationApp() {
                                   "Select model..."}
                               </div>
                             )}
+
                             {isValve && (
                               <div className="grid grid-cols-2 gap-2 mt-2 bg-gray-50 p-2 rounded border border-dashed">
                                 <div>
@@ -3000,7 +2535,7 @@ export default function QuotationApp() {
                                     className={`w-full text-xs border rounded text-black ${
                                       !item.bodyMat ? "text-gray-400" : ""
                                     }`}
-                                    value={item.bodyMat}
+                                    value={item.bodyMat || ""}
                                     onChange={(e) =>
                                       updateItem(
                                         item.id,
@@ -3025,7 +2560,7 @@ export default function QuotationApp() {
                                     className={`w-full text-xs border rounded text-black ${
                                       !item.trimMat ? "text-gray-400" : ""
                                     }`}
-                                    value={item.trimMat}
+                                    value={item.trimMat || "Copper/Brass"}
                                     onChange={(e) =>
                                       updateItem(
                                         item.id,
@@ -3050,7 +2585,7 @@ export default function QuotationApp() {
                                     className={`w-full text-xs border rounded text-black ${
                                       !item.connType ? "text-gray-400" : ""
                                     }`}
-                                    value={item.connType}
+                                    value={item.connType || ""}
                                     onChange={(e) =>
                                       updateItem(
                                         item.id,
@@ -3078,7 +2613,7 @@ export default function QuotationApp() {
                             className={`border rounded p-1 w-full text-center text-black ${
                               !item.size ? "text-gray-400" : ""
                             }`}
-                            value={item.size}
+                            value={item.size || ""}
                             onChange={(e) =>
                               updateItem(item.id, "size", e.target.value)
                             }
@@ -3099,14 +2634,14 @@ export default function QuotationApp() {
                           type="number"
                           min="1"
                           className="w-full border rounded p-2 text-center font-bold bg-white text-black shadow-sm"
-                          value={item.qty}
+                          value={item.qty || 1}
                           onChange={(e) =>
                             updateItem(item.id, "qty", parseInt(e.target.value))
                           }
                         />
                       </td>
 
-                      {/* INCLUDE / EDIT COLUMN */}
+                      {/* NEW INCLUDE / EDIT COLUMN */}
                       <td className="px-2 py-3 text-center flex flex-col items-center gap-2">
                         {!isValve && (
                           <div
@@ -3119,14 +2654,16 @@ export default function QuotationApp() {
                               checked={item.isIncluded || false}
                               onChange={() => toggleInclude(item.id)}
                             />
-                            <span className="text-[9px]">Incl.</span>
+                            <span className="text-[9px] text-gray-600">
+                              Incl.
+                            </span>
                           </div>
                         )}
                         <button
                           onClick={() =>
                             updateItem(item.id, "isEditing", !item.isEditing)
                           }
-                          className="text-gray-500 hover:text-blue-600"
+                          className="text-gray-500 hover:text-blue-600 p-1 rounded border border-transparent hover:border-gray-300"
                           title="Edit Description/Price"
                         >
                           ✏️
@@ -3139,13 +2676,15 @@ export default function QuotationApp() {
                             type="number"
                             className="w-full border rounded p-1 text-right font-mono font-bold text-blue-900"
                             value={
-                              item.isEditing ? item.customPrice : item.price
+                              item.isEditing
+                                ? item.customPrice || 0
+                                : item.price || ""
                             }
                             onChange={(e) =>
                               updateItem(
                                 item.id,
                                 item.isEditing ? "customPrice" : "price",
-                                e.target.value
+                                parseFloat(e.target.value)
                               )
                             }
                             placeholder="0.00"
@@ -3176,7 +2715,7 @@ export default function QuotationApp() {
                         <input
                           type="number"
                           className="w-full border rounded p-1 text-center text-red-600 font-bold bg-white"
-                          value={item.discount}
+                          value={item.discount || 0}
                           disabled={isFreeText}
                           onChange={(e) =>
                             updateItem(
