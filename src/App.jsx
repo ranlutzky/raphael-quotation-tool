@@ -177,10 +177,8 @@ const addSize2_5 = (priceList) => {
   const newPriceList = { ...priceList };
   Object.keys(newPriceList).forEach((key) => {
     const item = newPriceList[key];
-    // בודק אם קיים 2 ו-3 אינץ', ואם 2.5 אינץ' *חסר*
     if (item && item['2"'] && item['3"'] && !item['2.5"']) {
       const avg = (item['2"'] + item['3"']) / 2;
-      // מוסיף את ה-2.5 לרשומה
       newPriceList[key] = { ...item, '2.5"': avg };
     }
   });
@@ -220,7 +218,7 @@ const getFormattedDate = () => {
 
 const DIAPHRAGMS_DB = {
   'Deluge (FDV) Diaphragm 2"': 70,
-  'Deluge (FDV) Diaphragm 2.5"': 94.5, // --- הוספתי שורה זו (ממוצע של 2 ו-3) ---
+  'Deluge (FDV) Diaphragm 2.5"': 94.5,
   'Deluge (FDV) Diaphragm 3"': 119,
   'Deluge (FDV) Diaphragm 4"': 208,
   'Deluge (FDV) Diaphragm 6"': 358,
@@ -493,7 +491,6 @@ const PRODUCTS_DB = {
   "FDV-R-LA2": { desc: "Altitude Control Valve", category: CATEGORIES.VALVES },
 };
 
-// --- PRICES RAW DATA ---
 const PRICES_STD_USD_RAW = {
   "FDV-DE0": {
     '1.5"': 2317,
@@ -818,7 +815,7 @@ const PRICES_STD_USD_RAW = {
   "FPS-SCE1": {
     '1.5"': 3721,
     '2"': 3721,
-    '3"': 3934,
+    '3"': 4146,
     '4"': 4936,
     '6"': 6303,
     '8"': 8885,
@@ -1389,433 +1386,6 @@ const PRICES_HG_USD_RAW = {
     '8"': 5999,
     '10"': 6946,
     '12"': 9790,
-  },
-};
-
-const PRICES_STD_EUR_RAW = {
-  "FDV-DE0": {
-    '1.5"': 2086,
-    '2"': 2086,
-    '3"': 2378,
-    '4"': 2920,
-    '6"': 3859,
-    '8"': 5631,
-    '10"': 6758,
-  },
-  "FDV-DP0": {
-    '1.5"': 2180,
-    '2"': 2180,
-    '3"': 2472,
-    '4"': 3014,
-    '6"': 3952,
-    '8"': 5725,
-    '10"': 6851,
-  },
-  "FDV-DC0": {
-    '1.5"': 2591,
-    '2"': 2591,
-    '3"': 2954,
-    '4"': 3628,
-    '6"': 4794,
-    '8"': 6997,
-    '10"': 8396,
-  },
-  "FDV-DH0": {
-    '1.5"': 1767,
-    '2"': 1767,
-    '3"': 2015,
-    '4"': 2474,
-    '6"': 3269,
-    '8"': 4772,
-    '10"': 5726,
-  },
-  "FDV-DA0": {
-    '1.5"': 2199,
-    '2"': 2199,
-    '3"': 2506,
-    '4"': 3078,
-    '6"': 4067,
-    '8"': 5936,
-    '10"': 7123,
-  },
-  "FDV-DE1": {
-    '1.5"': 1810,
-    '2"': 1810,
-    '3"': 2064,
-    '4"': 2534,
-    '6"': 3349,
-    '8"': 4888,
-    '10"': 5865,
-  },
-  "FDV-3W-DE1": {
-    '1.5"': 1952,
-    '2"': 1952,
-    '3"': 2205,
-    '4"': 2676,
-    '6"': 3491,
-    '8"': 5030,
-    '10"': 6007,
-  },
-  "FDV-DP1": {
-    '1.5"': 1905,
-    '2"': 1905,
-    '3"': 2158,
-    '4"': 2629,
-    '6"': 3444,
-    '8"': 4982,
-    '10"': 5960,
-  },
-  "FDV-DC1": {
-    '1.5"': 2314,
-    '2"': 2314,
-    '3"': 2637,
-    '4"': 3239,
-    '6"': 4280,
-    '8"': 6247,
-    '10"': 7496,
-  },
-  "FDV-DH1": {
-    '1.5"': 1544,
-    '2"': 1544,
-    '3"': 1780,
-    '4"': 2161,
-    '6"': 2856,
-    '8"': 4168,
-    '10"': 5001,
-  },
-  "FDV-3W-DH1": {
-    '1.5"': 1544,
-    '2"': 1544,
-    '3"': 1780,
-    '4"': 2161,
-    '6"': 2856,
-    '8"': 4168,
-    '10"': 5001,
-  },
-  "FDV-DA1": {
-    '1.5"': 1923,
-    '2"': 1923,
-    '3"': 2193,
-    '4"': 2693,
-    '6"': 3558,
-    '8"': 5193,
-    '10"': 6232,
-  },
-  "FDV-PE0": {
-    '1.5"': 2553,
-    '2"': 2553,
-    '3"': 2988,
-    '4"': 3388,
-    '6"': 4326,
-    '8"': 6288,
-    '10"': 7544,
-  },
-  "FDV-PP0": {
-    '1.5"': 2799,
-    '2"': 2799,
-    '3"': 3091,
-    '4"': 3633,
-    '6"': 4571,
-    '8"': 6531,
-    '10"': 7788,
-  },
-  "FDV-PC0": {
-    '1.5"': 3059,
-    '2"': 3059,
-    '3"': 3422,
-    '4"': 4096,
-    '6"': 5262,
-    '8"': 7652,
-    '10"': 9182,
-  },
-  "FDV-PH0": {
-    '1.5"': 2235,
-    '2"': 2235,
-    '3"': 2482,
-    '4"': 2942,
-    '6"': 3737,
-    '8"': 5426,
-    '10"': 6512,
-  },
-  "FDV-PA0": {
-    '1.5"': 2666,
-    '2"': 2666,
-    '3"': 2974,
-    '4"': 3546,
-    '6"': 4535,
-    '8"': 6591,
-    '10"': 7909,
-  },
-  "FDV-PE1": {
-    '1.5"': 2278,
-    '2"': 2278,
-    '3"': 2532,
-    '4"': 3002,
-    '6"': 3817,
-    '8"': 5543,
-    '10"': 6651,
-  },
-  "FDV-PP1": {
-    '1.5"': 2524,
-    '2"': 2524,
-    '3"': 2777,
-    '4"': 3248,
-    '6"': 4063,
-    '8"': 5788,
-    '10"': 6897,
-  },
-  "FDV-PC1": {
-    '1.5"': 2781,
-    '2"': 2781,
-    '3"': 3105,
-    '4"': 3707,
-    '6"': 4748,
-    '8"': 6901,
-    '10"': 8282,
-  },
-  "FDV-PH1": {
-    '1.5"': 2011,
-    '2"': 2011,
-    '3"': 2228,
-    '4"': 2629,
-    '6"': 3324,
-    '8"': 4823,
-    '10"': 5787,
-  },
-  "FDV-PA1": {
-    '1.5"': 2391,
-    '2"': 2391,
-    '3"': 2681,
-    '4"': 3161,
-    '6"': 4026,
-    '8"': 5848,
-    '10"': 7018,
-  },
-  "FDV-AE1": {
-    '1.5"': 1431,
-    '2"': 1431,
-    '3"': 1631,
-    '4"': 2003,
-    '6"': 2815,
-    '8"': 4452,
-    '10"': 5342,
-  },
-  "FDV-3W-AE1": {
-    '1.5"': 1572,
-    '2"': 1572,
-    '3"': 1773,
-    '4"': 2145,
-    '6"': 2957,
-    '8"': 4594,
-    '10"': 5484,
-  },
-  "FDV-AP1": {
-    '1.5"': 1525,
-    '2"': 1525,
-    '3"': 1725,
-    '4"': 2097,
-    '6"': 2909,
-    '8"': 4546,
-    '10"': 5437,
-  },
-  "FDV-AC1": {
-    '1.5"': 1824,
-    '2"': 1824,
-    '3"': 2079,
-    '4"': 2553,
-    '6"': 3542,
-    '8"': 5514,
-    '10"': 6616,
-  },
-  "FDV-AH1": {
-    '1.5"': 1245,
-    '2"': 1245,
-    '3"': 1420,
-    '4"': 1996,
-    '6"': 2472,
-    '8"': 3952,
-    '10"': 4742,
-  },
-  "FDV-3W-AH1": {
-    '1.5"': 1245,
-    '2"': 1245,
-    '3"': 1420,
-    '4"': 1996,
-    '6"': 2472,
-    '8"': 3952,
-    '10"': 4742,
-  },
-  "FDV-R-HH0": { '1.5"': 1192, '2"': 1192, '3"': 1359 },
-  "FDV-R-HHP": { '1.5"': 1473, '2"': 1473, '3"': 1640 },
-  "FDV-R-MH0": {
-    '1.5"': 875,
-    '2"': 875,
-    '3"': 1011,
-    '4"': 1459,
-    '6"': 1829,
-    '8"': 2980,
-    '10"': 3595,
-    '12"': 5392,
-  },
-  "FDV-R-MH1": {
-    '1.5"': 969,
-    '2"': 969,
-    '3"': 1104,
-    '4"': 1552,
-    '6"': 1923,
-    '8"': 3074,
-    '10"': 3688,
-    '12"': 5532,
-  },
-  "FDV-R-ME1": {
-    '1.5"': 1113,
-    '2"': 1113,
-    '3"': 1288,
-    '4"': 1558,
-    '6"': 2189,
-    '8"': 3463,
-    '10"': 4155,
-    '12"': 6233,
-  },
-  "FPS-SIE0": {
-    '1.5"': 2378,
-    '2"': 2378,
-    '3"': 2711,
-    '4"': 3358,
-    '6"': 4399,
-    '8"': 6532,
-    '10"': 7839,
-  },
-  "FPS-SIP0": {
-    '1.5"': 2377,
-    '2"': 2377,
-    '3"': 2710,
-    '4"': 3357,
-    '6"': 4398,
-    '8"': 6531,
-    '10"': 7838,
-  },
-  "FPS-SCE0": {
-    '1.5"': 2911,
-    '2"': 2937,
-    '3"': 3272,
-    '4"': 3862,
-    '6"': 5019,
-    '8"': 7292,
-    '10"': 8675,
-  },
-  "FPS-SIE1": {
-    '1.5"': 2064,
-    '2"': 2064,
-    '3"': 2353,
-    '4"': 2915,
-    '6"': 3885,
-    '8"': 5621,
-    '10"': 6804,
-  },
-  "FPS-SCE1": {
-    '1.5"': 2597,
-    '2"': 2597,
-    '3"': 2911,
-    '4"': 3483,
-    '6"': 4389,
-    '8"': 6374,
-    '10"': 7715,
-  },
-  "FPS-DIE0": {
-    '1.5"': 2378,
-    '2"': 2378,
-    '3"': 2711,
-    '4"': 3358,
-    '6"': 4399,
-    '8"': 6532,
-    '10"': 7839,
-  },
-  "FPS-DIC0": {
-    '1.5"': 3032,
-    '2"': 3032,
-    '3"': 3456,
-    '4"': 4245,
-    '6"': 5609,
-    '8"': 8186,
-    '10"': 9824,
-  },
-  "FPS-DCE0": {
-    '1.5"': 2911,
-    '2"': 2937,
-    '3"': 3272,
-    '4"': 3862,
-    '6"': 5019,
-    '8"': 7292,
-    '10"': 8675,
-  },
-  "FPS-DCE1": {
-    '1.5"': 2597,
-    '2"': 2597,
-    '3"': 2911,
-    '4"': 3483,
-    '6"': 4389,
-    '8"': 6374,
-    '10"': 7715,
-  },
-  "FPS-DIE1": {
-    '1.5"': 2064,
-    '2"': 2064,
-    '3"': 2353,
-    '4"': 2915,
-    '6"': 3885,
-    '8"': 5621,
-    '10"': 6804,
-  },
-  "FDV-R-PN2": {
-    '1.5"': 747,
-    '2"': 747,
-    '3"': 1092,
-    '4"': 1396,
-    '6"': 2614,
-    '8"': 3670,
-    '10"': 4404,
-    '12"': 6606,
-  },
-  "FDV-R-RN2": {
-    '1.5"': 1124,
-    '2"': 1124,
-    '3"': 1233,
-    '4"': 1444,
-    '6"': 2758,
-    '8"': 3814,
-    '10"': 4576,
-    '12"': 6865,
-  },
-  "FDV-R-LE2": {
-    '1.5"': 710,
-    '2"': 710,
-    '3"': 1017,
-    '4"': 1337,
-    '6"': 2456,
-    '8"': 3215,
-    '10"': 3858,
-    '12"': 5787,
-  },
-  "FDV-R-LF2": {
-    '1.5"': 1050,
-    '2"': 1050,
-    '3"': 1215,
-    '4"': 1412,
-    '6"': 2575,
-    '8"': 3313,
-    '10"': 3976,
-    '12"': 5964,
-  },
-  "FDV-R-LA2": {
-    '1.5"': 1452,
-    '2"': 1452,
-    '3"': 1620,
-    '4"': 2210,
-    '6"': 2845,
-    '8"': 3909,
-    '10"': 4691,
-    '12"': 7037,
   },
 };
 
@@ -2410,10 +1980,13 @@ export default function QuotationApp() {
       size: "",
       qty: 1,
       discount: initialDiscount,
-      isHighGrade: false,
       bodyMat: "",
-      trimMat: "",
+      trimMat: "Copper/Brass", // Default value
       connType: "",
+      isIncluded: false, // Default: not included/merged
+      isEditing: false, // Default: not editing
+      customDesc: "", // Stores manual description overrides
+      customPrice: 0, // Stores manual price overrides (if any)
     };
     setItems([...items, newItem]);
   };
@@ -2448,6 +2021,17 @@ export default function QuotationApp() {
   };
 
   const calculateRow = (item) => {
+    // If the user manually edited the price, use that.
+    if (item.customPrice > 0) {
+      return {
+        basePrice: item.customPrice,
+        unitPrice: item.customPrice,
+        total: item.customPrice * (item.qty || 1),
+        bodyAdder: 0,
+        trimAdder: 0,
+      };
+    }
+
     if (item.category === CATEGORIES.FREE_TEXT) {
       const unitPrice = parseFloat(item.price) || 0;
       return {
@@ -2462,19 +2046,33 @@ export default function QuotationApp() {
     if (item.category === CATEGORIES.VALVES) {
       if (!item.code || !item.size)
         return { basePrice: 0, unitPrice: 0, total: 0 };
+
+      // -- HG TRIM AUTOMATION LOGIC --
+      let isHG = false;
+      let isSeaWater = false;
+
+      if (item.trimMat === "Full Sea Water Trim") {
+        isSeaWater = true;
+      } else if (item.trimMat && item.trimMat !== "Copper/Brass") {
+        isHG = true;
+      }
+
       let basePriceTable;
       if (currency === "USD") {
-        basePriceTable = item.isHighGrade ? PRICES_HG_USD : PRICES_STD_USD;
+        basePriceTable = isHG ? PRICES_HG_USD : PRICES_STD_USD;
       } else {
-        basePriceTable = item.isHighGrade ? PRICES_HG_EUR : PRICES_STD_EUR;
+        basePriceTable = isHG ? PRICES_HG_EUR : PRICES_STD_EUR;
       }
+
       const basePrice = basePriceTable?.[item.code]?.[item.size] || 0;
       const discountAmount = basePrice * (item.discount / 100);
       const discountedBase = basePrice - discountAmount;
+
       const bodyAdder = item.bodyMat
         ? BODY_MATERIAL_ADDONS[item.bodyMat]?.[item.size] || 0
         : 0;
-      const trimAdder = item.trimMat === "Full Sea Water Trim" ? 10000 : 0;
+      const trimAdder = isSeaWater ? 10000 : 0;
+
       const unitPrice = discountedBase + bodyAdder + trimAdder;
       return {
         basePrice,
@@ -2521,8 +2119,38 @@ export default function QuotationApp() {
     );
   };
 
+  const toggleInclude = (id) => {
+    setItems((currentItems) => {
+      const index = currentItems.findIndex((i) => i.id === id);
+      if (index === -1) return currentItems;
+
+      const item = currentItems[index];
+      const newStatus = !item.isIncluded;
+
+      // Check if there is a valve above
+      if (newStatus) {
+        let valveFound = false;
+        for (let i = index - 1; i >= 0; i--) {
+          if (currentItems[i].category === CATEGORIES.VALVES) {
+            valveFound = true;
+            break;
+          }
+        }
+        if (!valveFound) {
+          alert("No valve selected above this item! Please add a valve first.");
+          return currentItems;
+        }
+      }
+
+      return currentItems.map((i) =>
+        i.id === id ? { ...i, isIncluded: newStatus } : i
+      );
+    });
+  };
+
   const removeItem = (id) => setItems(items.filter((i) => i.id !== id));
 
+  // --- Calculate Grand Total (Includes merged items) ---
   const subTotal = items.reduce(
     (sum, item) => sum + calculateRow(item).total,
     0
@@ -2531,7 +2159,53 @@ export default function QuotationApp() {
   const grandTotal = subTotal + packingCost;
   const currencySymbol = currency === "USD" ? "$" : "€";
 
-  // --- Export Logic ---
+  // --- Export Logic with Merge ---
+  const getExportData = () => {
+    const exportItems = [];
+    let lastValveIndex = -1;
+
+    items.forEach((item) => {
+      const financials = calculateRow(item);
+      let desc = item.customDesc || item.code;
+      // Default description logic if no custom override
+      if (!item.customDesc) {
+        if (item.category === CATEGORIES.VALVES) {
+          desc = PRODUCTS_DB[item.code]?.desc || item.code;
+          if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
+          if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
+          if (item.connType) desc += `; Connection: ${item.connType}`;
+        } else if (item.category === CATEGORIES.FREE_TEXT) {
+          desc = item.description || "";
+        }
+      }
+
+      if (
+        item.isIncluded &&
+        item.category !== CATEGORIES.VALVES &&
+        lastValveIndex !== -1
+      ) {
+        // Merge into the last valve
+        const valveItem = exportItems[lastValveIndex];
+        valveItem.totalPrice += financials.total; // Add total price
+        // Append description
+        valveItem.desc += ` + ${desc} (Qty: ${item.qty})`;
+      } else {
+        // Add as new row
+        const newItem = {
+          ...item,
+          desc: desc,
+          unitPrice: financials.unitPrice,
+          totalPrice: financials.total,
+        };
+        exportItems.push(newItem);
+        if (item.category === CATEGORIES.VALVES) {
+          lastValveIndex = exportItems.length - 1;
+        }
+      }
+    });
+    return exportItems;
+  };
+
   const handleExportPDF = () => {
     saveCustomerToList(cust.name);
     const doc = new jsPDF();
@@ -2552,30 +2226,17 @@ export default function QuotationApp() {
       doc.text(`Attn: ${cust.contactName}`, 14, 45);
       doc.text(`Company: ${cust.name}`, 14, 50);
 
-      const tableBody = items.map((item, index) => {
-        const financials = calculateRow(item);
-        let desc = "";
-        let code = item.code;
-        if (item.category === CATEGORIES.VALVES) {
-          const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-          desc = `${baseDesc}`;
-          if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-          if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-          if (item.connType) desc += `; Connection: ${item.connType}`;
-        } else if (item.category === CATEGORIES.FREE_TEXT) {
-          code = item.code || "General";
-          desc = item.description || "";
-        } else {
-          desc = item.code;
-        }
+      const exportItems = getExportData();
+
+      const tableBody = exportItems.map((item, index) => {
         return [
           index + 1,
-          code,
-          desc,
+          item.code,
+          item.desc,
           item.size || "-",
           item.qty,
-          formatCurrency(financials.unitPrice),
-          formatCurrency(financials.total),
+          formatCurrency(item.unitPrice), // Note: Unit price for merged items shows original valve unit price usually, but total is updated.
+          formatCurrency(item.totalPrice),
         ];
       });
 
@@ -2719,18 +2380,16 @@ export default function QuotationApp() {
       `Total (${currencySymbol})`,
     ]);
 
-    items.forEach((item, index) => {
-      const financials = calculateRow(item);
-      let desc = item.code;
-      if (PRODUCTS_DB[item.code]) desc = PRODUCTS_DB[item.code].desc;
+    const exportItems = getExportData();
+    exportItems.forEach((item, index) => {
       wsData.push([
         index + 1,
         item.code,
-        desc,
+        item.desc,
         item.size || "-",
         item.qty,
-        financials.unitPrice,
-        financials.total,
+        item.unitPrice,
+        item.totalPrice,
       ]);
     });
 
@@ -2762,7 +2421,6 @@ export default function QuotationApp() {
     try {
       const dirHandle = await window.showDirectoryPicker();
 
-      // Excel Blob
       const wsData = [];
       wsData.push(["RAPHAEL VALVES QUOTATION"]);
       wsData.push([]);
@@ -2784,18 +2442,16 @@ export default function QuotationApp() {
         `Unit Price (${currencySymbol})`,
         `Total (${currencySymbol})`,
       ]);
-      items.forEach((item, index) => {
-        const financials = calculateRow(item);
-        let desc = item.code;
-        if (PRODUCTS_DB[item.code]) desc = PRODUCTS_DB[item.code].desc;
+      const exportItems = getExportData();
+      exportItems.forEach((item, index) => {
         wsData.push([
           index + 1,
           item.code,
-          desc,
+          item.desc,
           item.size || "-",
           item.qty,
-          financials.unitPrice,
-          financials.total,
+          item.unitPrice,
+          item.totalPrice,
         ]);
       });
       wsData.push([]);
@@ -2814,7 +2470,6 @@ export default function QuotationApp() {
       const wbOut = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const excelBlob = new Blob([wbOut], { type: "application/octet-stream" });
 
-      // PDF Blob
       const pdfBlob = await new Promise((resolve) => {
         const doc = new jsPDF();
         const logoImg = new Image();
@@ -2832,30 +2487,15 @@ export default function QuotationApp() {
           doc.text(`Attn: ${cust.contactName}`, 14, 45);
           doc.text(`Company: ${cust.name}`, 14, 50);
 
-          const tableBody = items.map((item, index) => {
-            const financials = calculateRow(item);
-            let desc = "";
-            let code = item.code;
-            if (item.category === CATEGORIES.VALVES) {
-              const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-              desc = `${baseDesc}`;
-              if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-              if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-              if (item.connType) desc += `; Connection: ${item.connType}`;
-            } else if (item.category === CATEGORIES.FREE_TEXT) {
-              code = item.code || "General";
-              desc = item.description || "";
-            } else {
-              desc = item.code;
-            }
+          const tableBody = exportItems.map((item, index) => {
             return [
               index + 1,
-              code,
-              desc,
+              item.code,
+              item.desc,
               item.size || "-",
               item.qty,
-              formatCurrency(financials.unitPrice),
-              formatCurrency(financials.total),
+              formatCurrency(item.unitPrice),
+              formatCurrency(item.totalPrice),
             ];
           });
 
@@ -3223,7 +2863,7 @@ export default function QuotationApp() {
                     Qty
                   </th>
                   <th className="px-2 py-3 border-b border-gray-300 w-16 text-center">
-                    HG TRIM
+                    Include
                   </th>
                   <th className="px-2 py-3 border-b border-gray-300 w-28 text-right bg-blue-50">
                     Unitary Price
@@ -3256,131 +2896,174 @@ export default function QuotationApp() {
                   return (
                     <tr
                       key={item.id}
-                      className="border-b hover:bg-gray-50 align-top"
+                      className={`border-b hover:bg-gray-50 align-top ${
+                        item.isIncluded ? "bg-yellow-50" : ""
+                      }`}
                     >
                       <td className="px-2 py-3 text-xs font-bold text-gray-800 uppercase">
                         {item.category}
                       </td>
                       <td className="px-2 py-3">
-                        {isFreeText ? (
+                        {item.isEditing ? (
                           <div className="flex flex-col gap-2">
                             <input
-                              type="text"
-                              placeholder="Item Name (Code)"
-                              className="w-full border rounded p-1 text-black font-bold"
-                              value={item.code || ""}
+                              className="border p-1 text-black font-bold"
+                              value={item.code}
                               onChange={(e) =>
                                 updateItem(item.id, "code", e.target.value)
                               }
                             />
-                            <input
-                              type="text"
-                              placeholder="Description"
-                              className="w-full border rounded p-1 text-black"
-                              value={item.description || ""}
+                            <textarea
+                              className="border p-1 text-black w-full"
+                              rows="2"
+                              value={
+                                item.customDesc ||
+                                PRODUCTS_DB[item.code]?.desc ||
+                                item.code
+                              }
                               onChange={(e) =>
                                 updateItem(
                                   item.id,
-                                  "description",
+                                  "customDesc",
                                   e.target.value
                                 )
                               }
                             />
                           </div>
                         ) : (
-                          <select
-                            className={`w-full border rounded p-1 font-bold text-black ${
-                              !item.code ? "text-gray-400" : ""
-                            }`}
-                            value={item.code}
-                            onChange={(e) =>
-                              updateItem(item.id, "code", e.target.value)
-                            }
-                          >
-                            <option value="">Select Item...</option>
-                            {dropDownOptions.map((k) => (
-                              <option key={k} value={k}>
-                                {k}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                        {isValve && (
-                          <div className="text-xs text-black mt-1 font-medium">
-                            {PRODUCTS_DB[item.code]?.desc ||
-                              "Select model to see description"}
-                          </div>
-                        )}
-                        {isValve && (
-                          <div className="grid grid-cols-2 gap-2 mt-2 bg-gray-50 p-2 rounded border border-dashed">
-                            <div>
-                              <label className="text-[10px] font-bold text-black">
-                                BODY MAT.
-                              </label>
+                          <>
+                            {isFreeText ? (
+                              <div className="flex flex-col gap-2">
+                                <input
+                                  type="text"
+                                  placeholder="Item Name (Code)"
+                                  className="w-full border rounded p-1 text-black font-bold"
+                                  value={item.code || ""}
+                                  onChange={(e) =>
+                                    updateItem(item.id, "code", e.target.value)
+                                  }
+                                />
+                                <input
+                                  type="text"
+                                  placeholder="Description"
+                                  className="w-full border rounded p-1 text-black"
+                                  value={item.description || ""}
+                                  onChange={(e) =>
+                                    updateItem(
+                                      item.id,
+                                      "description",
+                                      e.target.value
+                                    )
+                                  }
+                                />
+                              </div>
+                            ) : (
                               <select
-                                className={`w-full text-xs border rounded text-black ${
-                                  !item.bodyMat ? "text-gray-400" : ""
+                                className={`w-full border rounded p-1 font-bold text-black ${
+                                  !item.code ? "text-gray-400" : ""
                                 }`}
-                                value={item.bodyMat}
-                                onChange={(e) =>
-                                  updateItem(item.id, "bodyMat", e.target.value)
-                                }
+                                value={item.code}
+                                onChange={(e) => {
+                                  updateItem(item.id, "code", e.target.value);
+                                  updateItem(item.id, "customDesc", ""); // Reset custom desc when code changes
+                                  updateItem(item.id, "customPrice", 0); // Reset custom price when code changes
+                                }}
                               >
-                                <option value="">Select...</option>
-                                {OPTIONS.bodyMaterials.map((m) => (
-                                  <option key={m} value={m}>
-                                    {m}
+                                <option value="">Select Item...</option>
+                                {dropDownOptions.map((k) => (
+                                  <option key={k} value={k}>
+                                    {k}
                                   </option>
                                 ))}
                               </select>
-                            </div>
-                            <div>
-                              <label className="text-[10px] font-bold text-black">
-                                TRIM MAT.
-                              </label>
-                              <select
-                                className={`w-full text-xs border rounded text-black ${
-                                  !item.trimMat ? "text-gray-400" : ""
-                                }`}
-                                value={item.trimMat}
-                                onChange={(e) =>
-                                  updateItem(item.id, "trimMat", e.target.value)
-                                }
-                              >
-                                <option value="">Select...</option>
-                                {OPTIONS.trimMaterials.map((m) => (
-                                  <option key={m} value={m}>
-                                    {m}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            <div>
-                              <label className="text-[10px] font-bold text-black">
-                                CONNECTION
-                              </label>
-                              <select
-                                className={`w-full text-xs border rounded text-black ${
-                                  !item.connType ? "text-gray-400" : ""
-                                }`}
-                                value={item.connType}
-                                onChange={(e) =>
-                                  updateItem(
-                                    item.id,
-                                    "connType",
-                                    e.target.value
-                                  )
-                                }
-                              >
-                                <option value="">Select...</option>
-                                {OPTIONS.connections.map((c) => (
-                                  <option key={c} value={c}>
-                                    {c}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
+                            )}
+                            {isValve && !item.isEditing && (
+                              <div className="text-xs text-black mt-1 font-medium">
+                                {item.customDesc ||
+                                  PRODUCTS_DB[item.code]?.desc ||
+                                  "Select model..."}
+                              </div>
+                            )}
+                            {isValve && (
+                              <div className="grid grid-cols-2 gap-2 mt-2 bg-gray-50 p-2 rounded border border-dashed">
+                                <div>
+                                  <label className="text-[10px] font-bold text-black">
+                                    BODY MAT.
+                                  </label>
+                                  <select
+                                    className={`w-full text-xs border rounded text-black ${
+                                      !item.bodyMat ? "text-gray-400" : ""
+                                    }`}
+                                    value={item.bodyMat}
+                                    onChange={(e) =>
+                                      updateItem(
+                                        item.id,
+                                        "bodyMat",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option value="">Select...</option>
+                                    {OPTIONS.bodyMaterials.map((m) => (
+                                      <option key={m} value={m}>
+                                        {m}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-black">
+                                    TRIM MAT.
+                                  </label>
+                                  <select
+                                    className={`w-full text-xs border rounded text-black ${
+                                      !item.trimMat ? "text-gray-400" : ""
+                                    }`}
+                                    value={item.trimMat}
+                                    onChange={(e) =>
+                                      updateItem(
+                                        item.id,
+                                        "trimMat",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option value="">Select...</option>
+                                    {OPTIONS.trimMaterials.map((m) => (
+                                      <option key={m} value={m}>
+                                        {m}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                                <div>
+                                  <label className="text-[10px] font-bold text-black">
+                                    CONNECTION
+                                  </label>
+                                  <select
+                                    className={`w-full text-xs border rounded text-black ${
+                                      !item.connType ? "text-gray-400" : ""
+                                    }`}
+                                    value={item.connType}
+                                    onChange={(e) =>
+                                      updateItem(
+                                        item.id,
+                                        "connType",
+                                        e.target.value
+                                      )
+                                    }
+                                  >
+                                    <option value="">Select...</option>
+                                    {OPTIONS.connections.map((c) => (
+                                      <option key={c} value={c}>
+                                        {c}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </td>
                       <td className="px-2 py-3 text-center">
@@ -3416,32 +3099,48 @@ export default function QuotationApp() {
                           }
                         />
                       </td>
-                      <td className="px-2 py-3 text-center">
-                        {isValve ? (
-                          <input
-                            type="checkbox"
-                            className="w-5 h-5 accent-blue-600"
-                            checked={item.isHighGrade}
-                            onChange={(e) =>
-                              updateItem(
-                                item.id,
-                                "isHighGrade",
-                                e.target.checked
-                              )
-                            }
-                          />
-                        ) : (
-                          <span className="text-gray-400">-</span>
+
+                      {/* INCLUDE / EDIT COLUMN */}
+                      <td className="px-2 py-3 text-center flex flex-col items-center gap-2">
+                        {!isValve && (
+                          <div
+                            className="flex items-center gap-1"
+                            title="Include with valve above"
+                          >
+                            <input
+                              type="checkbox"
+                              className="w-4 h-4"
+                              checked={item.isIncluded || false}
+                              onChange={() => toggleInclude(item.id)}
+                            />
+                            <span className="text-[9px]">Incl.</span>
+                          </div>
                         )}
+                        <button
+                          onClick={() =>
+                            updateItem(item.id, "isEditing", !item.isEditing)
+                          }
+                          className="text-gray-500 hover:text-blue-600"
+                          title="Edit Description/Price"
+                        >
+                          ✏️
+                        </button>
                       </td>
+
                       <td className="px-2 py-3 text-right bg-blue-50">
-                        {isFreeText ? (
+                        {isFreeText || item.isEditing ? (
                           <input
                             type="number"
                             className="w-full border rounded p-1 text-right font-mono font-bold text-blue-900"
-                            value={item.price || ""}
+                            value={
+                              item.isEditing ? item.customPrice : item.price
+                            }
                             onChange={(e) =>
-                              updateItem(item.id, "price", e.target.value)
+                              updateItem(
+                                item.id,
+                                item.isEditing ? "customPrice" : "price",
+                                e.target.value
+                              )
                             }
                             placeholder="0.00"
                           />
