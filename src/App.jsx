@@ -13,6 +13,117 @@ const CATEGORIES = {
   FREE_TEXT: "Free Text",
 };
 
+// רשימת הלקוחות ההתחלתית - ממוינת וללא כפילויות
+const INITIAL_CUSTOMERS = [
+  "AceFlo",
+  "Al Yaseah",
+  "Atlantica Fire",
+  "AYSO",
+  "Belgicas",
+  "Canosider",
+  "Capolavori",
+  "CF Systemas",
+  "Chryssafidis",
+  "CMC",
+  "CMC Fire Solutions",
+  "Data Fire",
+  "DDC Eng.",
+  "DoOil",
+  "DOS",
+  "DSINT",
+  "Eastchain",
+  "EndFire",
+  "ESE Equipment",
+  "Eurosafe",
+  "FES",
+  "Fierre",
+  "Fire Protection Solutions",
+  "FireTech",
+  "Firing",
+  "FitFlow Bolivia",
+  "FitFlow Chile",
+  "FitFlow Ecuador",
+  "FitFlow Peru",
+  "FitFlow Uruguay",
+  "FluidTechnik",
+  "FoaMax",
+  "Fotern",
+  "Frucom",
+  "G&R Hidromedicion",
+  "General Commercial",
+  "Gia Linh",
+  "GLOCOM",
+  "Green Technology",
+  "Grupo Cunado",
+  "Grupo de Incendios",
+  "Grupo Incendios",
+  "Grupo Lupi",
+  "Grupo Quantum",
+  "Grupo Safety",
+  "Grupo Salva Vidas",
+  "Harbour Rich",
+  "HD Fire",
+  "Hidrofenix",
+  "Hydor",
+  "IDATOR",
+  "Ideal Solution",
+  "IMPEXTRON",
+  "InControl",
+  "Industrail Motion",
+  "Interstae Fire Protection",
+  "Jaconn",
+  "JCI Control",
+  "Koor Caribe",
+  "Latente",
+  "Marsol",
+  "Maximo Supply",
+  "Mega Planet",
+  "Motec",
+  "Mozzanica",
+  "Nhat An Industrial Equipment",
+  "OLPRA",
+  "Omexom",
+  "Ondoan",
+  "Orion",
+  "P/T/ Cerna Corp.",
+  "Pefipresa",
+  "PKE",
+  "Profit",
+  "PTSC Quang",
+  "PyroAsia",
+  "QD Fire",
+  "Quest Fire Protection",
+  "Riego Pro",
+  "RT Rame",
+  "S.B. Supply",
+  "SafeTec",
+  "Sanco S.p.A.",
+  "Secur",
+  "SertValve",
+  "SIA",
+  "Stilton",
+  "Tan Sang",
+  "Tazetco",
+  "Tecnovanguardia",
+  "TMX Pro",
+  "Top Flow",
+  "Tubotecnica",
+  "United Fire",
+  "UruFire",
+  "Uxello",
+  "Valve Tech",
+  "ValveTek",
+  "Van Ginkel",
+  "Vietsafe",
+  "Viking Corp",
+  "Viking Far East",
+  "Viking Luxemburg",
+  "Vina Autech",
+  "XPAD",
+  "Xpart",
+  "Zensitex",
+];
+
 const SALES_PEOPLE = [
   "RAN LUTZKY",
   "TAL FISHBHIN",
@@ -2207,6 +2318,16 @@ export default function QuotationApp() {
     }
   };
 
+  const loadSavedCustomers = () => {
+    try {
+      const saved = localStorage.getItem("RAPHAEL_CUSTOMERS");
+      return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
+    } catch (e) {
+      console.error("Local Storage Customers Error", e);
+      return INITIAL_CUSTOMERS;
+    }
+  };
+
   const saved = loadSavedData();
 
   const [items, setItems] = useState(saved?.items || []);
@@ -2222,6 +2343,7 @@ export default function QuotationApp() {
       defaultDiscount: 55,
     }
   );
+  const [customerList, setCustomerList] = useState(loadSavedCustomers());
   const [currency, setCurrency] = useState(saved?.currency || "USD");
   const [ref, setRef] = useState("");
   const [refSuffix, setRefSuffix] = useState(saved?.refSuffix || 1);
@@ -2250,6 +2372,19 @@ export default function QuotationApp() {
     };
     localStorage.setItem("RAPHAEL_QUOTATION_DATA", JSON.stringify(dataToSave));
   }, [items, cust, salesPerson, currency, terms, refSuffix, includePacking]);
+
+  // Logic to save new customer automatically when finalizing (Exporting)
+  const saveCustomerToList = (customerName) => {
+    if (!customerName) return;
+    const trimmedName = customerName.trim();
+    if (trimmedName && !customerList.includes(trimmedName)) {
+      const newList = [...customerList, trimmedName].sort((a, b) =>
+        a.localeCompare(b)
+      );
+      setCustomerList(newList);
+      localStorage.setItem("RAPHAEL_CUSTOMERS", JSON.stringify(newList));
+    }
+  };
 
   useEffect(() => {
     let initials = "XX";
@@ -2420,6 +2555,8 @@ export default function QuotationApp() {
   const currencySymbol = currency === "USD" ? "$" : "€";
 
   const handleExportPDF = () => {
+    saveCustomerToList(cust.name); // Save customer on export
+
     const doc = new jsPDF();
     const logoImg = new Image();
     logoImg.src = "/raphael_logo_final.png";
@@ -2626,6 +2763,8 @@ export default function QuotationApp() {
   };
 
   const handleExportExcel = () => {
+    saveCustomerToList(cust.name); // Save customer on export
+
     // Basic Excel Logic remains same
     const wsData = [];
     wsData.push(["RAPHAEL VALVES QUOTATION"]);
@@ -2768,10 +2907,17 @@ export default function QuotationApp() {
                 Company Name
               </label>
               <input
+                list="customers-list"
                 className="w-full p-2 border rounded text-black"
                 value={cust.name}
                 onChange={(e) => setCust({ ...cust, name: e.target.value })}
+                placeholder="Type or Select..."
               />
+              <datalist id="customers-list">
+                {customerList.map((customer, idx) => (
+                  <option key={idx} value={customer} />
+                ))}
+              </datalist>
             </div>
             <div>
               <label className="block text-[10px] text-gray-500">
