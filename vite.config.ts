@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // תיקון הנתיבים שיתאימו בדיוק לקבצים שיצרת בתיקיית ה-data
-import { pricesData } from "./src/data/prices_euro.js"; // ודא שזה השם אצלך
+import { pricesData } from "./src/data/prices_std_euro.js"; // ודא שזה השם אצלך
 import { pricesStdUsd } from "./src/data/prices_std_usd.js";
 import { pricesHgEur } from "./src/data/prices_hg_euro.js";
 import { pricesHgUsd } from "./src/data/prices_hg_usd.js";
