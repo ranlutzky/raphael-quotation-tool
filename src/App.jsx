@@ -3,7 +3,7 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 
-// --- 1. CONSTANTS & DATABASE ---
+// --- 1. CONSTANTS & HELPER FUNCTIONS ---
 
 const CATEGORIES = {
   VALVES: "Valves",
@@ -172,7 +172,49 @@ const SIGNATURES = {
 const PAYMENT_PRESETS = ["AS USUAL", "ADVANCED", "NET +30", "NET +60"];
 const DELIVERY_PRESETS = ["EXW", "FOB", "C&F"];
 
-// --- 2. RAW DATA (MUST BE DEFINED BEFORE PROCESSING) ---
+const addSize2_5 = (priceList) => {
+  if (!priceList) return {};
+  const newPriceList = { ...priceList };
+  Object.keys(newPriceList).forEach((key) => {
+    const item = newPriceList[key];
+    if (item && item['2"'] && item['3"']) {
+      const avg = (item['2"'] + item['3"']) / 2;
+      newPriceList[key] = { ...item, '2.5"': avg };
+    }
+  });
+  return newPriceList;
+};
+
+const formatCurrency = (amount, symbol = "") => {
+  const num = Number(amount) || 0;
+  return `${symbol}${num.toLocaleString(undefined, {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  })}`;
+};
+
+const getFormattedDate = () => {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.toLocaleString("default", { month: "long" });
+  const year = date.getFullYear();
+  const nth = (d) => {
+    if (d > 3 && d < 21) return "th";
+    switch (d % 10) {
+      case 1:
+        return "st";
+      case 2:
+        return "nd";
+      case 3:
+        return "rd";
+      default:
+        return "th";
+    }
+  };
+  return `${month} ${day}${nth(day)}, ${year}`;
+};
+
+// --- 2. RAW DATA (DATABASE) ---
 
 const DIAPHRAGMS_DB = {
   'Deluge (FDV) Diaphragm 2"': 70,
@@ -448,6 +490,7 @@ const PRODUCTS_DB = {
   "FDV-R-LA2": { desc: "Altitude Control Valve", category: CATEGORIES.VALVES },
 };
 
+// --- PRICES RAW DATA ---
 const PRICES_STD_USD_RAW = {
   "FDV-DE0": {
     '1.5"': 2317,
@@ -772,7 +815,7 @@ const PRICES_STD_USD_RAW = {
   "FPS-SCE1": {
     '1.5"': 3721,
     '2"': 3721,
-    '3"': 4146,
+    '3"': 3934,
     '4"': 4936,
     '6"': 6303,
     '8"': 8885,
@@ -2200,12 +2243,12 @@ const PRICES_HG_EUR_RAW = {
   },
 };
 
-// --- 3. PROCESSED DATA (DEPENDS ON RAW DATA) ---
+// --- 3. PROCESSED DATA (Moved AFTER raw data) ---
 
 const PRICES_STD_USD = addSize2_5(PRICES_STD_USD_RAW);
 const PRICES_HG_USD = addSize2_5(PRICES_HG_USD_RAW);
 const PRICES_STD_EUR = addSize2_5(PRICES_STD_EUR_RAW);
-const PRICES_HG_EUR = addSize2_5(PRICES_HG_EUR_RAW); // This was causing the error before
+const PRICES_HG_EUR = addSize2_5(PRICES_HG_EUR_RAW);
 
 // --- 4. COMPONENT ---
 
