@@ -491,6 +491,7 @@ const PRODUCTS_DB = {
   "FDV-R-LA2": { desc: "Altitude Control Valve", category: CATEGORIES.VALVES },
 };
 
+// --- PRICES RAW DATA ---
 const PRICES_STD_USD_RAW = {
   "FDV-DE0": {
     '1.5"': 2317,
@@ -1927,6 +1928,17 @@ export default function QuotationApp() {
   );
 
   useEffect(() => {
+    // --- EMERGENCY CLEANUP FOR NEW VERSION ---
+    // This safely clears old incompatible data structure on first run of this version
+    const hasRunCleanup = localStorage.getItem("CLEANUP_V2_DONE");
+    if (!hasRunCleanup) {
+      localStorage.removeItem("RAPHAEL_QUOTATION_DATA");
+      localStorage.setItem("CLEANUP_V2_DONE", "true");
+      setItems([]); // Clear state as well
+    }
+  }, []);
+
+  useEffect(() => {
     const dataToSave = {
       items,
       cust,
@@ -1980,6 +1992,7 @@ export default function QuotationApp() {
       size: "",
       qty: 1,
       discount: initialDiscount,
+      isHighGrade: false,
       bodyMat: "",
       trimMat: "Copper/Brass", // Default value
       connType: "",
@@ -2919,7 +2932,8 @@ export default function QuotationApp() {
                               value={
                                 item.customDesc ||
                                 PRODUCTS_DB[item.code]?.desc ||
-                                item.code
+                                item.code ||
+                                ""
                               }
                               onChange={(e) =>
                                 updateItem(
@@ -2962,7 +2976,7 @@ export default function QuotationApp() {
                                 className={`w-full border rounded p-1 font-bold text-black ${
                                   !item.code ? "text-gray-400" : ""
                                 }`}
-                                value={item.code}
+                                value={item.code || ""}
                                 onChange={(e) => {
                                   updateItem(item.id, "code", e.target.value);
                                   updateItem(item.id, "customDesc", ""); // Reset custom desc when code changes
