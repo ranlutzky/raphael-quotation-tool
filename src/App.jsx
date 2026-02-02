@@ -874,472 +874,6 @@ const PRICES_STD_USD_RAW = {
     '10"': 7522,
   },
   "FDV-R-PN2": {
-    '1.5"': 830,
-    '2"': 830,
-    '3"': 1213,
-    '4"': 1551,
-    '6"': 2904,
-    '8"': 4078,
-    '10"': 4894,
-    '12"': 7340,
-  },
-  "FDV-R-RN2": {
-    '1.5"': 1741,
-    '2"': 1741,
-    '3"': 1872,
-    '4"': 2128,
-    '6"': 3725,
-    '8"': 5001,
-    '10"': 5925,
-    '12"': 8699,
-  },
-  "FDV-R-LE2": {
-    '1.5"': 1238,
-    '2"': 1238,
-    '3"': 1611,
-    '4"': 1999,
-    '6"': 3355,
-    '8"': 4275,
-    '10"': 5055,
-    '12"': 7393,
-  },
-  "FDV-R-LF2": {
-    '1.5"': 2532,
-    '2"': 2532,
-    '3"': 2733,
-    '4"': 2972,
-    '6"': 4381,
-    '8"': 5276,
-    '10"': 6079,
-    '12"': 8489,
-  },
-  "FDV-R-LA2": {
-    '1.5"': 3020,
-    '2"': 3020,
-    '3"': 3224,
-    '4"': 3939,
-    '6"': 4708,
-    '8"': 5999,
-    '10"': 6946,
-    '12"': 9790,
-  },
-};
-
-const PRICES_HG_USD_RAW = {
-  "FDV-DE0": {
-    '1.5"': 2906,
-    '2"': 2906,
-    '2.5"': 3083,
-    '3"': 3260,
-    '4"': 3917,
-    '6"': 5055,
-    '8"': 7204,
-    '10"': 8569,
-  },
-  "FDV-DP0": {
-    '1.5"': 3011,
-    '2"': 3011,
-    '2.5"': 3188,
-    '3"': 3365,
-    '4"': 4022,
-    '6"': 5159,
-    '8"': 7308,
-    '10"': 8673,
-  },
-  "FDV-DC0": {
-    '1.5"': 3645,
-    '2"': 3645,
-    '2.5"': 3865,
-    '3"': 4085,
-    '4"': 4902,
-    '6"': 6315,
-    '8"': 8985,
-    '10"': 10681,
-  },
-  "FDV-DH0": {
-    '1.5"': 2520,
-    '2"': 2520,
-    '2.5"': 2670,
-    '3"': 2820,
-    '4"': 3377,
-    '6"': 4341,
-    '8"': 6162,
-    '10"': 7318,
-  },
-  "FDV-DA0": {
-    '1.5"': 3043,
-    '2"': 3043,
-    '2.5"': 3229,
-    '3"': 3416,
-    '4"': 4109,
-    '6"': 5308,
-    '8"': 7573,
-    '10"': 9012,
-  },
-  "FDV-DE1": {
-    '1.5"': 2509,
-    '2"': 2509,
-    '2.5"': 2663,
-    '3"': 2816,
-    '4"': 3387,
-    '6"': 4374,
-    '8"': 6240,
-    '10"': 7424,
-  },
-  "FDV-3W-DE1": {
-    '1.5"': 2667,
-    '2"': 2667,
-    '2.5"': 2820,
-    '3"': 2974,
-    '4"': 3545,
-    '6"': 4532,
-    '8"': 6397,
-    '10"': 7582,
-  },
-  "FDV-DP1": {
-    '1.5"': 2614,
-    '2"': 2614,
-    '2.5"': 2768,
-    '3"': 2921,
-    '4"': 3492,
-    '6"': 4479,
-    '8"': 6345,
-    '10"': 7529,
-  },
-  "FDV-DC1": {
-    '1.5"': 3119,
-    '2"': 3119,
-    '2.5"': 3316,
-    '3"': 3512,
-    '4"': 4241,
-    '6"': 5503,
-    '8"': 7887,
-    '10"': 9401,
-  },
-  "FDV-DH1": {
-    '1.5"': 2186,
-    '2"': 2186,
-    '2.5"': 2317,
-    '3"': 2448,
-    '4"': 2935,
-    '6"': 3777,
-    '8"': 5367,
-    '10"': 6377,
-  },
-  "FDV-3W-DH1": {
-    '1.5"': 2186,
-    '2"': 2186,
-    '2.5"': 2317,
-    '3"': 2448,
-    '4"': 2935,
-    '6"': 3777,
-    '8"': 5367,
-    '10"': 6377,
-  },
-  "FDV-DA1": {
-    '1.5"': 2647,
-    '2"': 2647,
-    '2.5"': 2810,
-    '3"': 2973,
-    '4"': 3579,
-    '6"': 4628,
-    '8"': 6610,
-    '10"': 7869,
-  },
-  "FDV-PE0": {
-    '1.5"': 3473,
-    '2"': 3473,
-    '2.5"': 3746,
-    '3"': 4018,
-    '4"': 4484,
-    '6"': 5622,
-    '8"': 7998,
-    '10"': 9522,
-  },
-  "FDV-PP0": {
-    '1.5"': 3746,
-    '2"': 3746,
-    '2.5"': 3923,
-    '3"': 4100,
-    '4"': 4757,
-    '6"': 5894,
-    '8"': 8270,
-    '10"': 9793,
-  },
-  "FDV-PC0": {
-    '1.5"': 4212,
-    '2"': 4212,
-    '2.5"': 4432,
-    '3"': 4652,
-    '4"': 5469,
-    '6"': 6882,
-    '8"': 9779,
-    '10"': 11634,
-  },
-  "FDV-PH0": {
-    '1.5"': 3087,
-    '2"': 3087,
-    '2.5"': 3237,
-    '3"': 3387,
-    '4"': 3944,
-    '6"': 4908,
-    '8"': 6956,
-    '10"': 8271,
-  },
-  "FDV-PA0": {
-    '1.5"': 3610,
-    '2"': 3610,
-    '2.5"': 3796,
-    '3"': 3983,
-    '4"': 4676,
-    '6"': 5875,
-    '8"': 8367,
-    '10"': 9965,
-  },
-  "FDV-PE1": {
-    '1.5"': 3076,
-    '2"': 3076,
-    '2.5"': 3230,
-    '3"': 3383,
-    '4"': 3954,
-    '6"': 4941,
-    '8"': 7033,
-    '10"': 8377,
-  },
-  "FDV-PP1": {
-    '1.5"': 3349,
-    '2"': 3349,
-    '2.5"': 3503,
-    '3"': 3656,
-    '4"': 4227,
-    '6"': 5214,
-    '8"': 7306,
-    '10"': 8650,
-  },
-  "FDV-PC1": {
-    '1.5"': 3686,
-    '2"': 3686,
-    '2.5"': 3883,
-    '3"': 4079,
-    '4"': 4808,
-    '6"': 6070,
-    '8"': 8680,
-    '10"': 10354,
-  },
-  "FDV-PH1": {
-    '1.5"': 2478,
-    '2"': 2478,
-    '3"': 2714,
-    '4"': 3151,
-    '6"': 3909,
-    '8"': 5545,
-    '10"': 6597,
-  },
-  "FDV-PA1": {
-    '1.5"': 2892,
-    '2"': 2892,
-    '3"': 3186,
-    '4"': 3731,
-    '6"': 4676,
-    '8"': 6663,
-    '10"': 7939,
-  },
-  "FDV-AE1": {
-    '1.5"': 2112,
-    '2"': 2112,
-    '2.5"': 2233,
-    '3"': 2355,
-    '4"': 2806,
-    '6"': 3790,
-    '8"': 5774,
-    '10"': 6853,
-  },
-  "FDV-3W-AE1": {
-    '1.5"': 2269,
-    '2"': 2269,
-    '2.5"': 2391,
-    '3"': 2512,
-    '4"': 2963,
-    '6"': 3948,
-    '8"': 5932,
-    '10"': 7011,
-  },
-  "FDV-AP1": {
-    '1.5"': 2217,
-    '2"': 2217,
-    '2.5"': 2338,
-    '3"': 2460,
-    '4"': 2911,
-    '6"': 3895,
-    '8"': 5879,
-    '10"': 6958,
-  },
-  "FDV-AC1": {
-    '1.5"': 2589,
-    '2"': 2589,
-    '2.5"': 2743,
-    '3"': 2898,
-    '4"': 3473,
-    '6"': 4672,
-    '8"': 7061,
-    '10"': 8398,
-  },
-  "FDV-AH1": {
-    '1.5"': 1887,
-    '2"': 1887,
-    '2.5"': 1993,
-    '3"': 2099,
-    '4"': 2797,
-    '6"': 3375,
-    '8"': 5168,
-    '10"': 6126,
-  },
-  "FDV-3W-AH1": {
-    '1.5"': 1887,
-    '2"': 1887,
-    '2.5"': 1993,
-    '3"': 2099,
-    '4"': 2797,
-    '6"': 3375,
-    '8"': 5168,
-    '10"': 6126,
-  },
-  "FDV-R-HH0": { '1.5"': 1697, '2"': 1697, '2.5"': 1798, '3"': 1899 },
-  "FDV-R-HHP": { '1.5"': 2163, '2"': 2163, '2.5"': 2264, '3"': 2365 },
-  "FDV-R-MH0": {
-    '1.5"': 1439,
-    '2"': 1439,
-    '2.5"': 1521,
-    '3"': 1603,
-    '4"': 2146,
-    '6"': 2595,
-    '8"': 3990,
-    '10"': 4735,
-    '12"': 6914,
-  },
-  "FDV-R-MH1": {
-    '1.5"': 1552,
-    '2"': 1552,
-    '2.5"': 1634,
-    '3"': 1716,
-    '4"': 2260,
-    '6"': 2709,
-    '8"': 4104,
-    '10"': 4849,
-    '12"': 7084,
-  },
-  "FDV-R-ME1": {
-    '1.5"': 1727,
-    '2"': 1727,
-    '2.5"': 1821,
-    '3"': 1915,
-    '4"': 2266,
-    '6"': 3032,
-    '8"': 4575,
-    '10"': 5414,
-    '12"': 7933,
-  },
-  "FPS-SIE0": {
-    '1.5"': 3565,
-    '2"': 3565,
-    '2.5"': 3767,
-    '3"': 3968,
-    '4"': 4718,
-    '6"': 6015,
-    '8"': 8465,
-    '10"': 10021,
-  },
-  "FPS-SIP0": {
-    '1.5"': 3564,
-    '2"': 3564,
-    '2.5"': 3766,
-    '3"': 3968,
-    '4"': 4717,
-    '6"': 6014,
-    '8"': 8463,
-    '10"': 10019,
-  },
-  "FPS-SCE0": {
-    '1.5"': 4407,
-    '2"': 4407,
-    '2.5"': 4658,
-    '3"': 4909,
-    '4"': 5840,
-    '6"': 7451,
-    '8"': 10495,
-    '10"': 12429,
-  },
-  "FPS-SIE1": {
-    '1.5"': 3125,
-    '2"': 3125,
-    '2.5"': 3296,
-    '3"': 3467,
-    '4"': 4102,
-    '6"': 5201,
-    '8"': 7276,
-    '10"': 8595,
-  },
-  "FPS-SCE1": {
-    '1.5"': 3721,
-    '2"': 3721,
-    '2.5"': 3934,
-    '3"': 4146,
-    '4"': 4936,
-    '6"': 6303,
-    '8"': 8885,
-    '10"': 10526,
-  },
-  "FPS-DIE0": {
-    '1.5"': 3113,
-    '2"': 3113,
-    '2.5"': 3288,
-    '3"': 3463,
-    '4"': 4113,
-    '6"': 5239,
-    '8"': 7365,
-    '10"': 8716,
-  },
-  "FPS-DIC0": {
-    '1.5"': 3706,
-    '2"': 3706,
-    '2.5"': 3965,
-    '3"': 4225,
-    '4"': 5188,
-    '6"': 6856,
-    '8"': 10005,
-    '10"': 12007,
-  },
-  "FPS-DCE0": {
-    '1.5"': 3558,
-    '2"': 3589,
-    '2.5"': 3794,
-    '3"': 3999,
-    '4"': 4720,
-    '6"': 6134,
-    '8"': 8913,
-    '10"': 10603,
-  },
-  "FPS-DCE1": {
-    '1.5"': 3808,
-    '2"': 3808,
-    '2.5"': 4032,
-    '3"': 4256,
-    '4"': 5087,
-    '6"': 6525,
-    '8"': 9243,
-    '10"': 10969,
-  },
-  "FPS-DIE1": {
-    '1.5"': 2744,
-    '2"': 2744,
-    '2.5"': 2893,
-    '3"': 3043,
-    '4"': 3597,
-    '6"': 4557,
-    '8"': 6370,
-    '10"': 7522,
-  },
-  "FDV-R-PN2": {
     '1.5"': 1284,
     '2"': 1284,
     '2.5"': 1492,
@@ -1393,433 +927,6 @@ const PRICES_HG_USD_RAW = {
     '8"': 5999,
     '10"': 6946,
     '12"': 9790,
-  },
-};
-
-const PRICES_STD_EUR_RAW = {
-  "FDV-DE0": {
-    '1.5"': 2086,
-    '2"': 2086,
-    '3"': 2378,
-    '4"': 2920,
-    '6"': 3859,
-    '8"': 5631,
-    '10"': 6758,
-  },
-  "FDV-DP0": {
-    '1.5"': 2180,
-    '2"': 2180,
-    '3"': 2472,
-    '4"': 3014,
-    '6"': 3952,
-    '8"': 5725,
-    '10"': 6851,
-  },
-  "FDV-DC0": {
-    '1.5"': 2591,
-    '2"': 2591,
-    '3"': 2954,
-    '4"': 3628,
-    '6"': 4794,
-    '8"': 6997,
-    '10"': 8396,
-  },
-  "FDV-DH0": {
-    '1.5"': 1767,
-    '2"': 1767,
-    '3"': 2015,
-    '4"': 2474,
-    '6"': 3269,
-    '8"': 4772,
-    '10"': 5726,
-  },
-  "FDV-DA0": {
-    '1.5"': 2199,
-    '2"': 2199,
-    '3"': 2506,
-    '4"': 3078,
-    '6"': 4067,
-    '8"': 5936,
-    '10"': 7123,
-  },
-  "FDV-DE1": {
-    '1.5"': 1810,
-    '2"': 1810,
-    '3"': 2064,
-    '4"': 2534,
-    '6"': 3349,
-    '8"': 4888,
-    '10"': 5865,
-  },
-  "FDV-3W-DE1": {
-    '1.5"': 1952,
-    '2"': 1952,
-    '3"': 2205,
-    '4"': 2676,
-    '6"': 3491,
-    '8"': 5030,
-    '10"': 6007,
-  },
-  "FDV-DP1": {
-    '1.5"': 1905,
-    '2"': 1905,
-    '3"': 2158,
-    '4"': 2629,
-    '6"': 3444,
-    '8"': 4982,
-    '10"': 5960,
-  },
-  "FDV-DC1": {
-    '1.5"': 2314,
-    '2"': 2314,
-    '3"': 2637,
-    '4"': 3239,
-    '6"': 4280,
-    '8"': 6247,
-    '10"': 7496,
-  },
-  "FDV-DH1": {
-    '1.5"': 1544,
-    '2"': 1544,
-    '3"': 1780,
-    '4"': 2161,
-    '6"': 2856,
-    '8"': 4168,
-    '10"': 5001,
-  },
-  "FDV-3W-DH1": {
-    '1.5"': 1544,
-    '2"': 1544,
-    '3"': 1780,
-    '4"': 2161,
-    '6"': 2856,
-    '8"': 4168,
-    '10"': 5001,
-  },
-  "FDV-DA1": {
-    '1.5"': 1923,
-    '2"': 1923,
-    '3"': 2193,
-    '4"': 2693,
-    '6"': 3558,
-    '8"': 5193,
-    '10"': 6232,
-  },
-  "FDV-PE0": {
-    '1.5"': 2553,
-    '2"': 2553,
-    '3"': 2988,
-    '4"': 3388,
-    '6"': 4326,
-    '8"': 6288,
-    '10"': 7544,
-  },
-  "FDV-PP0": {
-    '1.5"': 2799,
-    '2"': 2799,
-    '3"': 3091,
-    '4"': 3633,
-    '6"': 4571,
-    '8"': 6531,
-    '10"': 7788,
-  },
-  "FDV-PC0": {
-    '1.5"': 3059,
-    '2"': 3059,
-    '3"': 3422,
-    '4"': 4096,
-    '6"': 5262,
-    '8"': 7652,
-    '10"': 9182,
-  },
-  "FDV-PH0": {
-    '1.5"': 2235,
-    '2"': 2235,
-    '3"': 2482,
-    '4"': 2942,
-    '6"': 3737,
-    '8"': 5426,
-    '10"': 6512,
-  },
-  "FDV-PA0": {
-    '1.5"': 2666,
-    '2"': 2666,
-    '3"': 2974,
-    '4"': 3546,
-    '6"': 4535,
-    '8"': 6591,
-    '10"': 7909,
-  },
-  "FDV-PE1": {
-    '1.5"': 2278,
-    '2"': 2278,
-    '3"': 2532,
-    '4"': 3002,
-    '6"': 3817,
-    '8"': 5543,
-    '10"': 6651,
-  },
-  "FDV-PP1": {
-    '1.5"': 2524,
-    '2"': 2524,
-    '3"': 2777,
-    '4"': 3248,
-    '6"': 4063,
-    '8"': 5788,
-    '10"': 6897,
-  },
-  "FDV-PC1": {
-    '1.5"': 2781,
-    '2"': 2781,
-    '3"': 3105,
-    '4"': 3707,
-    '6"': 4748,
-    '8"': 6901,
-    '10"': 8282,
-  },
-  "FDV-PH1": {
-    '1.5"': 2011,
-    '2"': 2011,
-    '3"': 2228,
-    '4"': 2629,
-    '6"': 3324,
-    '8"': 4823,
-    '10"': 5787,
-  },
-  "FDV-PA1": {
-    '1.5"': 2391,
-    '2"': 2391,
-    '3"': 2681,
-    '4"': 3161,
-    '6"': 4026,
-    '8"': 5848,
-    '10"': 7018,
-  },
-  "FDV-AE1": {
-    '1.5"': 1431,
-    '2"': 1431,
-    '3"': 1631,
-    '4"': 2003,
-    '6"': 2815,
-    '8"': 4452,
-    '10"': 5342,
-  },
-  "FDV-3W-AE1": {
-    '1.5"': 1572,
-    '2"': 1572,
-    '3"': 1773,
-    '4"': 2145,
-    '6"': 2957,
-    '8"': 4594,
-    '10"': 5484,
-  },
-  "FDV-AP1": {
-    '1.5"': 1525,
-    '2"': 1525,
-    '3"': 1725,
-    '4"': 2097,
-    '6"': 2909,
-    '8"': 4546,
-    '10"': 5437,
-  },
-  "FDV-AC1": {
-    '1.5"': 1824,
-    '2"': 1824,
-    '3"': 2079,
-    '4"': 2553,
-    '6"': 3542,
-    '8"': 5514,
-    '10"': 6616,
-  },
-  "FDV-AH1": {
-    '1.5"': 1245,
-    '2"': 1245,
-    '3"': 1420,
-    '4"': 1996,
-    '6"': 2472,
-    '8"': 3952,
-    '10"': 4742,
-  },
-  "FDV-3W-AH1": {
-    '1.5"': 1245,
-    '2"': 1245,
-    '3"': 1420,
-    '4"': 1996,
-    '6"': 2472,
-    '8"': 3952,
-    '10"': 4742,
-  },
-  "FDV-R-HH0": { '1.5"': 1192, '2"': 1192, '3"': 1359 },
-  "FDV-R-HHP": { '1.5"': 1473, '2"': 1473, '3"': 1640 },
-  "FDV-R-MH0": {
-    '1.5"': 875,
-    '2"': 875,
-    '3"': 1011,
-    '4"': 1459,
-    '6"': 1829,
-    '8"': 2980,
-    '10"': 3595,
-    '12"': 5392,
-  },
-  "FDV-R-MH1": {
-    '1.5"': 969,
-    '2"': 969,
-    '3"': 1104,
-    '4"': 1552,
-    '6"': 1923,
-    '8"': 3074,
-    '10"': 3688,
-    '12"': 5532,
-  },
-  "FDV-R-ME1": {
-    '1.5"': 1113,
-    '2"': 1113,
-    '3"': 1288,
-    '4"': 1558,
-    '6"': 2189,
-    '8"': 3463,
-    '10"': 4155,
-    '12"': 6233,
-  },
-  "FPS-SIE0": {
-    '1.5"': 2378,
-    '2"': 2378,
-    '3"': 2711,
-    '4"': 3358,
-    '6"': 4399,
-    '8"': 6532,
-    '10"': 7839,
-  },
-  "FPS-SIP0": {
-    '1.5"': 2377,
-    '2"': 2377,
-    '3"': 2710,
-    '4"': 3357,
-    '6"': 4398,
-    '8"': 6531,
-    '10"': 7838,
-  },
-  "FPS-SCE0": {
-    '1.5"': 2911,
-    '2"': 2937,
-    '3"': 3272,
-    '4"': 3862,
-    '6"': 5019,
-    '8"': 7292,
-    '10"': 8675,
-  },
-  "FPS-SIE1": {
-    '1.5"': 2064,
-    '2"': 2064,
-    '3"': 2353,
-    '4"': 2915,
-    '6"': 3885,
-    '8"': 5621,
-    '10"': 6804,
-  },
-  "FPS-SCE1": {
-    '1.5"': 2597,
-    '2"': 2597,
-    '3"': 2911,
-    '4"': 3483,
-    '6"': 4389,
-    '8"': 6374,
-    '10"': 7715,
-  },
-  "FPS-DIE0": {
-    '1.5"': 2378,
-    '2"': 2378,
-    '3"': 2711,
-    '4"': 3358,
-    '6"': 4399,
-    '8"': 6532,
-    '10"': 7839,
-  },
-  "FPS-DIC0": {
-    '1.5"': 3032,
-    '2"': 3032,
-    '3"': 3456,
-    '4"': 4245,
-    '6"': 5609,
-    '8"': 8186,
-    '10"': 9824,
-  },
-  "FPS-DCE0": {
-    '1.5"': 2911,
-    '2"': 2937,
-    '3"': 3272,
-    '4"': 3862,
-    '6"': 5019,
-    '8"': 7292,
-    '10"': 8675,
-  },
-  "FPS-DCE1": {
-    '1.5"': 2597,
-    '2"': 2597,
-    '3"': 2911,
-    '4"': 3483,
-    '6"': 4389,
-    '8"': 6374,
-    '10"': 7715,
-  },
-  "FPS-DIE1": {
-    '1.5"': 2064,
-    '2"': 2064,
-    '3"': 2353,
-    '4"': 2915,
-    '6"': 3885,
-    '8"': 5621,
-    '10"': 6804,
-  },
-  "FDV-R-PN2": {
-    '1.5"': 747,
-    '2"': 747,
-    '3"': 1092,
-    '4"': 1396,
-    '6"': 2614,
-    '8"': 3670,
-    '10"': 4404,
-    '12"': 6606,
-  },
-  "FDV-R-RN2": {
-    '1.5"': 1124,
-    '2"': 1124,
-    '3"': 1233,
-    '4"': 1444,
-    '6"': 2758,
-    '8"': 3814,
-    '10"': 4576,
-    '12"': 6865,
-  },
-  "FDV-R-LE2": {
-    '1.5"': 710,
-    '2"': 710,
-    '3"': 1017,
-    '4"': 1337,
-    '6"': 2456,
-    '8"': 3215,
-    '10"': 3858,
-    '12"': 5787,
-  },
-  "FDV-R-LF2": {
-    '1.5"': 1050,
-    '2"': 1050,
-    '3"': 1215,
-    '4"': 1412,
-    '6"': 2575,
-    '8"': 3313,
-    '10"': 3976,
-    '12"': 5964,
-  },
-  "FDV-R-LA2": {
-    '1.5"': 1452,
-    '2"': 1452,
-    '3"': 1620,
-    '4"': 2210,
-    '6"': 2845,
-    '8"': 3909,
-    '10"': 4691,
-    '12"': 7037,
   },
 };
 
@@ -2817,6 +1924,289 @@ export default function QuotationApp() {
     XLSX.writeFile(wb, `Quotation_${ref}.xlsx`);
   };
 
+  // --- פונקציה חדשה לשמירה חכמה לתיקייה ---
+  const handleSmartSave = async () => {
+    // 1. בדיקת תמיכה בדפדפן
+    if (!("showDirectoryPicker" in window)) {
+      alert("הדפדפן שלך לא תומך בשמירה ישירה לתיקייה (נסה Chrome או Edge).");
+      return;
+    }
+
+    saveCustomerToList(cust.name); // שמירת שם הלקוח
+
+    try {
+      // 2. פתיחת חלון בחירת תיקייה
+      const dirHandle = await window.showDirectoryPicker();
+
+      // --- הכנת קובץ אקסל (Excel Blob) ---
+      const wsData = [];
+      wsData.push(["RAPHAEL VALVES QUOTATION"]);
+      wsData.push([]);
+      wsData.push([
+        "Date:",
+        new Date().toLocaleDateString(),
+        "Reference:",
+        ref,
+      ]);
+      wsData.push(["Attn:", cust.contactName, "Company:", cust.name]);
+      wsData.push(["Prepared By:", salesPerson]);
+      wsData.push([]);
+      wsData.push([
+        "No",
+        "Code",
+        "Description",
+        "DN",
+        "Qty",
+        `Unit Price (${currencySymbol})`,
+        `Total (${currencySymbol})`,
+      ]);
+      items.forEach((item, index) => {
+        const financials = calculateRow(item);
+        let desc = item.code;
+        if (PRODUCTS_DB[item.code]) desc = PRODUCTS_DB[item.code].desc;
+        wsData.push([
+          index + 1,
+          item.code,
+          desc,
+          item.size || "-",
+          item.qty,
+          financials.unitPrice,
+          financials.total,
+        ]);
+      });
+      wsData.push([]);
+      wsData.push(["", "", "", "", "Subtotal:", subTotal]);
+      if (includePacking) {
+        wsData.push(["", "", "", "", "Packing (3.5%):", packingCost]);
+      }
+      wsData.push(["", "", "", "", "GRAND TOTAL:", grandTotal]);
+      wsData.push([]);
+      wsData.push(["Commercial Terms"]);
+      wsData.push(["Payment:", terms.payment]);
+      wsData.push(["Delivery:", terms.delivery]);
+
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Quotation");
+      // יצירת ה-Blob של האקסל
+      const wbOut = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+      const excelBlob = new Blob([wbOut], { type: "application/octet-stream" });
+
+      // --- הכנת קובץ PDF (PDF Blob) ---
+      // אנו עוטפים את יצירת ה-PDF ב-Promise כדי לחכות לטעינת הלוגו
+      const pdfBlob = await new Promise((resolve) => {
+        const doc = new jsPDF();
+        const logoImg = new Image();
+        logoImg.src = "/raphael_logo_final.png";
+        doc.setFont("helvetica", "normal");
+
+        const generatePDFContent = () => {
+          if (logoImg.complete && logoImg.naturalHeight !== 0) {
+            doc.addImage(logoImg, "PNG", 14, 10, 50, 15);
+          }
+          doc.setFontSize(10);
+          doc.setTextColor(0, 0, 0);
+          doc.text("COMMERCIAL QUOTATION", 14, 35);
+          const dateStr = getFormattedDate();
+          doc.text(`Date: ${dateStr}`, 140, 35);
+          doc.text(`Reference: ${ref}`, 140, 40);
+          doc.text(`Attn: ${cust.contactName}`, 14, 45);
+          doc.text(`Company: ${cust.name}`, 14, 50);
+
+          const tableBody = items.map((item, index) => {
+            const financials = calculateRow(item);
+            let desc = "";
+            let code = item.code;
+            if (item.category === CATEGORIES.VALVES) {
+              const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+              desc = `${baseDesc}`;
+              if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
+              if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
+              if (item.connType) desc += `; Connection: ${item.connType}`;
+            } else if (item.category === CATEGORIES.FREE_TEXT) {
+              code = item.code || "General";
+              desc = item.description || "";
+            } else {
+              desc = item.code;
+            }
+            return [
+              index + 1,
+              code,
+              desc,
+              item.size || "-",
+              item.qty,
+              financials.unitPrice.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
+              financials.total.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              }),
+            ];
+          });
+
+          const tableFoot = [
+            [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Subtotal:",
+              `${currencySymbol}${subTotal.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`,
+            ],
+          ];
+          if (packingCost > 0) {
+            tableFoot.push([
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Packing & Handling (3.5%):",
+              `${currencySymbol}${packingCost.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}`,
+            ]);
+          }
+          tableFoot.push([
+            "",
+            "",
+            "",
+            "",
+            "",
+            "GRAND TOTAL:",
+            `${currencySymbol}${grandTotal.toLocaleString(undefined, {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}`,
+          ]);
+
+          autoTable(doc, {
+            startY: 60,
+            head: [
+              [
+                "No",
+                "Model",
+                "Description",
+                "DN",
+                "Qty",
+                `Unit Price (${currencySymbol})`,
+                `Total (${currencySymbol})`,
+              ],
+            ],
+            body: tableBody,
+            foot: tableFoot,
+            theme: "striped",
+            headStyles: {
+              fillColor: [0, 51, 102],
+              textColor: [255, 255, 255],
+              fontStyle: "bold",
+            },
+            alternateRowStyles: { fillColor: [245, 245, 245] },
+            styles: {
+              fontSize: 9,
+              textColor: [0, 0, 0],
+              lineColor: [200, 200, 200],
+              lineWidth: 0.1,
+              cellPadding: 4,
+            },
+            columnStyles: {
+              0: { cellWidth: 15 },
+              1: { cellWidth: 25 },
+              2: { cellWidth: 60 },
+            },
+            footStyles: {
+              fillColor: [255, 255, 255],
+              textColor: [0, 0, 0],
+              fontStyle: "bold",
+              lineColor: [200, 200, 200],
+              lineWidth: 0.1,
+            },
+            margin: { top: 20 },
+          });
+
+          let finalY = doc.lastAutoTable.finalY + 15;
+          if (finalY > 220) {
+            doc.addPage();
+            finalY = 20;
+          }
+
+          doc.setFontSize(10);
+          doc.setTextColor(0, 0, 0);
+          doc.setFont("helvetica", "bold");
+          doc.text("Commercial Terms:", 14, finalY);
+          doc.setFont("helvetica", "normal");
+          finalY += 5;
+          doc.setFontSize(9);
+          doc.text(`Payment: ${terms.payment}`, 14, finalY);
+          doc.text(`Delivery: ${terms.delivery}`, 80, finalY);
+          finalY += 5;
+          doc.text(`Lead time: ${terms.leadTime}`, 14, finalY);
+          doc.text(`Validity: ${terms.validity}`, 80, finalY);
+          finalY += 20;
+          doc.text("Sincerely,", 14, finalY);
+          finalY += 10;
+          const signer = SIGNATURES[salesPerson] || SIGNATURES["OTHER"];
+          doc.setTextColor(0, 51, 102);
+          doc.setFont("helvetica", "bold");
+          doc.text(signer.name || "Sales Manager", 14, finalY);
+          doc.setFont("helvetica", "normal");
+          finalY += 5;
+          doc.text(signer.title, 14, finalY);
+          finalY += 5;
+          doc.text(signer.region, 14, finalY);
+          if (signer.phone) {
+            finalY += 5;
+            doc.text(`Phone: ${signer.phone}`, 14, finalY);
+          }
+          if (signer.email) {
+            finalY += 5;
+            doc.text(`Email: ${signer.email}`, 14, finalY);
+          }
+
+          // החזרת ה-Blob
+          resolve(doc.output("blob"));
+        };
+
+        logoImg.onload = generatePDFContent;
+        logoImg.onerror = generatePDFContent;
+      });
+
+      // 3. שמירת הקבצים לתיקייה שנבחרה
+      // שמירת PDF
+      const pdfFileHandle = await dirHandle.getFileHandle(
+        `Quotation_${ref}.pdf`,
+        { create: true }
+      );
+      const pdfWritable = await pdfFileHandle.createWritable();
+      await pdfWritable.write(pdfBlob);
+      await pdfWritable.close();
+
+      // שמירת Excel
+      const excelFileHandle = await dirHandle.getFileHandle(
+        `Quotation_${ref}.xlsx`,
+        { create: true }
+      );
+      const excelWritable = await excelFileHandle.createWritable();
+      await excelWritable.write(excelBlob);
+      await excelWritable.close();
+
+      alert("הקבצים נשמרו בהצלחה בתיקייה שבחרת!");
+    } catch (err) {
+      if (err.name !== "AbortError") {
+        // להתעלם אם המשתמש לחץ על ביטול
+        console.error(err);
+        alert("אירעה שגיאה בשמירת הקבצים.");
+      }
+    }
+  };
+
   return (
     <div
       className="min-h-screen bg-gray-50 p-2 md:p-8 font-sans text-gray-900"
@@ -2879,18 +2269,26 @@ export default function QuotationApp() {
               </select>
             </div>
 
-            <div className="flex gap-2 w-full justify-center md:justify-end">
+            <div className="flex flex-col gap-2 w-full md:w-auto items-end">
+              <div className="flex gap-2 w-full justify-center md:justify-end">
+                <button
+                  onClick={handleExportPDF}
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                >
+                  Export PDF
+                </button>
+                <button
+                  onClick={handleExportExcel}
+                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                >
+                  Export Excel
+                </button>
+              </div>
               <button
-                onClick={handleExportPDF}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                onClick={handleSmartSave}
+                className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-1 px-4 rounded shadow text-xs border border-blue-900/20"
               >
-                Export PDF
-              </button>
-              <button
-                onClick={handleExportExcel}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
-              >
-                Export Excel
+                Save Both to Folder (Browse...)
               </button>
             </div>
           </div>
