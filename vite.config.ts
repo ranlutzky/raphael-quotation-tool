@@ -11,11 +11,25 @@ import { pricesHgUsd } from "./src/data/prices_hg_usd.js";
 export default defineConfig({
   plugins: [react()],
   define: {
-    // הזרקת המחירונים למשתנים הגלובליים שהקוד שלך מכיר
     PRICES_STD_EUR_RAW: JSON.stringify(pricesData),
     PRICES_STD_USD_RAW: JSON.stringify(pricesStdUsd),
     PRICES_HG_EUR_RAW: JSON.stringify(pricesHgEur),
     PRICES_HG_USD_RAW: JSON.stringify(pricesHgUsd),
+
+    // כאן אנחנו מזריקים את האופציות האמיתיות שמצאת
+    OPTIONS: JSON.stringify({
+      bodyMaterials: ["Ductile Iron", "Cast Steel", "ST. St.", "Ni Al Bz"],
+      trimMaterials: [
+        "Copper/Brass",
+        "Ductile Iron",
+        "Stainless Steel",
+        "Cupro Nickel 90/10",
+        "Monel",
+        "Full Sea Water Trim",
+      ],
+      connections: ["TH*TH", "FL*FL", "GR*GR", "FL*GR", "GR*FL"],
+      sizes: ['1.5"', '2"', '2.5"', '3"', '4"', '6"', '8"', '10"', '12"'],
+    }),
   },
   server: {
     allowedHosts: true,
