@@ -177,8 +177,10 @@ const addSize2_5 = (priceList) => {
   const newPriceList = { ...priceList };
   Object.keys(newPriceList).forEach((key) => {
     const item = newPriceList[key];
-    if (item && item['2"'] && item['3"']) {
+    // בודק אם קיים 2 ו-3 אינץ', ואם 2.5 אינץ' *חסר*
+    if (item && item['2"'] && item['3"'] && !item['2.5"']) {
       const avg = (item['2"'] + item['3"']) / 2;
+      // מוסיף את ה-2.5 לרשומה
       newPriceList[key] = { ...item, '2.5"': avg };
     }
   });
@@ -218,6 +220,7 @@ const getFormattedDate = () => {
 
 const DIAPHRAGMS_DB = {
   'Deluge (FDV) Diaphragm 2"': 70,
+  'Deluge (FDV) Diaphragm 2.5"': 94.5, // --- הוספתי שורה זו (ממוצע של 2 ו-3) ---
   'Deluge (FDV) Diaphragm 3"': 119,
   'Deluge (FDV) Diaphragm 4"': 208,
   'Deluge (FDV) Diaphragm 6"': 358,
