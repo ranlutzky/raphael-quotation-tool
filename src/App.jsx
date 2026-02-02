@@ -172,6 +172,7 @@ const SIGNATURES = {
 const PAYMENT_PRESETS = ["AS USUAL", "ADVANCED", "NET +30", "NET +60"];
 const DELIVERY_PRESETS = ["EXW", "FOB", "C&F"];
 
+// פונקציית עזר לחישוב מחירים - מוגדרת בהתחלה כדי למנוע שגיאות
 const addSize2_5 = (priceList) => {
   if (!priceList) return {};
   const newPriceList = { ...priceList };
@@ -816,7 +817,7 @@ const PRICES_STD_USD_RAW = {
   "FPS-SCE1": {
     '1.5"': 3721,
     '2"': 3721,
-    '3"': 4146,
+    '3"': 3934,
     '4"': 4936,
     '6"': 6303,
     '8"': 8885,
@@ -868,34 +869,34 @@ const PRICES_STD_USD_RAW = {
     '10"': 7522,
   },
   "FDV-R-PN2": {
-    '1.5"': 830,
-    '2"': 830,
-    '3"': 1213,
-    '4"': 1551,
-    '6"': 2904,
-    '8"': 4078,
-    '10"': 4894,
-    '12"': 7340,
+    '1.5"': 1284,
+    '2"': 1284,
+    '3"': 1531,
+    '4"': 1863,
+    '6"': 3192,
+    '8"': 4344,
+    '10"': 5145,
+    '12"': 7547,
   },
   "FDV-R-RN2": {
     '1.5"': 1741,
     '2"': 1741,
     '3"': 1872,
-    '4"': 2128,
-    '6"': 3725,
-    '8"': 5001,
-    '10"': 5925,
-    '12"': 8699,
+    '4"': 1915,
+    '6"': 3352,
+    '8"': 4501,
+    '10"': 5333,
+    '12"': 7829,
   },
   "FDV-R-LE2": {
     '1.5"': 1238,
     '2"': 1238,
     '3"': 1611,
-    '4"': 1999,
-    '6"': 3355,
-    '8"': 4275,
-    '10"': 5055,
-    '12"': 7393,
+    '4"': 1799,
+    '6"': 3020,
+    '8"': 3848,
+    '10"': 4549,
+    '12"': 6654,
   },
   "FDV-R-LF2": {
     '1.5"': 2532,
@@ -1877,7 +1878,7 @@ const OPTIONS = {
 export default function QuotationApp() {
   const loadSavedData = () => {
     try {
-      const saved = localStorage.getItem("RAPHAEL_QUOTATION_DATA");
+      const saved = localStorage.getItem("RAPHAEL_APP_V3"); // Changed key
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
       console.error("Local Storage Error", e);
@@ -1887,7 +1888,7 @@ export default function QuotationApp() {
 
   const loadSavedCustomers = () => {
     try {
-      const saved = localStorage.getItem("RAPHAEL_CUSTOMERS");
+      const saved = localStorage.getItem("RAPHAEL_CUSTOMERS_V3"); // Changed key
       return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
     } catch (e) {
       console.error("Local Storage Customers Error", e);
@@ -1928,17 +1929,6 @@ export default function QuotationApp() {
   );
 
   useEffect(() => {
-    // --- EMERGENCY CLEANUP FOR NEW VERSION ---
-    // This safely clears old incompatible data structure on first run of this version
-    const hasRunCleanup = localStorage.getItem("CLEANUP_V2_DONE");
-    if (!hasRunCleanup) {
-      localStorage.removeItem("RAPHAEL_QUOTATION_DATA");
-      localStorage.setItem("CLEANUP_V2_DONE", "true");
-      setItems([]); // Clear state as well
-    }
-  }, []);
-
-  useEffect(() => {
     const dataToSave = {
       items,
       cust,
@@ -1948,7 +1938,7 @@ export default function QuotationApp() {
       refSuffix,
       includePacking,
     };
-    localStorage.setItem("RAPHAEL_QUOTATION_DATA", JSON.stringify(dataToSave));
+    localStorage.setItem("RAPHAEL_APP_V3", JSON.stringify(dataToSave)); // Changed key
   }, [items, cust, salesPerson, currency, terms, refSuffix, includePacking]);
 
   const saveCustomerToList = (customerName) => {
@@ -1959,7 +1949,7 @@ export default function QuotationApp() {
         a.localeCompare(b)
       );
       setCustomerList(newList);
-      localStorage.setItem("RAPHAEL_CUSTOMERS", JSON.stringify(newList));
+      localStorage.setItem("RAPHAEL_CUSTOMERS_V3", JSON.stringify(newList)); // Changed key
     }
   };
 
@@ -2029,13 +2019,15 @@ export default function QuotationApp() {
         validity: "30 Days",
       });
       setIncludePacking(true);
-      localStorage.removeItem("RAPHAEL_QUOTATION_DATA");
+      // We don't remove the key, just clear state to avoid refresh issues
+      // localStorage.removeItem("RAPHAEL_APP_V3");
     }
   };
 
   const calculateRow = (item) => {
     // If the user manually edited the price, use that.
     if (item.customPrice > 0) {
+      // Assuming custom price entered is the UNIT NET PRICE
       return {
         basePrice: item.customPrice,
         unitPrice: item.customPrice,
