@@ -243,6 +243,7 @@ const ACCESSORIES_DB = {
   "Pressure Switch Explosion proof (PS-10-EX Proof)": 650,
   "Pressure Switch Explosion proof (UE-120)": 650,
   "Pressure Switch PS-13": 100,
+  "Pressure Switch Standard": 150,
   "Solenoid Electric latching solenoid(2/2) (8281- 320595-BURKERT-2/2)": 250,
   "Solenoid EX PROOF NOT Standard": 500,
   "Solenoid Standard ": 220,
