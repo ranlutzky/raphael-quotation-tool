@@ -2451,6 +2451,22 @@ export default function QuotationApp() {
   const calculateRow = (item, index, ignoreMerge = false) => {
     if (!ignoreMerge && item.isIncluded) return { unitPrice: 0, total: 0 };
 
+    // 1. בדיקת דריסת מחיר ידנית (Manual Overwrite)
+    if (
+      item.category !== CATEGORIES.FREE_TEXT &&
+      item.manualPrice !== undefined &&
+      item.manualPrice !== "" &&
+      item.manualPrice !== null
+    ) {
+      const unitPrice = parseFloat(item.manualPrice) || 0;
+      return {
+        unitPrice,
+        total: unitPrice * (item.qty || 1),
+        bodyAdder: 0,
+        trimAdder: 0,
+      };
+    }
+
     if (item.category === CATEGORIES.FREE_TEXT) {
       const unitPrice = parseFloat(item.price) || 0;
       return {
@@ -2464,37 +2480,30 @@ export default function QuotationApp() {
     if (item.category === CATEGORIES.VALVES) {
       if (!item.code || !item.size) return { unitPrice: 0, total: 0 };
 
-      // תמיד מתחילים ממחירון הסטנדרט
       const basePriceTable =
         currency === "USD" ? PRICES_STD_USD : PRICES_STD_EUR;
       const basePrice = basePriceTable?.[item.code]?.[item.size] || 0;
-
       const discountAmount = basePrice * (item.discount / 100);
       const discountedBase = basePrice - discountAmount;
-
       const bodyAdder = item.bodyMat
         ? BODY_MATERIAL_ADDONS[item.bodyMat]?.[item.size] || 0
         : 0;
 
-      // חישוב תוספת טרים על ידי הפרש בין טבלאות
       let trimAdder = 0;
       if (item.trimMat === "Full Sea Water Trim") {
         trimAdder = 10000;
       } else if (item.trimMat && item.trimMat !== "Copper/Brass") {
         const hgTable = currency === "USD" ? PRICES_HG_USD : PRICES_HG_EUR;
         const hgPrice = hgTable?.[item.code]?.[item.size] || basePrice;
-        trimAdder = Math.max(0, hgPrice - basePrice); // מוסיף רק את ההפרש
+        trimAdder = Math.max(0, hgPrice - basePrice);
       }
 
       let unitPrice = discountedBase + bodyAdder + trimAdder;
 
-      // הוספת מחיר האביזרים הממוזגים למגוף
-      // הוספת מחיר האביזרים הממוזגים למגוף (כולל הכפלה בכמות שלהם)
       if (!ignoreMerge) {
         for (let i = index + 1; i < items.length; i++) {
           if (items[i].isIncluded) {
             const mergedVal = calculateRow(items[i], i, true);
-            // הכפלת מחיר היחידה של האביזר בכמות שלו
             unitPrice += mergedVal.unitPrice * (items[i].qty || 1);
           } else break;
         }
@@ -2507,7 +2516,6 @@ export default function QuotationApp() {
         trimAdder,
       };
     } else {
-      // אביזרים וסרעפות
       let db =
         item.category === CATEGORIES.DIAPHRAGMS
           ? DIAPHRAGMS_DB
@@ -3460,33 +3468,70 @@ export default function QuotationApp() {
                         />
                       </td>
                       <td className="px-2 py-3 text-right bg-blue-50">
-                        {isFreeText ? (
-                          <input
-                            type="number"
-                            className="w-full border rounded p-1 text-right font-mono font-bold text-blue-900"
-                            value={item.price || ""}
-                            onChange={(e) =>
-                              updateItem(item.id, "price", e.target.value)
-                            }
-                            placeholder="0.00"
-                          />
-                        ) : (
-                          <>
-                            <div className="font-mono font-bold text-blue-900">
-                              {formatCurrency(
-                                financials.unitPrice,
-                                currencySymbol
+                        <div className="flex flex-col items-end group">
+                          <div className="relative w-full">
+                            <input
+                              type="number"
+                              className={`w-full border rounded p-1 text-right font-mono font-bold outline-none transition-colors ${
+                                !isFreeText && item.manualPrice
+                                  ? "border-amber-400 bg-amber-50 text-amber-900"
+                                  : "border-blue-200 bg-white text-blue-900 focus:border-blue-500"
+                              }`}
+                              value={
+                                isFreeText
+                                  ? item.price || ""
+                                  : item.manualPrice || ""
+                              }
+                              onChange={(e) => {
+                                const val = e.target.value;
+                                if (isFreeText) {
+                                  updateItem(item.id, "price", val);
+                                } else {
+                                  updateItem(item.id, "manualPrice", val);
+                                }
+                              }}
+                              placeholder={
+                                isFreeText
+                                  ? "0.00"
+                                  : financials.unitPrice.toFixed(2)
+                              }
+                            />
+                            {/* כפתור איפוס שמופיע רק כשיש מחיר ידני */}
+                            {!isFreeText && item.manualPrice && (
+                              <button
+                                onClick={() =>
+                                  updateItem(item.id, "manualPrice", "")
+                                }
+                                className="absolute -left-2 top-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] hover:bg-red-700 shadow-sm z-10"
+                                title="Reset to list price"
+                              >
+                                ×
+                              </button>
+                            )}
+                          </div>
+
+                          {/* הצגת מחיר המקור מתחת לתיבה באפור קטן */}
+                          {!isFreeText && item.manualPrice && (
+                            <div className="text-[10px] text-gray-400 font-medium mt-1">
+                              Orig:{" "}
+                              {formatCurrency(financials.unitPrice).replace(
+                                currencySymbol,
+                                ""
                               )}
                             </div>
-                            {isValve && financials.trimAdder > 0 && (
+                          )}
+
+                          {/* חיווי הטרים (רק אם אין מחיר ידני) */}
+                          {isValve &&
+                            financials.trimAdder > 0 &&
+                            !item.manualPrice && (
                               <div className="text-[9px] text-red-600 font-bold italic leading-tight">
                                 {item.trimMat === "Full Sea Water Trim"
                                   ? "+SeaWater"
                                   : "+HG Trim"}
                               </div>
                             )}
-                          </>
-                        )}
+                        </div>
                       </td>
                       <td className="px-2 py-3 bg-blue-50">
                         <input
