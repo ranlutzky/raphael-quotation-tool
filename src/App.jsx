@@ -2589,7 +2589,20 @@ export default function QuotationApp() {
           code = item.code || "General";
           desc = item.customDesc || "";
         } else {
-          const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+          // שליפת התיאור הבסיסי
+          let baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+
+          // רשימת החרגות ל-FM/UL
+          const excludedFM = ["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"];
+
+          // הוספת FM/UL APPROVED אם זה מגוף ולא ברשימת ההחרגה
+          if (
+            item.category === CATEGORIES.VALVES &&
+            !excludedFM.includes(item.code)
+          ) {
+            baseDesc += " - FM/UL APPROVED";
+          }
+
           desc = `${baseDesc}`;
           if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
           if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
@@ -2772,7 +2785,20 @@ export default function QuotationApp() {
         code = item.code || "General";
         desc = item.customDesc || ""; // מושך את הטקסט מהתיבה החופשית
       } else {
-        const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+        // שליפת התיאור הבסיסי
+        let baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+
+        // רשימת החרגות ל-FM/UL
+        const excludedFM = ["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"];
+
+        // הוספת FM/UL APPROVED אם זה מגוף ולא ברשימת ההחרגה
+        if (
+          item.category === CATEGORIES.VALVES &&
+          !excludedFM.includes(item.code)
+        ) {
+          baseDesc += " - FM/UL APPROVED";
+        }
+
         desc = `${baseDesc}`;
         if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
         if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
