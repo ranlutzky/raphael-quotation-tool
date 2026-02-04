@@ -2764,6 +2764,8 @@ export default function QuotationApp() {
     wsData.push(["Attn:", cust.contactName, "Company:", cust.name]);
     wsData.push(["Prepared By:", salesPerson]);
     wsData.push([]);
+
+    // 1. הוספת הכותרת "Disc %" למערך
     wsData.push([
       "No",
       "Code",
@@ -2771,11 +2773,12 @@ export default function QuotationApp() {
       "DN",
       "Qty",
       `Unit Price (${currencySymbol})`,
+      "Disc %",
       `Total (${currencySymbol})`,
+      "Internal Notes",
     ]);
 
     items.forEach((item, index) => {
-      // אם הפריט ממוזג, אל תוסיף לו שורה נפרדת באקסל
       if (item.isIncluded) return;
 
       const financials = calculateRow(item, index);
@@ -2784,31 +2787,14 @@ export default function QuotationApp() {
 
       if (item.category === CATEGORIES.FREE_TEXT) {
         code = item.code || "General";
-        desc = item.customDesc || ""; // מושך את הטקסט מהתיבה החופשית
+        desc = item.customDesc || "";
       } else {
-        // שליפת התיאור הבסיסי
-        let baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-
-        // רשימת החרגות ל-FM/UL
-        const excludedFM = ["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"];
-
-        // הוספת FM/UL APPROVED אם זה מגוף ולא ברשימת ההחרגה
-        if (
-          item.category === CATEGORIES.VALVES &&
-          !excludedFM.includes(item.code)
-        ) {
-          baseDesc += " - FM/UL APPROVED";
-        }
-
-        desc = `${baseDesc}`;
+        const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
+        desc = baseDesc;
         if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
         if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-
-        // הוספת הטקסט הידני מהתיבה (אם הוקלד)
         if (item.customDesc) desc += `, ${item.customDesc}`;
 
-        // מיזוג שמות האביזרים לתוך התיאור של המגוף
-        // מיזוג שמות האביזרים לתוך התיאור באקסל עם כמות
         for (let i = index + 1; i < items.length; i++) {
           if (items[i].isIncluded) {
             const qtySuffix =
@@ -2818,34 +2804,54 @@ export default function QuotationApp() {
         }
       }
 
+      // 2. הוספת ערך ההנחה לכל שורה
       wsData.push([
-        wsData.length - 6, // שומר על מספור רץ נכון באקסל
+        wsData.length - 6,
         code,
         desc,
         item.size || "-",
         item.qty,
         financials.unitPrice,
+        item.category === CATEGORIES.FREE_TEXT ? "-" : `${item.discount}%`,
         financials.total,
+        item.internalNotes || "",
       ]);
     });
 
     wsData.push([]);
-    wsData.push(["", "", "", "", "Subtotal:", subTotal]);
+
+    // 3. עדכון שורות הסיכום (הוספת תאים ריקים כדי להתאים למבנה החדש)
+    wsData.push(["", "", "", "", "", "Subtotal:", "", "", subTotal]); // הוספתי "" אחד נוסף
     if (includePacking) {
-      wsData.push(["", "", "", "", "Packing (3.5%):", packingCost]);
+      wsData.push(["", "", "", "", "", "Packing (3.5%):", "", "", packingCost]); // הוספתי "" אחד נוסף
     }
-    wsData.push(["", "", "", "", "GRAND TOTAL:", grandTotal]);
+    wsData.push(["", "", "", "", "", "GRAND TOTAL:", "", "", grandTotal]); // הוספתי "" אחד נוסף
+
     wsData.push([]);
     wsData.push(["Commercial Terms"]);
     wsData.push(["Payment:", terms.payment]);
     wsData.push(["Delivery:", terms.delivery]);
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+    // 4. הגדרת רוחב עמודות אוטומטי
+    const wscols = [
+      { wch: 5 }, // No
+      { wch: 15 }, // Code
+      { wch: 90 }, // Description (רחב במיוחד)
+      { wch: 8 }, // DN
+      { wch: 6 }, // Qty
+      { wch: 15 }, // Unit Price
+      { wch: 10 }, // Disc %
+      { wch: 15 }, // Total
+      { wch: 40 }, // Internal Notes
+    ];
+    ws["!cols"] = wscols;
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Quotation");
     XLSX.writeFile(wb, `Quotation_${ref}.xlsx`);
   };
-
   const handleSmartSave = async () => {
     if (!("showDirectoryPicker" in window)) {
       alert(
@@ -3412,6 +3418,20 @@ export default function QuotationApp() {
                           value={item.customDesc || ""}
                           onChange={(e) =>
                             updateItem(item.id, "customDesc", e.target.value)
+                          }
+                        />
+                        <textarea
+                          className="w-full text-xs border p-1 mt-1 italic"
+                          style={{
+                            backgroundColor: "#fff5f5", // רקע אדמדם
+                            color: "#c53030", // טקסט אדום כהה
+                            borderColor: "#feb2b2", // מסגרת ורודה
+                          }}
+                          placeholder="INTERNAL NOTES (Excel only)"
+                          rows="1"
+                          value={item.internalNotes || ""}
+                          onChange={(e) =>
+                            updateItem(item.id, "internalNotes", e.target.value)
                           }
                         />
                         {isValve && (
