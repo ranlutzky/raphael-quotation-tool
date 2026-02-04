@@ -2867,11 +2867,20 @@ export default function QuotationApp() {
       );
       return;
     }
+
+    // 1. בקשת שם קובץ מהמשתמש (ברירת מחדל היא ה-Ref)
+    const customName = window.prompt(
+      "Enter filename (without extension):",
+      `Quotation_${ref}`
+    );
+    if (!customName) return; // ביטול אם המשתמש לחץ Cancel
+
     saveCustomerToList(cust.name);
+
     try {
       const dirHandle = await window.showDirectoryPicker();
 
-      // Excel Blob
+      // --- יצירת Excel Blob ---
       const wsData = [];
       wsData.push(["RAPHAEL VALVES QUOTATION"]);
       wsData.push([]);
@@ -2882,8 +2891,9 @@ export default function QuotationApp() {
         ref,
       ]);
       wsData.push(["Attn:", cust.contactName, "Company:", cust.name]);
-      wsData.push(["Prepared By:", salesPerson]);
       wsData.push([]);
+
+      // הוספת הכותרות המורחבות
       wsData.push([
         "No",
         "Code",
@@ -2891,52 +2901,67 @@ export default function QuotationApp() {
         "DN",
         "Qty",
         `Unit Price (${currencySymbol})`,
+        "Disc %",
         `Total (${currencySymbol})`,
+        "Internal Notes",
       ]);
+
       items.forEach((item, index) => {
+        if (item.isIncluded) return;
         const financials = calculateRow(item, index);
-        let desc = item.code;
-        if (PRODUCTS_DB[item.code]) desc = PRODUCTS_DB[item.code].desc;
+        let desc = PRODUCTS_DB[item.code]?.desc || item.code;
+
+        // הוספת כל הנתונים לשורה
         wsData.push([
-          index + 1,
+          wsData.length - 6,
           item.code,
           desc,
           item.size || "-",
           item.qty,
           financials.unitPrice,
+          `${item.discount}%`,
           financials.total,
+          item.internalNotes || "",
         ]);
       });
-      wsData.push([]);
-      wsData.push(["", "", "", "", "Subtotal:", subTotal]);
-      if (includePacking)
-        wsData.push(["", "", "", "", "Packing (3.5%):", packingCost]);
-      wsData.push(["", "", "", "", "GRAND TOTAL:", grandTotal]);
-      wsData.push([]);
-      wsData.push(["Commercial Terms"]);
-      wsData.push(["Payment:", terms.payment]);
-      wsData.push(["Delivery:", terms.delivery]);
 
+      wsData.push([]);
+      wsData.push(["", "", "", "", "", "Subtotal:", "", subTotal]);
+      if (includePacking)
+        wsData.push(["", "", "", "", "", "Packing (3.5%):", "", packingCost]);
+      wsData.push(["", "", "", "", "", "GRAND TOTAL:", "", grandTotal]);
       const ws = XLSX.utils.aoa_to_sheet(wsData);
+      // הגדרת רוחב העמודות
+      ws["!cols"] = [
+        { wch: 5 }, // No
+        { wch: 15 }, // Code
+        { wch: 65 }, // Description (רחב מספיק לתיאורים של רפאל)
+        { wch: 8 }, // DN
+        { wch: 6 }, // Qty
+        { wch: 15 }, // Unit Price
+        { wch: 10 }, // Disc %
+        { wch: 15 }, // Total
+        { wch: 40 }, // Internal Notes
+      ];
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, "Quotation");
       const wbOut = XLSX.write(wb, { bookType: "xlsx", type: "array" });
       const excelBlob = new Blob([wbOut], { type: "application/octet-stream" });
 
-      // PDF Blob
+      // --- יצירת PDF Blob ---
+      // --- בתוך handleSmartSave, החלף את בלוק ה-PDF ---
       const pdfBlob = await new Promise((resolve) => {
         const doc = new jsPDF();
         const logoImg = new Image();
         logoImg.src = "/raphael_logo_final.png";
-        doc.setFont("helvetica", "normal");
+
         const generatePDFContent = () => {
+          // הוספת לוגו וטקסט עליון
           if (logoImg.complete && logoImg.naturalHeight !== 0)
             doc.addImage(logoImg, "PNG", 14, 10, 50, 15);
           doc.setFontSize(10);
-          doc.setTextColor(0, 0, 0);
           doc.text("COMMERCIAL QUOTATION", 14, 35);
-          const dateStr = getFormattedDate();
-          doc.text(`Date: ${dateStr}`, 140, 35);
+          doc.text(`Date: ${getFormattedDate()}`, 140, 35);
           doc.text(`Reference: ${ref}`, 140, 40);
           doc.text(`Attn: ${cust.contactName}`, 14, 45);
           doc.text(`Company: ${cust.name}`, 14, 50);
@@ -2945,27 +2970,28 @@ export default function QuotationApp() {
           items.forEach((item, index) => {
             if (item.isIncluded) return;
             const financials = calculateRow(item, index);
-            let desc = "";
-            let code = item.code;
-            if (item.category === CATEGORIES.VALVES) {
-              const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-              desc = `${baseDesc}`;
-              if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-              if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-              if (item.connType) desc += `; Connection: ${item.connType}`;
-              for (let i = index + 1; i < items.length; i++) {
-                if (items[i].isIncluded) desc += `, ${items[i].code}`;
-                else break;
-              }
-            } else if (item.category === CATEGORIES.FREE_TEXT) {
-              code = item.code || "General";
-              desc = item.description || "";
-            } else {
-              desc = item.code;
+            let desc = PRODUCTS_DB[item.code]?.desc || item.code;
+            if (
+              item.category === CATEGORIES.VALVES &&
+              !["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"].includes(item.code)
+            ) {
+              desc += " - FM/UL APPROVED";
             }
+            if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
+            if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
+            if (item.customDesc) desc += `, ${item.customDesc}`;
+
+            for (let i = index + 1; i < items.length; i++) {
+              if (items[i].isIncluded)
+                desc += `, ${items[i].code}${
+                  items[i].qty > 1 ? ` (${items[i].qty} units)` : ""
+                }`;
+              else break;
+            }
+
             tableBody.push([
               tableBody.length + 1,
-              code,
+              item.code,
               desc,
               item.size || "-",
               item.qty,
@@ -2985,16 +3011,17 @@ export default function QuotationApp() {
               `${currencySymbol}${formatCurrency(subTotal, "")}`,
             ],
           ];
-          if (packingCost > 0)
+          if (includePacking) {
             tableFoot.push([
               "",
               "",
               "",
               "",
               "",
-              "Packing:",
+              "Packing & Handling (3.5%):",
               `${currencySymbol}${formatCurrency(packingCost, "")}`,
             ]);
+          }
           tableFoot.push([
             "",
             "",
@@ -3005,6 +3032,7 @@ export default function QuotationApp() {
             `${currencySymbol}${formatCurrency(grandTotal, "")}`,
           ]);
 
+          // החזרת עיצוב הזברה והצבעים
           autoTable(doc, {
             startY: 60,
             head: [
@@ -3027,15 +3055,9 @@ export default function QuotationApp() {
               fontStyle: "bold",
             },
             alternateRowStyles: { fillColor: [245, 245, 245] },
-            styles: {
-              fontSize: 9,
-              textColor: [0, 0, 0],
-              lineColor: [200, 200, 200],
-              lineWidth: 0.1,
-              cellPadding: 4,
-            },
+            styles: { fontSize: 9, cellPadding: 4 },
             columnStyles: {
-              0: { cellWidth: 15 },
+              0: { cellWidth: 12 },
               1: { cellWidth: 25 },
               2: { cellWidth: 60 },
             },
@@ -3043,65 +3065,35 @@ export default function QuotationApp() {
               fillColor: [255, 255, 255],
               textColor: [0, 0, 0],
               fontStyle: "bold",
-              lineColor: [200, 200, 200],
-              lineWidth: 0.1,
             },
-            margin: { top: 20 },
           });
 
           let finalY = doc.lastAutoTable.finalY + 15;
-          if (finalY > 220) {
-            doc.addPage();
-            finalY = 20;
-          }
-          doc.setFontSize(10);
-          doc.setTextColor(0, 0, 0);
           doc.setFont("helvetica", "bold");
           doc.text("Commercial Terms:", 14, finalY);
           doc.setFont("helvetica", "normal");
-          finalY += 5;
-          doc.setFontSize(9);
-          doc.text(`Payment: ${terms.payment}`, 14, finalY);
-          doc.text(`Delivery: ${terms.delivery}`, 80, finalY);
-          finalY += 5;
-          doc.text(`Lead time: ${terms.leadTime}`, 14, finalY);
-          doc.text(`Validity: ${terms.validity}`, 80, finalY);
-          finalY += 20;
-          doc.text("Sincerely,", 14, finalY);
-          finalY += 10;
-          const signer = SIGNATURES[salesPerson] || SIGNATURES["OTHER"];
-          doc.setTextColor(0, 51, 102);
-          doc.setFont("helvetica", "bold");
-          doc.text(signer.name || "Sales Manager", 14, finalY);
-          doc.setFont("helvetica", "normal");
-          finalY += 5;
-          doc.text(signer.title, 14, finalY);
-          finalY += 5;
-          doc.text(signer.region, 14, finalY);
-          if (signer.phone) {
-            finalY += 5;
-            doc.text(`Phone: ${signer.phone}`, 14, finalY);
-          }
-          if (signer.email) {
-            finalY += 5;
-            doc.text(`Email: ${signer.email}`, 14, finalY);
-          }
+          doc.text(
+            `Payment: ${terms.payment} | Delivery: ${terms.delivery} | Lead: ${terms.leadTime}`,
+            14,
+            finalY + 7
+          );
+
           resolve(doc.output("blob"));
         };
         logoImg.onload = generatePDFContent;
         logoImg.onerror = generatePDFContent;
       });
 
-      const pdfFileHandle = await dirHandle.getFileHandle(
-        `Quotation_${ref}.pdf`,
-        { create: true }
-      );
+      // שמירה עם השם המותאם אישית
+      const pdfFileHandle = await dirHandle.getFileHandle(`${customName}.pdf`, {
+        create: true,
+      });
       const pdfWritable = await pdfFileHandle.createWritable();
       await pdfWritable.write(pdfBlob);
       await pdfWritable.close();
 
       const excelFileHandle = await dirHandle.getFileHandle(
-        `Quotation_${ref}.xlsx`,
+        `${customName}.xlsx`,
         { create: true }
       );
       const excelWritable = await excelFileHandle.createWritable();
@@ -3110,10 +3102,7 @@ export default function QuotationApp() {
 
       alert("Files Saved Successfully!");
     } catch (err) {
-      if (err.name !== "AbortError") {
-        console.error(err);
-        alert("Error saving files.");
-      }
+      if (err.name !== "AbortError") alert("Error saving files.");
     }
   };
 
