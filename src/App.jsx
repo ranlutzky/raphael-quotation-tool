@@ -748,8 +748,16 @@ const PRICES_STD_USD_RAW = {
     '8"': 4391,
     '10"': 5269,
   },
-  "FDV-R-HH0": { '1.5"': 1697, '2"': 1697, '3"': 1899 },
-  "FDV-R-HHP": { '1.5"': 2163, '2"': 2163, '3"': 2365 },
+  "FDV-R-HH0": {
+    '1.5"': 1697,
+    '2"': 1697,
+    '3"': 1899,
+  },
+  "FDV-R-HHP": {
+    '1.5"': 2163,
+    '2"': 2163,
+    '3"': 2365,
+  },
   "FDV-R-MH0": {
     '1.5"': 1439,
     '2"': 1439,
@@ -3172,7 +3180,7 @@ export default function QuotationApp() {
               <div className="flex gap-2 w-full justify-center md:justify-end">
                 <button
                   onClick={handleExportPDF}
-                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                  className="bg-orange-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
                 >
                   Export PDF
                 </button>
@@ -3185,9 +3193,10 @@ export default function QuotationApp() {
               </div>
               <button
                 onClick={handleSmartSave}
-                className="w-full bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-1 px-4 rounded shadow text-xs border border-blue-900/20"
+                className="w-[218px] h-[34px] bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold rounded shadow border border-blue-900/20 text-[11px] flex items-center justify-center transition-transform active:scale-95"
               >
-                Save Both to Folder (Browse...)
+                {" "}
+                📂 SMART SAVE (PDF + EXCEL)
               </button>
             </div>
           </div>
@@ -3731,44 +3740,78 @@ export default function QuotationApp() {
             </div>
           </div>
         </div>
-
-        {/* Footer Totals */}
-        <div className="bg-gray-200 p-4 md:p-6 border-t">
-          <div className="flex flex-col items-end gap-2">
-            <div className="flex justify-between w-full md:w-64 text-sm text-black">
-              <span>Subtotal:</span>
-              <span className="font-mono">
-                {formatCurrency(subTotal, currencySymbol)}
-              </span>
-            </div>
-            <div className="flex justify-between w-full md:w-64 text-sm text-black border-b border-gray-400 pb-2">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={includePacking}
-                  onChange={(e) => setIncludePacking(e.target.checked)}
-                  className="w-4 h-4"
-                />
-                <span className="font-bold">Packing & Handling (3.5%):</span>
-              </div>
-              <span
-                className={`font-mono ${
-                  !includePacking ? "text-gray-400 line-through" : ""
-                }`}
+        {/* Footer Totals & Export Buttons */}
+        <div className="bg-gray-200 p-4 md:p-6 border-t shadow-inner">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            {/* שורת כפתורים עם הפרדה חכמה */}
+            <div className="flex flex-wrap gap-2 w-full md:flex-1 items-center">
+              <button
+                onClick={handleExportPDF}
+                className="bg-orange-700 hover:bg-indigo-800 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
               >
-                {formatCurrency(packingCost, currencySymbol)}
-              </span>
+                Export PDF
+              </button>
+              <button
+                onClick={handleExportExcel}
+                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
+              >
+                Export Excel
+              </button>
+              <button
+                onClick={handleSmartSave}
+                className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95 border border-blue-900/20"
+              >
+                📂 SMART SAVE (PDF + EXCEL)
+              </button>
+
+              {/* הרווח הזה דוחף את הכפתור הבא ימינה ככל האפשר */}
+              <div className="flex-grow"></div>
+
+              <button
+                onClick={handleCleanAll}
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
+              >
+                CLEAN ALL
+              </button>
             </div>
-            <div className="flex justify-between w-full md:w-64 text-xl font-bold text-blue-900 pt-1 uppercase">
-              <span>Grand Total:</span>
-              <span>{formatCurrency(grandTotal, currencySymbol)}</span>
+
+            {/* אזור הסיכומים בצד ימין */}
+            <div className="flex flex-col items-end w-full md:w-auto">
+              <div className="flex justify-between w-full md:w-72 text-sm text-black mb-1">
+                <span>Subtotal:</span>
+                <span className="font-mono font-bold">
+                  {formatCurrency(subTotal, currencySymbol)}
+                </span>
+              </div>
+
+              <div className="flex justify-between w-full md:w-72 text-sm text-black border-b border-gray-400 pb-2 mb-2 italic">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    checked={includePacking}
+                    onChange={(e) => setIncludePacking(e.target.checked)}
+                    className="w-4 h-4"
+                  />
+                  <span>Packing & Handling (3.5%):</span>
+                </div>
+                <span
+                  className={`font-mono ${
+                    !includePacking ? "text-gray-400 line-through" : "font-bold"
+                  }`}
+                >
+                  {formatCurrency(packingCost, currencySymbol)}
+                </span>
+              </div>
+
+              <div className="flex justify-between w-full md:w-72 items-center">
+                <span className="text-xl font-black text-blue-900 uppercase leading-none">
+                  Grand Total:
+                </span>
+                <span className="text-2xl font-black text-blue-900 font-mono leading-none">
+                  {formatCurrency(grandTotal, currencySymbol)}
+                </span>
+              </div>
             </div>
-            <button
-              onClick={handleCleanAll}
-              className="mt-4 bg-gray-500 hover:bg-gray-600 text-white font-bold py-1 px-4 rounded shadow text-xs uppercase"
-            >
-              CLEAN ALL FIELDS
-            </button>
           </div>
         </div>
       </div>
