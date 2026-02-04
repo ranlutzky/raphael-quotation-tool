@@ -2293,7 +2293,6 @@ const OPTIONS = {
   bodyMaterials: ["Ductile Iron", "Cast Steel", "ST. St.", "Ni Al Bz"],
   trimMaterials: [
     "Copper/Brass",
-    "Ductile Iron",
     "Stainless Steel",
     "Cupro Nickel 90/10",
     "Monel",
@@ -2490,11 +2489,13 @@ export default function QuotationApp() {
       let unitPrice = discountedBase + bodyAdder + trimAdder;
 
       // הוספת מחיר האביזרים הממוזגים למגוף
+      // הוספת מחיר האביזרים הממוזגים למגוף (כולל הכפלה בכמות שלהם)
       if (!ignoreMerge) {
         for (let i = index + 1; i < items.length; i++) {
           if (items[i].isIncluded) {
             const mergedVal = calculateRow(items[i], i, true);
-            unitPrice += mergedVal.unitPrice;
+            // הכפלת מחיר היחידה של האביזר בכמות שלו
+            unitPrice += mergedVal.unitPrice * (items[i].qty || 1);
           } else break;
         }
       }
@@ -2589,9 +2590,13 @@ export default function QuotationApp() {
           if (item.customDesc) desc += `, ${item.customDesc}`;
 
           // מיזוג אביזרים
+          // איסוף טקסט מפריטים ממוזגים עם כמות (רק אם הכמות גדולה מ-1)
           for (let i = index + 1; i < items.length; i++) {
-            if (items[i].isIncluded) desc += `, ${items[i].code}`;
-            else break;
+            if (items[i].isIncluded) {
+              const qtySuffix =
+                items[i].qty > 1 ? ` (${items[i].qty} units)` : "";
+              desc += `, ${items[i].code}${qtySuffix}`;
+            } else break;
           }
         }
 
@@ -2652,13 +2657,15 @@ export default function QuotationApp() {
         ],
         body: tableBody,
         foot: tableFoot,
-        theme: "striped", // --- הוספתי "זברה" ---
+        theme: "striped", // מוודא שהערכת נושא היא פסים
         headStyles: {
           fillColor: [0, 51, 102],
           textColor: [255, 255, 255],
           fontStyle: "bold",
         },
+        // --- זו השורה שאתה מוסיף/מעדכן ---
         alternateRowStyles: { fillColor: [245, 245, 245] },
+        // ---------------------------------
         styles: {
           fontSize: 9,
           textColor: [0, 0, 0],
@@ -2766,9 +2773,13 @@ export default function QuotationApp() {
         if (item.customDesc) desc += `, ${item.customDesc}`;
 
         // מיזוג שמות האביזרים לתוך התיאור של המגוף
+        // מיזוג שמות האביזרים לתוך התיאור באקסל עם כמות
         for (let i = index + 1; i < items.length; i++) {
-          if (items[i].isIncluded) desc += `, ${items[i].code}`;
-          else break;
+          if (items[i].isIncluded) {
+            const qtySuffix =
+              items[i].qty > 1 ? ` (${items[i].qty} units)` : "";
+            desc += `, ${items[i].code}${qtySuffix}`;
+          } else break;
         }
       }
 
