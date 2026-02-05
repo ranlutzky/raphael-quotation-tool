@@ -4,7 +4,6 @@ import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 
 // --- 1. CONSTANTS & HELPER FUNCTIONS ---
-
 const CATEGORIES = {
   VALVES: "Valves",
   ACCESSORIES: "Accessories",
@@ -177,10 +176,8 @@ const addSize2_5 = (priceList) => {
   const newPriceList = { ...priceList };
   Object.keys(newPriceList).forEach((key) => {
     const item = newPriceList[key];
-    // בודק אם קיים 2 ו-3 אינץ', ואם 2.5 אינץ' *חסר*
     if (item && item['2"'] && item['3"'] && !item['2.5"']) {
       const avg = (item['2"'] + item['3"']) / 2;
-      // מוסיף את ה-2.5 לרשומה
       newPriceList[key] = { ...item, '2.5"': avg };
     }
   });
@@ -216,11 +213,10 @@ const getFormattedDate = () => {
   return `${month} ${day}${nth(day)}, ${year}`;
 };
 
-// --- 2. RAW DATA (DATABASE) ---
-
+// --- 2. RAW DATA ---
 const DIAPHRAGMS_DB = {
   'Deluge (FDV) Diaphragm 2"': 70,
-  'Deluge (FDV) Diaphragm 2.5"': 94.5, // --- הוספתי שורה זו (ממוצע של 2 ו-3) ---
+  'Deluge (FDV) Diaphragm 2.5"': 94.5,
   'Deluge (FDV) Diaphragm 3"': 119,
   'Deluge (FDV) Diaphragm 4"': 208,
   'Deluge (FDV) Diaphragm 6"': 358,
@@ -284,7 +280,7 @@ const ACCESSORIES_DB = {
   "MADV-1/2-1/4P (Brass Manual Automatic drain valve)": 71,
   "MEU-L-KIT (SS Manual Emergency Unit)": 98,
   "HAV-2-1/2-N316 (SS Hydraulic Actuator Valve)": 109,
-  "HAV-2-1/2-B (Brass Hydraulic Actuator Valve)": 98,
+  "HAV-2-1/2-B (Brass Hydraulic Actuator Valve)": 109,
   "PSA-1/4W-1/2FP (Brass Pressure Supply Arrestor)": 95,
   "PSA-1/4W-1/2 FSS (SS Pressure Supply Arrestor)": 149,
   "PAV-2 (Brass Pneumatic actuator)": 190,
@@ -748,16 +744,8 @@ const PRICES_STD_USD_RAW = {
     '8"': 4391,
     '10"': 5269,
   },
-  "FDV-R-HH0": {
-    '1.5"': 1697,
-    '2"': 1697,
-    '3"': 1899,
-  },
-  "FDV-R-HHP": {
-    '1.5"': 2163,
-    '2"': 2163,
-    '3"': 2365,
-  },
+  "FDV-R-HH0": { '1.5"': 1697, '2"': 1697, '3"': 1899 },
+  "FDV-R-HHP": { '1.5"': 2163, '2"': 2163, '3"': 2365 },
   "FDV-R-MH0": {
     '1.5"': 1439,
     '2"': 1439,
@@ -1134,6 +1122,7 @@ const PRICES_HG_USD_RAW = {
   "FDV-PH1": {
     '1.5"': 2478,
     '2"': 2478,
+    '2.5"': 2714,
     '3"': 2714,
     '4"': 3151,
     '6"': 3909,
@@ -1143,6 +1132,7 @@ const PRICES_HG_USD_RAW = {
   "FDV-PA1": {
     '1.5"': 2892,
     '2"': 2892,
+    '2.5"': 3186,
     '3"': 3186,
     '4"': 3731,
     '6"': 4676,
@@ -1287,11 +1277,11 @@ const PRICES_HG_USD_RAW = {
   "FPS-SCE1": {
     '1.5"': 3721,
     '2"': 3721,
-    '2.5"': 3934,
-    '3"': 4146,
-    '4"': 4936,
-    '6"': 6303,
-    '8"': 8885,
+    '2.5"': 3732,
+    '3"': 3732,
+    '4"': 4442,
+    '6"': 5673,
+    '8"': 7997,
     '10"': 10526,
   },
   "FPS-DIE0": {
@@ -1308,8 +1298,8 @@ const PRICES_HG_USD_RAW = {
     '1.5"': 3706,
     '2"': 3706,
     '2.5"': 3965,
-    '3"': 4225,
-    '4"': 5188,
+    '3"': 3965,
+    '4"': 4225,
     '6"': 6856,
     '8"': 10005,
     '10"': 12007,
@@ -1345,59 +1335,54 @@ const PRICES_HG_USD_RAW = {
     '10"': 7522,
   },
   "FDV-R-PN2": {
-    '1.5"': 1284,
-    '2"': 1284,
-    '2.5"': 1492,
-    '3"': 1701,
-    '4"': 2070,
-    '6"': 3546,
-    '8"': 4827,
-    '10"': 5717,
-    '12"': 8386,
+    '1.5"': 1155,
+    '2"': 1155,
+    '3"': 1531,
+    '4"': 1863,
+    '6"': 3192,
+    '8"': 4344,
+    '10"': 5145,
+    '12"': 7547,
   },
   "FDV-R-RN2": {
-    '1.5"': 1741,
-    '2"': 1741,
-    '2.5"': 1807,
-    '3"': 1872,
-    '4"': 2128,
-    '6"': 3725,
-    '8"': 5001,
-    '10"': 5925,
-    '12"': 8699,
+    '1.5"': 1567,
+    '2"': 1567,
+    '3"': 1685,
+    '4"': 1915,
+    '6"': 3352,
+    '8"': 4501,
+    '10"': 5333,
+    '12"': 7829,
   },
   "FDV-R-LE2": {
-    '1.5"': 1238,
-    '2"': 1238,
-    '2.5"': 1425,
-    '3"': 1611,
-    '4"': 1999,
-    '6"': 3355,
-    '8"': 4275,
-    '10"': 5055,
-    '12"': 7393,
+    '1.5"': 1115,
+    '2"': 1115,
+    '3"': 1450,
+    '4"': 1799,
+    '6"': 3020,
+    '8"': 3848,
+    '10"': 4549,
+    '12"': 6654,
   },
   "FDV-R-LF2": {
-    '1.5"': 2532,
-    '2"': 2532,
-    '2.5"': 2633,
-    '3"': 2733,
-    '4"': 2972,
-    '6"': 4381,
-    '8"': 5276,
-    '10"': 6079,
-    '12"': 8489,
+    '1.5"': 2279,
+    '2"': 2279,
+    '3"': 2460,
+    '4"': 2675,
+    '6"': 3943,
+    '8"': 4748,
+    '10"': 5471,
+    '12"': 7640,
   },
   "FDV-R-LA2": {
-    '1.5"': 3020,
-    '2"': 3020,
-    '2.5"': 3122,
-    '3"': 3224,
-    '4"': 3939,
-    '6"': 4708,
-    '8"': 5999,
-    '10"': 6946,
-    '12"': 9790,
+    '1.5"': 2718,
+    '2"': 2718,
+    '3"': 2902,
+    '4"': 3545,
+    '6"': 4238,
+    '8"': 5399,
+    '10"': 6252,
+    '12"': 8811,
   },
 };
 
@@ -2012,6 +1997,7 @@ const PRICES_HG_EUR_RAW = {
   "FDV-PH1": {
     '1.5"': 2478,
     '2"': 2478,
+    '2.5"': 2714,
     '3"': 2714,
     '4"': 3151,
     '6"': 3909,
@@ -2021,11 +2007,12 @@ const PRICES_HG_EUR_RAW = {
   "FDV-PA1": {
     '1.5"': 2391,
     '2"': 2391,
-    '3"': 2681,
-    '4"': 3161,
-    '6"': 4026,
-    '8"': 5848,
-    '10"': 7018,
+    '2.5"': 3186,
+    '3"': 3186,
+    '4"': 3731,
+    '6"': 4676,
+    '8"': 6663,
+    '10"': 7939,
   },
   "FDV-AE1": {
     '1.5"': 1901,
@@ -2152,6 +2139,7 @@ const PRICES_HG_EUR_RAW = {
   "FPS-SCE1": {
     '1.5"': 3349,
     '2"': 3349,
+    '2.5"': 3732,
     '3"': 3732,
     '4"': 4442,
     '6"': 5673,
@@ -2170,15 +2158,17 @@ const PRICES_HG_EUR_RAW = {
   "FPS-DIC0": {
     '1.5"': 3335,
     '2"': 3335,
-    '3"': 3802,
-    '4"': 4669,
-    '6"': 6170,
-    '8"': 9005,
-    '10"': 10806,
+    '2.5"': 3965,
+    '3"': 3965,
+    '4"': 4225,
+    '6"': 6856,
+    '8"': 10005,
+    '10"': 12007,
   },
   "FPS-DCE0": {
     '1.5"': 3202,
     '2"': 3230,
+    '2.5"': 3600,
     '3"': 3600,
     '4"': 4248,
     '6"': 5520,
@@ -2188,6 +2178,7 @@ const PRICES_HG_EUR_RAW = {
   "FPS-DCE1": {
     '1.5"': 3427,
     '2"': 3427,
+    '2.5"': 3830,
     '3"': 3830,
     '4"': 4578,
     '6"': 5873,
@@ -2197,6 +2188,7 @@ const PRICES_HG_EUR_RAW = {
   "FPS-DIE1": {
     '1.5"': 2470,
     '2"': 2470,
+    '2.5"': 2739,
     '3"': 2739,
     '4"': 3238,
     '6"': 4102,
@@ -2255,15 +2247,13 @@ const PRICES_HG_EUR_RAW = {
   },
 };
 
-// --- 3. PROCESSED DATA (Moved AFTER raw data) ---
-
+// --- 3. PROCESSED DATA ---
 const PRICES_STD_USD = addSize2_5(PRICES_STD_USD_RAW);
 const PRICES_HG_USD = addSize2_5(PRICES_HG_USD_RAW);
 const PRICES_STD_EUR = addSize2_5(PRICES_STD_EUR_RAW);
 const PRICES_HG_EUR = addSize2_5(PRICES_HG_EUR_RAW);
 
 // --- 4. COMPONENT ---
-
 const BODY_MATERIAL_ADDONS = {
   "Ductile Iron": {},
   "Cast Steel": {
@@ -2317,7 +2307,6 @@ export default function QuotationApp() {
       const saved = localStorage.getItem("RAPHAEL_QUOTATION_DATA");
       return saved ? JSON.parse(saved) : null;
     } catch (e) {
-      console.error("Local Storage Error", e);
       return null;
     }
   };
@@ -2327,13 +2316,11 @@ export default function QuotationApp() {
       const saved = localStorage.getItem("RAPHAEL_CUSTOMERS");
       return saved ? JSON.parse(saved) : INITIAL_CUSTOMERS;
     } catch (e) {
-      console.error("Local Storage Customers Error", e);
       return INITIAL_CUSTOMERS;
     }
   };
 
   const saved = loadSavedData();
-
   const [items, setItems] = useState(saved?.items || []);
   const [salesPerson, setSalesPerson] = useState(
     saved?.salesPerson || "RAN LUTZKY"
@@ -2354,7 +2341,6 @@ export default function QuotationApp() {
   const [includePacking, setIncludePacking] = useState(
     saved?.includePacking ?? true
   );
-
   const [terms, setTerms] = useState(
     saved?.terms || {
       payment: "AS USUAL",
@@ -2396,14 +2382,12 @@ export default function QuotationApp() {
     else if (salesPerson === "OGENIA ARBITMAN") initials = "OA";
     else if (salesPerson === "OHAD LEV") initials = "OL";
     else initials = "FP";
-
     const d = new Date();
     const day = String(d.getDate()).padStart(2, "0");
     const month = String(d.getMonth() + 1).padStart(2, "0");
     const year = String(d.getFullYear()).slice(2);
-    const dateStr = `${day}${month}${year}`;
     const suffixNum = refSuffix === 1 ? "01" : String((refSuffix - 1) * 11);
-    setRef(`${initials}${dateStr}${suffixNum}`);
+    setRef(`${initials}${day}${month}${year}${suffixNum}`);
   }, [salesPerson, refSuffix]);
 
   const cycleRefSuffix = () => setRefSuffix((prev) => prev + 1);
@@ -2411,32 +2395,36 @@ export default function QuotationApp() {
   const addItem = (category) => {
     const initialDiscount =
       category === CATEGORIES.VALVES ? cust.defaultDiscount : 0;
-    const newItem = {
-      id: Date.now(),
-      category,
-      code: "",
-      size: "",
-      qty: 1,
-      discount: initialDiscount,
-      isHighGrade: false,
-      bodyMat: "",
-      trimMat: "",
-      connType: "",
-      isIncluded: false, // --- הוספתי ---
-    };
-    setItems([...items, newItem]);
+    setItems([
+      ...items,
+      {
+        id: Date.now(),
+        category,
+        code: "",
+        size: "",
+        qty: 1,
+        discount: initialDiscount,
+        isIncluded: false,
+        customDesc: "",
+        internalNotes: "",
+        bodyMat: "",
+        trimMat: "",
+      },
+    ]);
   };
 
+  const updateItem = (id, field, value) =>
+    setItems(items.map((i) => (i.id === id ? { ...i, [field]: value } : i)));
+  const removeItem = (id) => setItems(items.filter((i) => i.id !== id));
+
   const applyGlobalDiscount = () => {
-    const updatedItems = items.map((item) => ({
-      ...item,
-      discount: cust.defaultDiscount,
-    }));
-    setItems(updatedItems);
+    setItems(
+      items.map((item) => ({ ...item, discount: cust.defaultDiscount }))
+    );
   };
 
   const handleCleanAll = () => {
-    if (window.confirm("Are you sure you want to clear all fields?")) {
+    if (window.confirm("Are you sure?")) {
       setItems([]);
       setCust({
         name: "",
@@ -2445,116 +2433,309 @@ export default function QuotationApp() {
         phone: "",
         defaultDiscount: 55,
       });
-      setTerms({
-        payment: "AS USUAL",
-        delivery: "EXW",
-        leadTime: "6-8 weeks",
-        validity: "30 Days",
-      });
       setIncludePacking(true);
       localStorage.removeItem("RAPHAEL_QUOTATION_DATA");
     }
   };
 
-  // --- לוגיקת חישוב מעודכנת לשמירה על מחיר עולה ---
   const calculateRow = (item, index, ignoreMerge = false) => {
-    if (!ignoreMerge && item.isIncluded) return { unitPrice: 0, total: 0 };
-
-    // 1. בדיקת דריסת מחיר ידנית (Manual Overwrite)
-    if (
-      item.category !== CATEGORIES.FREE_TEXT &&
-      item.manualPrice !== undefined &&
-      item.manualPrice !== "" &&
-      item.manualPrice !== null
-    ) {
-      const unitPrice = parseFloat(item.manualPrice) || 0;
-      return {
-        unitPrice,
-        total: unitPrice * (item.qty || 1),
-        bodyAdder: 0,
-        trimAdder: 0,
-      };
+    if (!ignoreMerge && item.isIncluded)
+      return { unitPrice: 0, total: 0, trimAdder: 0 };
+    if (item.category !== CATEGORIES.FREE_TEXT && item.manualPrice) {
+      const up = parseFloat(item.manualPrice) || 0;
+      return { unitPrice: up, total: up * item.qty, trimAdder: 0 };
     }
-
     if (item.category === CATEGORIES.FREE_TEXT) {
-      const unitPrice = parseFloat(item.price) || 0;
-      return {
-        unitPrice,
-        total: unitPrice * (item.qty || 1),
-        bodyAdder: 0,
-        trimAdder: 0,
-      };
+      const up = parseFloat(item.price) || 0;
+      return { unitPrice: up, total: up * item.qty, trimAdder: 0 };
     }
-
     if (item.category === CATEGORIES.VALVES) {
-      if (!item.code || !item.size) return { unitPrice: 0, total: 0 };
-
-      const basePriceTable =
-        currency === "USD" ? PRICES_STD_USD : PRICES_STD_EUR;
-      const basePrice = basePriceTable?.[item.code]?.[item.size] || 0;
-      const discountAmount = basePrice * (item.discount / 100);
-      const discountedBase = basePrice - discountAmount;
+      if (!item.code || !item.size)
+        return { unitPrice: 0, total: 0, trimAdder: 0 };
+      const baseTable = currency === "USD" ? PRICES_STD_USD : PRICES_STD_EUR;
+      const basePrice = baseTable?.[item.code]?.[item.size] || 0;
+      const discountedBase = basePrice * (1 - item.discount / 100);
       const bodyAdder = item.bodyMat
         ? BODY_MATERIAL_ADDONS[item.bodyMat]?.[item.size] || 0
         : 0;
-
       let trimAdder = 0;
-      if (item.trimMat === "Full Sea Water Trim") {
-        trimAdder = 10000;
-      } else if (item.trimMat && item.trimMat !== "Copper/Brass") {
+      if (item.trimMat === "Full Sea Water Trim") trimAdder = 10000;
+      else if (item.trimMat && item.trimMat !== "Copper/Brass") {
         const hgTable = currency === "USD" ? PRICES_HG_USD : PRICES_HG_EUR;
-        const hgPrice = hgTable?.[item.code]?.[item.size] || basePrice;
-        trimAdder = Math.max(0, hgPrice - basePrice);
+        trimAdder = Math.max(
+          0,
+          (hgTable?.[item.code]?.[item.size] || basePrice) - basePrice
+        );
       }
-
       let unitPrice = discountedBase + bodyAdder + trimAdder;
-
       if (!ignoreMerge) {
         for (let i = index + 1; i < items.length; i++) {
           if (items[i].isIncluded) {
             const mergedVal = calculateRow(items[i], i, true);
-            unitPrice += mergedVal.unitPrice * (items[i].qty || 1);
+            unitPrice += mergedVal.unitPrice * items[i].qty;
           } else break;
         }
       }
-
-      return {
-        unitPrice,
-        total: unitPrice * (item.qty || 1),
-        bodyAdder,
-        trimAdder,
-      };
+      return { unitPrice, total: unitPrice * item.qty, trimAdder };
     } else {
-      let db =
+      const db =
         item.category === CATEGORIES.DIAPHRAGMS
           ? DIAPHRAGMS_DB
           : ACCESSORIES_DB;
       const base = db[item.code] || 0;
       const factor = item.category === CATEGORIES.SPARE_PARTS ? 1.5 : 1;
       const unitPrice = base * factor * (1 - item.discount / 100);
-      return {
-        unitPrice,
-        total: unitPrice * (item.qty || 1),
-        bodyAdder: 0,
-        trimAdder: 0,
-      };
+      return { unitPrice, total: unitPrice * item.qty, trimAdder: 0 };
     }
   };
 
-  const updateItem = (id, field, value) => {
-    setItems(
-      items.map((item) => (item.id === id ? { ...item, [field]: value } : item))
-    );
+  const createGlobalPDFBlob = async () => {
+    const doc = new jsPDF();
+    const logoImg = new Image();
+    logoImg.src = "/raphael_logo_final.png";
+
+    await new Promise((resolve) => {
+      logoImg.onload = resolve;
+      logoImg.onerror = resolve;
+    });
+
+    if (logoImg.complete && logoImg.naturalHeight !== 0) {
+      doc.addImage(logoImg, "PNG", 14, 10, 50, 15);
+    }
+
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text("COMMERCIAL QUOTATION", 14, 35);
+    doc.text(`Date: ${getFormattedDate()}`, 140, 35);
+    doc.text(`Reference: ${ref}`, 140, 40);
+    doc.text(`Attn: ${cust.contactName}`, 14, 45);
+    doc.text(`Company: ${cust.name}`, 14, 50);
+
+    const tableBody = [];
+    items.forEach((item, index) => {
+      if (item.isIncluded) return;
+      const financials = calculateRow(item, index);
+      let desc = PRODUCTS_DB[item.code]?.desc || item.code;
+      if (
+        item.category === CATEGORIES.VALVES &&
+        !["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"].includes(item.code)
+      )
+        desc += " - FM/UL APPROVED";
+      if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
+      if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
+      if (item.customDesc) desc += `, ${item.customDesc}`;
+      for (let i = index + 1; i < items.length; i++) {
+        if (items[i].isIncluded) {
+          desc += `, ${items[i].code}${
+            items[i].qty > 1 ? ` (${items[i].qty} units)` : ""
+          }`;
+          if (items[i].customDesc) desc += ` [${items[i].customDesc}]`;
+        } else break;
+      }
+      tableBody.push([
+        tableBody.length + 1,
+        item.code,
+        desc,
+        item.size || "-",
+        item.qty,
+        formatCurrency(financials.unitPrice),
+        formatCurrency(financials.total),
+      ]);
+    });
+
+    const tableFoot = [
+      [
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Subtotal:",
+        `${currencySymbol}${formatCurrency(subTotal, "")}`,
+      ],
+    ];
+    if (includePacking)
+      tableFoot.push([
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Packing & Handling (3.5%):",
+        `${currencySymbol}${formatCurrency(packingCost, "")}`,
+      ]);
+    tableFoot.push([
+      "",
+      "",
+      "",
+      "",
+      "",
+      "GRAND TOTAL:",
+      `${currencySymbol}${formatCurrency(grandTotal, "")}`,
+    ]);
+
+    autoTable(doc, {
+      startY: 60,
+      theme: "striped",
+      head: [
+        [
+          "No",
+          "Model",
+          "Description",
+          "DN",
+          "Qty",
+          `Unit Price (${currencySymbol})`,
+          `Total (${currencySymbol})`,
+        ],
+      ],
+      body: tableBody,
+      foot: tableFoot,
+      headStyles: {
+        fillColor: [0, 51, 102],
+        textColor: [255, 255, 255],
+        fontStyle: "bold",
+      },
+      alternateRowStyles: { fillColor: [245, 245, 245] },
+      styles: {
+        fontSize: 9,
+        textColor: [0, 0, 0],
+        lineColor: [200, 200, 200],
+        lineWidth: 0.1,
+        cellPadding: 4,
+      },
+      columnStyles: {
+        0: { cellWidth: 15 },
+        1: { cellWidth: 25 },
+        2: { cellWidth: 60 },
+      },
+      footStyles: {
+        fillColor: [255, 255, 255],
+        textColor: [0, 0, 0],
+        fontStyle: "bold",
+        lineColor: [200, 200, 200],
+        lineWidth: 0.1,
+      },
+      margin: { top: 20 },
+    });
+
+    let finalY = doc.lastAutoTable.finalY + 15;
+    if (finalY > 210) {
+      doc.addPage();
+      finalY = 20;
+    }
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.setFont("helvetica", "bold");
+    doc.text("Commercial Terms:", 14, finalY);
+    doc.setFont("helvetica", "normal");
+    finalY += 6;
+    doc.setFontSize(9);
+    doc.text(`Payment: ${terms.payment}`, 14, finalY);
+    doc.text(`Delivery: ${terms.delivery}`, 80, finalY);
+    finalY += 5;
+    doc.text(`Lead time: ${terms.leadTime}`, 14, finalY);
+    doc.text(`Validity: ${terms.validity}`, 80, finalY);
+    finalY += 15;
+    const signer = SIGNATURES[salesPerson] || SIGNATURES["OTHER"];
+    doc.setTextColor(0, 51, 102);
+    doc.setFont("helvetica", "bold");
+    doc.text(signer.name || "Sales Manager", 14, finalY);
+    doc.setFont("helvetica", "normal");
+    finalY += 5;
+    doc.text(signer.title, 14, finalY);
+    if (signer.region) {
+      finalY += 5;
+      doc.text(signer.region, 14, finalY);
+    }
+    if (signer.phone) {
+      finalY += 5;
+      doc.text(`Phone: ${signer.phone}`, 14, finalY);
+    }
+    if (signer.email) {
+      finalY += 5;
+      doc.text(`Email: ${signer.email}`, 14, finalY);
+    }
+    return doc.output("blob");
   };
 
-  const removeItem = (id) => setItems(items.filter((i) => i.id !== id));
+  const createGlobalExcelBlob = () => {
+    const wsData = [
+      ["RAPHAEL VALVES QUOTATION"],
+      [],
+      ["Date:", new Date().toLocaleDateString(), "Reference:", ref],
+      ["Attn:", cust.contactName, "Company:", cust.name],
+      ["Prepared By:", salesPerson],
+      [],
+      [
+        "No",
+        "Code",
+        "Description",
+        "DN",
+        "Qty",
+        `Unit Price (${currencySymbol})`,
+        "Disc %",
+        `Total (${currencySymbol})`,
+        "Internal Notes",
+      ],
+    ];
+    items.forEach((item, index) => {
+      if (item.isIncluded) return;
+      const financials = calculateRow(item, index);
+      let desc = PRODUCTS_DB[item.code]?.desc || item.code;
+      if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
+      if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
+      if (item.customDesc) desc += `, ${item.customDesc}`;
+      let intNotes = item.internalNotes || "";
+      for (let i = index + 1; i < items.length; i++) {
+        if (items[i].isIncluded) {
+          desc += `, ${items[i].code}${
+            items[i].qty > 1 ? ` (${items[i].qty} units)` : ""
+          }`;
+          if (items[i].customDesc) desc += ` [${items[i].customDesc}]`;
+          if (items[i].internalNotes)
+            intNotes += (intNotes ? " | " : "") + items[i].internalNotes;
+        } else break;
+      }
+      wsData.push([
+        wsData.length - 6,
+        item.code,
+        desc,
+        item.size || "-",
+        item.qty,
+        financials.unitPrice,
+        `${item.discount}%`,
+        financials.total,
+        intNotes,
+      ]);
+    });
+    wsData.push([], ["", "", "", "", "", "Subtotal:", "", subTotal]);
+    if (includePacking)
+      wsData.push(["", "", "", "", "", "Packing (3.5%):", "", packingCost]);
+    wsData.push(["", "", "", "", "", "GRAND TOTAL:", "", grandTotal]);
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws["!cols"] = [
+      { wch: 5 },
+      { wch: 15 },
+      { wch: 65 },
+      { wch: 8 },
+      { wch: 6 },
+      { wch: 15 },
+      { wch: 10 },
+      { wch: 15 },
+      { wch: 40 },
+    ];
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Quotation");
+    const wbOut = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+    return new Blob([wbOut], { type: "application/octet-stream" });
+  };
 
   const toggleMerge = (id, index) => {
-    const hasValveAbove = items
-      .slice(0, index)
-      .some((x) => x.category === CATEGORIES.VALVES);
-    if (!hasValveAbove && !items[index].isIncluded)
-      return alert("Cannot merge: No valve found above this item.");
+    if (
+      !items.slice(0, index).some((x) => x.category === CATEGORIES.VALVES) &&
+      !items[index].isIncluded
+    )
+      return alert("No valve above.");
     updateItem(id, "isIncluded", !items[index].isIncluded);
   };
 
@@ -2566,543 +2747,52 @@ export default function QuotationApp() {
   const grandTotal = subTotal + packingCost;
   const currencySymbol = currency === "USD" ? "$" : "€";
 
-  // --- Export Logic ---
-  const handleExportPDF = () => {
+  const handleExportPDF = async () => {
     saveCustomerToList(cust.name);
-    const doc = new jsPDF();
-    const logoImg = new Image();
-    logoImg.src = "/raphael_logo_final.png";
-    doc.setFont("helvetica", "normal");
-
-    const generate = () => {
-      if (logoImg.complete && logoImg.naturalHeight !== 0) {
-        doc.addImage(logoImg, "PNG", 14, 10, 50, 15);
-      }
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      doc.text("COMMERCIAL QUOTATION", 14, 35);
-      const dateStr = getFormattedDate();
-      doc.text(`Date: ${dateStr}`, 140, 35);
-      doc.text(`Reference: ${ref}`, 140, 40);
-      doc.text(`Attn: ${cust.contactName}`, 14, 45);
-      doc.text(`Company: ${cust.name}`, 14, 50);
-
-      const tableBody = [];
-      items.forEach((item, index) => {
-        if (item.isIncluded) return;
-        const financials = calculateRow(item, index);
-        let desc = "";
-        let code = item.code;
-
-        if (item.category === CATEGORIES.FREE_TEXT) {
-          code = item.code || "General";
-          desc = item.customDesc || "";
-        } else {
-          // שליפת התיאור הבסיסי
-          let baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-
-          // רשימת החרגות ל-FM/UL
-          const excludedFM = ["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"];
-
-          // הוספת FM/UL APPROVED אם זה מגוף ולא ברשימת ההחרגה
-          if (
-            item.category === CATEGORIES.VALVES &&
-            !excludedFM.includes(item.code)
-          ) {
-            baseDesc += " - FM/UL APPROVED";
-          }
-
-          desc = `${baseDesc}`;
-          if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-          if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-
-          // הוספת הטקסט החופשי מהתיבה בתוך שורת המוצר
-          if (item.customDesc) desc += `, ${item.customDesc}`;
-
-          // מיזוג אביזרים
-          // איסוף טקסט מפריטים ממוזגים עם כמות (רק אם הכמות גדולה מ-1)
-          for (let i = index + 1; i < items.length; i++) {
-            if (items[i].isIncluded) {
-              const qtySuffix =
-                items[i].qty > 1 ? ` (${items[i].qty} units)` : "";
-              desc += `, ${items[i].code}${qtySuffix}`;
-            } else break;
-          }
-        }
-
-        tableBody.push([
-          tableBody.length + 1,
-          code,
-          desc,
-          item.size || "-",
-          item.qty,
-          formatCurrency(financials.unitPrice),
-          formatCurrency(financials.total),
-        ]);
-      });
-      const tableFoot = [
-        [
-          "",
-          "",
-          "",
-          "",
-          "",
-          "Subtotal:",
-          `${currencySymbol}${formatCurrency(subTotal, "")}`,
-        ],
-      ];
-      if (packingCost > 0) {
-        tableFoot.push([
-          "",
-          "",
-          "",
-          "",
-          "",
-          "Packing & Handling (3.5%):",
-          `${currencySymbol}${formatCurrency(packingCost, "")}`,
-        ]);
-      }
-      tableFoot.push([
-        "",
-        "",
-        "",
-        "",
-        "",
-        "GRAND TOTAL:",
-        `${currencySymbol}${formatCurrency(grandTotal, "")}`,
-      ]);
-
-      autoTable(doc, {
-        startY: 60,
-        head: [
-          [
-            "No",
-            "Model",
-            "Description",
-            "DN",
-            "Qty",
-            `Unit Price (${currencySymbol})`,
-            `Total (${currencySymbol})`,
-          ],
-        ],
-        body: tableBody,
-        foot: tableFoot,
-        theme: "striped", // מוודא שהערכת נושא היא פסים
-        headStyles: {
-          fillColor: [0, 51, 102],
-          textColor: [255, 255, 255],
-          fontStyle: "bold",
-        },
-        // --- זו השורה שאתה מוסיף/מעדכן ---
-        alternateRowStyles: { fillColor: [245, 245, 245] },
-        // ---------------------------------
-        styles: {
-          fontSize: 9,
-          textColor: [0, 0, 0],
-          lineColor: [200, 200, 200],
-          lineWidth: 0.1,
-          cellPadding: 4,
-        },
-        columnStyles: {
-          0: { cellWidth: 15 },
-          1: { cellWidth: 25 },
-          2: { cellWidth: 60 },
-        },
-        footStyles: {
-          fillColor: [255, 255, 255],
-          textColor: [0, 0, 0],
-          fontStyle: "bold",
-          lineColor: [200, 200, 200],
-          lineWidth: 0.1,
-        },
-        margin: { top: 20 },
-      });
-
-      let finalY = doc.lastAutoTable.finalY + 15;
-      if (finalY > 220) {
-        doc.addPage();
-        finalY = 20;
-      }
-
-      doc.setFontSize(10);
-      doc.setTextColor(0, 0, 0);
-      doc.setFont("helvetica", "bold");
-      doc.text("Commercial Terms:", 14, finalY);
-      doc.setFont("helvetica", "normal");
-      finalY += 5;
-      doc.setFontSize(9);
-      doc.text(`Payment: ${terms.payment}`, 14, finalY);
-      doc.text(`Delivery: ${terms.delivery}`, 80, finalY);
-      finalY += 5;
-      doc.text(`Lead time: ${terms.leadTime}`, 14, finalY);
-      doc.text(`Validity: ${terms.validity}`, 80, finalY);
-      finalY += 20;
-      doc.text("Sincerely,", 14, finalY);
-      finalY += 10;
-      const signer = SIGNATURES[salesPerson] || SIGNATURES["OTHER"];
-      doc.setTextColor(0, 51, 102);
-      doc.setFont("helvetica", "bold");
-      doc.text(signer.name || "Sales Manager", 14, finalY);
-      doc.setFont("helvetica", "normal");
-      finalY += 5;
-      doc.text(signer.title, 14, finalY);
-      finalY += 5;
-      doc.text(signer.region, 14, finalY);
-      if (signer.phone) {
-        finalY += 5;
-        doc.text(`Phone: ${signer.phone}`, 14, finalY);
-      }
-      if (signer.email) {
-        finalY += 5;
-        doc.text(`Email: ${signer.email}`, 14, finalY);
-      }
-
-      doc.save(`Quotation_${ref}.pdf`);
-    };
-    logoImg.onload = generate;
-    logoImg.onerror = generate;
+    const blob = await createGlobalPDFBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Quotation_${ref}.pdf`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
 
   const handleExportExcel = () => {
     saveCustomerToList(cust.name);
-    const wsData = [];
-    wsData.push(["RAPHAEL VALVES QUOTATION"]);
-    wsData.push([]);
-    wsData.push(["Date:", new Date().toLocaleDateString(), "Reference:", ref]);
-    wsData.push(["Attn:", cust.contactName, "Company:", cust.name]);
-    wsData.push(["Prepared By:", salesPerson]);
-    wsData.push([]);
-
-    // 1. הוספת הכותרת "Disc %" למערך
-    wsData.push([
-      "No",
-      "Code",
-      "Description",
-      "DN",
-      "Qty",
-      `Unit Price (${currencySymbol})`,
-      "Disc %",
-      `Total (${currencySymbol})`,
-      "Internal Notes",
-    ]);
-
-    items.forEach((item, index) => {
-      if (item.isIncluded) return;
-
-      const financials = calculateRow(item, index);
-      let desc = "";
-      let code = item.code;
-
-      if (item.category === CATEGORIES.FREE_TEXT) {
-        code = item.code || "General";
-        desc = item.customDesc || "";
-      } else {
-        const baseDesc = PRODUCTS_DB[item.code]?.desc || item.code;
-        desc = baseDesc;
-        if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-        if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-        if (item.customDesc) desc += `, ${item.customDesc}`;
-
-        for (let i = index + 1; i < items.length; i++) {
-          if (items[i].isIncluded) {
-            const qtySuffix =
-              items[i].qty > 1 ? ` (${items[i].qty} units)` : "";
-            desc += `, ${items[i].code}${qtySuffix}`;
-          } else break;
-        }
-      }
-
-      // 2. הוספת ערך ההנחה לכל שורה
-      wsData.push([
-        wsData.length - 6,
-        code,
-        desc,
-        item.size || "-",
-        item.qty,
-        financials.unitPrice,
-        item.category === CATEGORIES.FREE_TEXT ? "-" : `${item.discount}%`,
-        financials.total,
-        item.internalNotes || "",
-      ]);
-    });
-
-    wsData.push([]);
-
-    // 3. עדכון שורות הסיכום (הוספת תאים ריקים כדי להתאים למבנה החדש)
-    wsData.push(["", "", "", "", "", "Subtotal:", "", "", subTotal]); // הוספתי "" אחד נוסף
-    if (includePacking) {
-      wsData.push(["", "", "", "", "", "Packing (3.5%):", "", "", packingCost]); // הוספתי "" אחד נוסף
-    }
-    wsData.push(["", "", "", "", "", "GRAND TOTAL:", "", "", grandTotal]); // הוספתי "" אחד נוסף
-
-    wsData.push([]);
-    wsData.push(["Commercial Terms"]);
-    wsData.push(["Payment:", terms.payment]);
-    wsData.push(["Delivery:", terms.delivery]);
-
-    const ws = XLSX.utils.aoa_to_sheet(wsData);
-
-    // 4. הגדרת רוחב עמודות אוטומטי
-    const wscols = [
-      { wch: 5 }, // No
-      { wch: 15 }, // Code
-      { wch: 90 }, // Description (רחב במיוחד)
-      { wch: 8 }, // DN
-      { wch: 6 }, // Qty
-      { wch: 15 }, // Unit Price
-      { wch: 10 }, // Disc %
-      { wch: 15 }, // Total
-      { wch: 40 }, // Internal Notes
-    ];
-    ws["!cols"] = wscols;
-
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Quotation");
-    XLSX.writeFile(wb, `Quotation_${ref}.xlsx`);
+    const blob = createGlobalExcelBlob();
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `Quotation_${ref}.xlsx`;
+    link.click();
+    URL.revokeObjectURL(url);
   };
+
   const handleSmartSave = async () => {
-    if (!("showDirectoryPicker" in window)) {
-      alert(
-        "Browser does not support folder access. Use Chrome or Edge on Desktop."
-      );
-      return;
-    }
-
-    // 1. בקשת שם קובץ מהמשתמש (ברירת מחדל היא ה-Ref)
-    const customName = window.prompt(
-      "Enter filename (without extension):",
-      `Quotation_${ref}`
-    );
-    if (!customName) return; // ביטול אם המשתמש לחץ Cancel
-
+    if (!("showDirectoryPicker" in window))
+      return alert("Use Chrome/Edge on Desktop.");
+    const customName = window.prompt("Enter filename:", `Quotation_${ref}`);
+    if (!customName) return;
     saveCustomerToList(cust.name);
-
     try {
       const dirHandle = await window.showDirectoryPicker();
-
-      // --- יצירת Excel Blob ---
-      const wsData = [];
-      wsData.push(["RAPHAEL VALVES QUOTATION"]);
-      wsData.push([]);
-      wsData.push([
-        "Date:",
-        new Date().toLocaleDateString(),
-        "Reference:",
-        ref,
-      ]);
-      wsData.push(["Attn:", cust.contactName, "Company:", cust.name]);
-      wsData.push([]);
-
-      // הוספת הכותרות המורחבות
-      wsData.push([
-        "No",
-        "Code",
-        "Description",
-        "DN",
-        "Qty",
-        `Unit Price (${currencySymbol})`,
-        "Disc %",
-        `Total (${currencySymbol})`,
-        "Internal Notes",
-      ]);
-
-      items.forEach((item, index) => {
-        if (item.isIncluded) return;
-        const financials = calculateRow(item, index);
-        let desc = PRODUCTS_DB[item.code]?.desc || item.code;
-
-        // הוספת כל הנתונים לשורה
-        wsData.push([
-          wsData.length - 6,
-          item.code,
-          desc,
-          item.size || "-",
-          item.qty,
-          financials.unitPrice,
-          `${item.discount}%`,
-          financials.total,
-          item.internalNotes || "",
-        ]);
-      });
-
-      wsData.push([]);
-      wsData.push(["", "", "", "", "", "Subtotal:", "", subTotal]);
-      if (includePacking)
-        wsData.push(["", "", "", "", "", "Packing (3.5%):", "", packingCost]);
-      wsData.push(["", "", "", "", "", "GRAND TOTAL:", "", grandTotal]);
-      const ws = XLSX.utils.aoa_to_sheet(wsData);
-      // הגדרת רוחב העמודות
-      ws["!cols"] = [
-        { wch: 5 }, // No
-        { wch: 15 }, // Code
-        { wch: 65 }, // Description (רחב מספיק לתיאורים של רפאל)
-        { wch: 8 }, // DN
-        { wch: 6 }, // Qty
-        { wch: 15 }, // Unit Price
-        { wch: 10 }, // Disc %
-        { wch: 15 }, // Total
-        { wch: 40 }, // Internal Notes
-      ];
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "Quotation");
-      const wbOut = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-      const excelBlob = new Blob([wbOut], { type: "application/octet-stream" });
-
-      // --- יצירת PDF Blob ---
-      // --- בתוך handleSmartSave, החלף את בלוק ה-PDF ---
-      const pdfBlob = await new Promise((resolve) => {
-        const doc = new jsPDF();
-        const logoImg = new Image();
-        logoImg.src = "/raphael_logo_final.png";
-
-        const generatePDFContent = () => {
-          // הוספת לוגו וטקסט עליון
-          if (logoImg.complete && logoImg.naturalHeight !== 0)
-            doc.addImage(logoImg, "PNG", 14, 10, 50, 15);
-          doc.setFontSize(10);
-          doc.text("COMMERCIAL QUOTATION", 14, 35);
-          doc.text(`Date: ${getFormattedDate()}`, 140, 35);
-          doc.text(`Reference: ${ref}`, 140, 40);
-          doc.text(`Attn: ${cust.contactName}`, 14, 45);
-          doc.text(`Company: ${cust.name}`, 14, 50);
-
-          const tableBody = [];
-          items.forEach((item, index) => {
-            if (item.isIncluded) return;
-            const financials = calculateRow(item, index);
-            let desc = PRODUCTS_DB[item.code]?.desc || item.code;
-            if (
-              item.category === CATEGORIES.VALVES &&
-              !["FDV-R-LE2", "FDV-R-LF2", "FDV-R-LA2"].includes(item.code)
-            ) {
-              desc += " - FM/UL APPROVED";
-            }
-            if (item.bodyMat) desc += `; Body: ${item.bodyMat}`;
-            if (item.trimMat) desc += `; Trim: ${item.trimMat}`;
-            if (item.customDesc) desc += `, ${item.customDesc}`;
-
-            for (let i = index + 1; i < items.length; i++) {
-              if (items[i].isIncluded)
-                desc += `, ${items[i].code}${
-                  items[i].qty > 1 ? ` (${items[i].qty} units)` : ""
-                }`;
-              else break;
-            }
-
-            tableBody.push([
-              tableBody.length + 1,
-              item.code,
-              desc,
-              item.size || "-",
-              item.qty,
-              formatCurrency(financials.unitPrice),
-              formatCurrency(financials.total),
-            ]);
-          });
-
-          const tableFoot = [
-            [
-              "",
-              "",
-              "",
-              "",
-              "",
-              "Subtotal:",
-              `${currencySymbol}${formatCurrency(subTotal, "")}`,
-            ],
-          ];
-          if (includePacking) {
-            tableFoot.push([
-              "",
-              "",
-              "",
-              "",
-              "",
-              "Packing & Handling (3.5%):",
-              `${currencySymbol}${formatCurrency(packingCost, "")}`,
-            ]);
-          }
-          tableFoot.push([
-            "",
-            "",
-            "",
-            "",
-            "",
-            "GRAND TOTAL:",
-            `${currencySymbol}${formatCurrency(grandTotal, "")}`,
-          ]);
-
-          // החזרת עיצוב הזברה והצבעים
-          autoTable(doc, {
-            startY: 60,
-            head: [
-              [
-                "No",
-                "Model",
-                "Description",
-                "DN",
-                "Qty",
-                `Unit Price (${currencySymbol})`,
-                `Total (${currencySymbol})`,
-              ],
-            ],
-            body: tableBody,
-            foot: tableFoot,
-            theme: "striped",
-            headStyles: {
-              fillColor: [0, 51, 102],
-              textColor: [255, 255, 255],
-              fontStyle: "bold",
-            },
-            alternateRowStyles: { fillColor: [245, 245, 245] },
-            styles: { fontSize: 9, cellPadding: 4 },
-            columnStyles: {
-              0: { cellWidth: 12 },
-              1: { cellWidth: 25 },
-              2: { cellWidth: 60 },
-            },
-            footStyles: {
-              fillColor: [255, 255, 255],
-              textColor: [0, 0, 0],
-              fontStyle: "bold",
-            },
-          });
-
-          let finalY = doc.lastAutoTable.finalY + 15;
-          doc.setFont("helvetica", "bold");
-          doc.text("Commercial Terms:", 14, finalY);
-          doc.setFont("helvetica", "normal");
-          doc.text(
-            `Payment: ${terms.payment} | Delivery: ${terms.delivery} | Lead: ${terms.leadTime}`,
-            14,
-            finalY + 7
-          );
-
-          resolve(doc.output("blob"));
-        };
-        logoImg.onload = generatePDFContent;
-        logoImg.onerror = generatePDFContent;
-      });
-
-      // שמירה עם השם המותאם אישית
-      const pdfFileHandle = await dirHandle.getFileHandle(`${customName}.pdf`, {
+      const pdfBlob = await createGlobalPDFBlob();
+      const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
         create: true,
       });
-      const pdfWritable = await pdfFileHandle.createWritable();
-      await pdfWritable.write(pdfBlob);
-      await pdfWritable.close();
-
-      const excelFileHandle = await dirHandle.getFileHandle(
-        `${customName}.xlsx`,
-        { create: true }
-      );
-      const excelWritable = await excelFileHandle.createWritable();
-      await excelWritable.write(excelBlob);
-      await excelWritable.close();
-
+      const pdfW = await pdfH.createWritable();
+      await pdfW.write(pdfBlob);
+      await pdfW.close();
+      const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
+        create: true,
+      });
+      const xlsW = await xlsH.createWritable();
+      await xlsW.write(createGlobalExcelBlob());
+      await xlsW.close();
       alert("Files Saved Successfully!");
     } catch (err) {
-      if (err.name !== "AbortError") alert("Error saving files.");
+      if (err.name !== "AbortError") alert("Error saving.");
     }
   };
 
@@ -3112,32 +2802,28 @@ export default function QuotationApp() {
       dir="ltr"
     >
       <div className="max-w-7xl mx-auto bg-white shadow-xl rounded-lg overflow-hidden">
-        {/* Header */}
         <div className="bg-blue-900 text-white p-4 md:p-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex flex-col items-center md:items-start w-full md:w-auto">
             <img
               src="/raphael_logo_final.png"
-              alt="Raphael Valves Logo"
-              className="h-12 w-auto mb-4 object-contain bg-white rounded p-1"
-              onError={(e) => {
-                e.target.style.display = "none";
-              }}
+              alt="Logo"
+              className="h-12 w-auto mb-4 bg-white rounded p-1"
             />
-            <h1 className="text-2xl md:text-3xl font-bold uppercase text-center md:text-left">
+            <h1 className="text-2xl md:text-3xl font-bold uppercase">
               RAPHAEL VALVES QUOTATION FORM
             </h1>
-            <div className="flex flex-col gap-2 mt-2 bg-blue-800 p-2 rounded w-full md:w-auto">
-              <div className="flex items-center gap-2 justify-between md:justify-start">
+            <div className="flex flex-col gap-2 mt-2 bg-blue-800 p-2 rounded">
+              <div className="flex items-center gap-2">
                 <span className="text-blue-200 text-xs">Ref:</span>
-                <span className="font-mono font-bold text-white">{ref}</span>
+                <span className="font-mono font-bold">{ref}</span>
                 <button
                   onClick={cycleRefSuffix}
-                  className="bg-blue-600 hover:bg-blue-500 px-2 py-0.5 rounded text-[10px]"
+                  className="bg-blue-600 px-2 py-0.5 rounded text-[10px]"
                 >
                   + ID
                 </button>
               </div>
-              <div className="flex items-center gap-2 justify-between md:justify-start">
+              <div className="flex items-center gap-2">
                 <span className="text-blue-200 text-xs">Prepared By:</span>
                 <select
                   className="text-black text-xs rounded p-1"
@@ -3166,640 +2852,432 @@ export default function QuotationApp() {
               </select>
             </div>
             <div className="flex flex-col gap-2 w-full md:w-auto items-end">
-              <div className="flex gap-2 w-full justify-center md:justify-end">
+              <div className="flex gap-2">
                 <button
                   onClick={handleExportPDF}
-                  className="bg-orange-600 hover:bg-red-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                  className="bg-orange-600 text-white font-bold py-1 px-4 rounded text-sm"
                 >
                   Export PDF
                 </button>
                 <button
                   onClick={handleExportExcel}
-                  className="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-4 rounded shadow text-sm flex-1 md:flex-none"
+                  className="bg-green-600 text-white font-bold py-1 px-4 rounded text-sm"
                 >
                   Export Excel
                 </button>
               </div>
               <button
                 onClick={handleSmartSave}
-                className="w-[218px] h-[34px] bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold rounded shadow border border-blue-900/20 text-[11px] flex items-center justify-center transition-transform active:scale-95"
+                className="w-[218px] bg-yellow-400 text-blue-900 font-bold rounded py-2 text-[11px]"
               >
-                {" "}
                 📂 SMART SAVE (PDF + EXCEL)
               </button>
             </div>
           </div>
         </div>
 
-        {/* Customer Info */}
         <div className="p-4 md:p-6 bg-gray-100 border-b">
-          <h3 className="text-sm font-bold text-black mb-3 uppercase">
-            Customer Details
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
-            <div>
-              <label className="block text-[10px] text-gray-500">
-                Company Name
-              </label>
+          <h3 className="text-sm font-bold mb-3 uppercase">Customer Details</h3>
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+            <input
+              list="customers-list"
+              className="p-2 border rounded"
+              value={cust.name}
+              onChange={(e) => setCust({ ...cust, name: e.target.value })}
+              placeholder="Company Name"
+            />
+            <datalist id="customers-list">
+              {customerList.map((c, i) => (
+                <option key={i} value={c} />
+              ))}
+            </datalist>
+            <input
+              className="p-2 border rounded"
+              value={cust.contactName}
+              onChange={(e) =>
+                setCust({ ...cust, contactName: e.target.value })
+              }
+              placeholder="Contact Person"
+            />
+            <input
+              className="p-2 border rounded"
+              value={cust.email}
+              onChange={(e) => setCust({ ...cust, email: e.target.value })}
+              placeholder="Email"
+            />
+            <input
+              className="p-2 border rounded"
+              value={cust.phone}
+              onChange={(e) => setCust({ ...cust, phone: e.target.value })}
+              placeholder="Phone"
+            />
+            <div className="bg-white p-2 rounded border border-blue-200 flex gap-2">
               <input
-                list="customers-list"
-                className="w-full p-2 border rounded text-black"
-                value={cust.name}
-                onChange={(e) => setCust({ ...cust, name: e.target.value })}
-                placeholder="Type or Select..."
-              />
-              <datalist id="customers-list">
-                {customerList.map((customer, idx) => (
-                  <option key={idx} value={customer} />
-                ))}
-              </datalist>
-            </div>
-            <div>
-              <label className="block text-[10px] text-gray-500">
-                Contact Person (Attn)
-              </label>
-              <input
-                className="w-full p-2 border rounded text-black"
-                value={cust.contactName}
+                type="number"
+                className="p-1 border rounded w-16 font-bold"
+                value={cust.defaultDiscount}
                 onChange={(e) =>
-                  setCust({ ...cust, contactName: e.target.value })
+                  setCust({
+                    ...cust,
+                    defaultDiscount: parseFloat(e.target.value) || 0,
+                  })
                 }
               />
-            </div>
-            <div>
-              <label className="block text-[10px] text-gray-500">Email</label>
-              <input
-                className="w-full p-2 border rounded text-black"
-                value={cust.email}
-                onChange={(e) => setCust({ ...cust, email: e.target.value })}
-              />
-            </div>
-            <div>
-              <label className="block text-[10px] text-gray-500">Phone</label>
-              <input
-                className="w-full p-2 border rounded text-black"
-                value={cust.phone}
-                onChange={(e) => setCust({ ...cust, phone: e.target.value })}
-              />
-            </div>
-            <div className="bg-white p-2 rounded border border-blue-200 shadow-sm">
-              <label className="block text-[10px] text-blue-600 font-bold mb-1">
-                Global Discount %
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="number"
-                  className="p-1 border rounded w-16 font-bold text-blue-900 text-center"
-                  value={cust.defaultDiscount}
-                  onChange={(e) =>
-                    setCust({
-                      ...cust,
-                      defaultDiscount: parseFloat(e.target.value) || 0,
-                    })
-                  }
-                />
-                <button
-                  onClick={applyGlobalDiscount}
-                  className="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
-                >
-                  Apply
-                </button>
-              </div>
+              <button
+                onClick={applyGlobalDiscount}
+                className="text-[10px] bg-blue-100 px-2 rounded"
+              >
+                Apply %
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Action Bar */}
-        <div className="p-4 bg-white border-b">
-          <div className="grid grid-cols-2 md:flex md:flex-row gap-2 md:gap-4">
-            <button
-              onClick={() => addItem(CATEGORIES.VALVES)}
-              className="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded shadow flex items-center justify-center gap-1 text-xs md:text-sm"
-            >
-              <span>+ Add Valve</span>
-            </button>
-            <button
-              onClick={() => addItem(CATEGORIES.ACCESSORIES)}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
-            >
-              + Add Accessory
-            </button>
-            <button
-              onClick={() => addItem(CATEGORIES.SPARE_PARTS)}
-              className="bg-amber-800 hover:bg-amber-900 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
-            >
-              + Add Spare Part
-            </button>
-            <button
-              onClick={() => addItem(CATEGORIES.DIAPHRAGMS)}
-              className="bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded shadow text-xs md:text-sm"
-            >
-              + Add Diaphragm
-            </button>
-            <button
-              onClick={() => addItem(CATEGORIES.FREE_TEXT)}
-              className="bg-teal-500 hover:bg-teal-600 text-white px-3 py-2 rounded shadow text-xs md:text-sm col-span-2 md:col-span-1"
-            >
-              + Add Free Text
-            </button>
-          </div>
+        <div className="p-4 bg-white border-b flex flex-wrap gap-2">
+          <button
+            onClick={() => addItem(CATEGORIES.VALVES)}
+            className="bg-green-600 text-white px-3 py-2 rounded text-xs"
+          >
+            + Valve
+          </button>
+          <button
+            onClick={() => addItem(CATEGORIES.ACCESSORIES)}
+            className="bg-blue-600 text-white px-3 py-2 rounded text-xs"
+          >
+            + Accessory
+          </button>
+          <button
+            onClick={() => addItem(CATEGORIES.SPARE_PARTS)}
+            className="bg-amber-800 text-white px-3 py-2 rounded text-xs"
+          >
+            + Spare Part
+          </button>
+          <button
+            onClick={() => addItem(CATEGORIES.DIAPHRAGMS)}
+            className="bg-purple-600 text-white px-3 py-2 rounded text-xs"
+          >
+            + Diaphragm
+          </button>
+          <button
+            onClick={() => addItem(CATEGORIES.FREE_TEXT)}
+            className="bg-teal-500 text-white px-3 py-2 rounded text-xs"
+          >
+            + Free Text
+          </button>
         </div>
 
-        {/* Items Table */}
-        <div className="p-2 md:p-6 overflow-x-auto min-h-[400px]">
-          {items.length === 0 ? (
-            <div className="text-center text-gray-400 py-10">
-              Start by adding items from the menu above
-            </div>
-          ) : (
-            <table className="w-full text-sm text-left border-collapse min-w-[800px]">
-              <thead className="text-xs text-black uppercase bg-gray-200">
-                <tr>
-                  <th className="px-2 py-3 border-b border-gray-300 w-20">
-                    Type
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300">
-                    Description / Specs
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-24 text-center">
-                    Size
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-20 text-center">
-                    Qty
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-28 text-right bg-blue-50">
-                    Unitary Price
-                    <br />
-                    <span className="text-[9px] font-normal lowercase">
-                      (Net)
-                    </span>
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-20 text-center bg-blue-50">
-                    Disc %
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-32 text-right">
-                    Total Per Line
-                  </th>
-                  <th className="px-2 py-3 border-b border-gray-300 w-10"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {items.map((item, idx) => {
-                  const financials = calculateRow(item, idx);
-                  const isValve = item.category === CATEGORIES.VALVES;
-                  const isFreeText = item.category === CATEGORIES.FREE_TEXT;
-                  let dropDownOptions = [];
-                  if (item.category === CATEGORIES.VALVES)
-                    dropDownOptions = Object.keys(PRODUCTS_DB);
-                  else if (item.category === CATEGORIES.DIAPHRAGMS)
-                    dropDownOptions = Object.keys(DIAPHRAGMS_DB);
-                  else dropDownOptions = SORTED_ACCESSORIES_KEYS;
-
-                  return (
-                    <tr
-                      key={item.id}
-                      className={`border-b hover:bg-gray-50 align-top ${
-                        item.isIncluded ? "bg-blue-50 opacity-60 italic" : ""
-                      }`}
-                    >
-                      <td className="px-2 py-3 text-xs font-bold text-gray-800 uppercase">
-                        {item.category}
-                      </td>
-                      <td className="px-2 py-3">
-                        {isFreeText ? (
-                          <div className="flex flex-col gap-2">
-                            <input
-                              type="text"
-                              placeholder="Item Name (Code)"
-                              className="w-full border rounded p-1 text-black font-bold"
-                              value={item.code || ""}
-                              onChange={(e) =>
-                                updateItem(item.id, "code", e.target.value)
-                              }
-                            />
-                            <input
-                              type="text"
-                              placeholder="Description"
-                              className="w-full border rounded p-1 text-black"
-                              value={item.description || ""}
-                              onChange={(e) =>
-                                updateItem(
-                                  item.id,
-                                  "description",
-                                  e.target.value
-                                )
-                              }
-                            />
-                          </div>
-                        ) : (
-                          <select
-                            className={`w-full border rounded p-1 font-bold text-black ${
-                              !item.code ? "text-gray-400" : ""
-                            }`}
+        <div className="p-2 md:p-6 overflow-x-auto">
+          <table className="w-full text-sm text-left border-collapse min-w-[800px]">
+            <thead className="bg-gray-200 text-black uppercase text-xs">
+              <tr>
+                <th className="px-2 py-3 w-20">Type</th>
+                <th className="px-2 py-3">Description</th>
+                <th className="px-2 py-3 w-24 text-center">Size</th>
+                <th className="px-2 py-3 w-20 text-center">Qty</th>
+                <th className="px-2 py-3 w-28 text-right bg-blue-50">
+                  Unit Price
+                </th>
+                <th className="px-2 py-3 w-20 text-center bg-blue-50">
+                  Disc %
+                </th>
+                <th className="px-2 py-3 w-32 text-right">Total</th>
+                <th className="px-2 py-3 w-10"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item, idx) => {
+                const financials = calculateRow(item, idx);
+                const isValve = item.category === CATEGORIES.VALVES;
+                const isFreeText = item.category === CATEGORIES.FREE_TEXT;
+                let opts = isValve
+                  ? Object.keys(PRODUCTS_DB)
+                  : item.category === CATEGORIES.DIAPHRAGMS
+                  ? Object.keys(DIAPHRAGMS_DB)
+                  : SORTED_ACCESSORIES_KEYS;
+                return (
+                  <tr
+                    key={item.id}
+                    className={`border-b hover:bg-gray-50 ${
+                      item.isIncluded ? "bg-blue-50 opacity-60 italic" : ""
+                    }`}
+                  >
+                    <td className="px-2 py-3 text-xs font-bold uppercase">
+                      {item.category}
+                    </td>
+                    <td className="px-2 py-3">
+                      {isFreeText ? (
+                        <div className="flex flex-col gap-1">
+                          <input
+                            className="border rounded p-1 font-bold"
                             value={item.code}
                             onChange={(e) =>
                               updateItem(item.id, "code", e.target.value)
                             }
-                          >
-                            <option value="">Select Item...</option>
-                            {dropDownOptions.map((k) => (
-                              <option key={k} value={k}>
-                                {k}
-                              </option>
-                            ))}
-                          </select>
-                        )}
-                        <textarea
-                          className="w-full text-xs border p-1 mt-1 bg-gray-50 italic text-gray-700"
-                          placeholder="Manual notes/description..."
-                          rows="1"
-                          value={item.customDesc || ""}
-                          onChange={(e) =>
-                            updateItem(item.id, "customDesc", e.target.value)
-                          }
-                        />
-                        <textarea
-                          className="w-full text-xs border p-1 mt-1 italic"
-                          style={{
-                            backgroundColor: "#fff5f5", // רקע אדמדם
-                            color: "#c53030", // טקסט אדום כהה
-                            borderColor: "#feb2b2", // מסגרת ורודה
-                          }}
-                          placeholder="INTERNAL NOTES (Excel only)"
-                          rows="1"
-                          value={item.internalNotes || ""}
-                          onChange={(e) =>
-                            updateItem(item.id, "internalNotes", e.target.value)
-                          }
-                        />
-                        {isValve && (
-                          <div className="grid grid-cols-2 gap-2 mt-2 bg-gray-50 p-2 rounded border border-dashed text-black font-medium">
-                            <div>
-                              <label className="text-[10px] font-bold">
-                                BODY MAT.
-                              </label>
-                              <select
-                                className={`w-full text-xs border rounded ${
-                                  !item.bodyMat ? "text-gray-400" : ""
-                                }`}
-                                value={item.bodyMat}
-                                onChange={(e) =>
-                                  updateItem(item.id, "bodyMat", e.target.value)
-                                }
-                              >
-                                <option value="">Select...</option>
-                                {OPTIONS.bodyMaterials.map((m) => (
-                                  <option key={m} value={m}>
-                                    {m}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                            <div>
-                              <label className="text-[10px] font-bold">
-                                TRIM MAT.
-                              </label>
-                              <select
-                                className={`w-full text-xs border rounded ${
-                                  !item.trimMat ? "text-gray-400" : ""
-                                }`}
-                                value={item.trimMat}
-                                onChange={(e) =>
-                                  updateItem(item.id, "trimMat", e.target.value)
-                                }
-                              >
-                                <option value="">Select...</option>
-                                {OPTIONS.trimMaterials.map((m) => (
-                                  <option key={m} value={m}>
-                                    {m}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                        )}
-                      </td>
-                      <td className="px-2 py-3 text-center">
-                        {isValve ? (
-                          <select
-                            className={`border rounded p-1 w-full text-center text-black ${
-                              !item.size ? "text-gray-400" : ""
-                            }`}
-                            value={item.size}
+                            placeholder="Code"
+                          />
+                          <input
+                            className="border rounded p-1"
+                            value={item.description}
                             onChange={(e) =>
-                              updateItem(item.id, "size", e.target.value)
+                              updateItem(item.id, "description", e.target.value)
+                            }
+                            placeholder="Description"
+                          />
+                        </div>
+                      ) : (
+                        <select
+                          className="w-full border rounded p-1 font-bold"
+                          value={item.code}
+                          onChange={(e) =>
+                            updateItem(item.id, "code", e.target.value)
+                          }
+                        >
+                          <option value="">Select...</option>
+                          {opts.map((k) => (
+                            <option key={k} value={k}>
+                              {k}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                      <textarea
+                        className="w-full text-xs border p-1 mt-1 italic"
+                        value={item.customDesc}
+                        onChange={(e) =>
+                          updateItem(item.id, "customDesc", e.target.value)
+                        }
+                        placeholder="Notes..."
+                        rows="1"
+                      />
+                      <textarea
+                        className="w-full text-xs border p-1 mt-1 bg-red-50 text-red-800 italic"
+                        value={item.internalNotes}
+                        onChange={(e) =>
+                          updateItem(item.id, "internalNotes", e.target.value)
+                        }
+                        placeholder="INTERNAL NOTES"
+                        rows="1"
+                      />
+                      {isValve && (
+                        <div className="grid grid-cols-2 gap-2 mt-1">
+                          <select
+                            className="text-xs border rounded"
+                            value={item.bodyMat}
+                            onChange={(e) =>
+                              updateItem(item.id, "bodyMat", e.target.value)
                             }
                           >
-                            <option value="">Select...</option>
-                            {OPTIONS.sizes.map((s) => (
-                              <option key={s} value={s}>
-                                {s}
+                            <option value="">Body...</option>
+                            {OPTIONS.bodyMaterials.map((m) => (
+                              <option key={m} value={m}>
+                                {m}
                               </option>
                             ))}
                           </select>
-                        ) : (
-                          <span className="text-gray-400">-</span>
-                        )}
-                      </td>
-                      <td className="px-2 py-3">
-                        <input
-                          type="number"
-                          min="1"
-                          className="w-full border rounded p-2 text-center font-bold bg-white text-black shadow-sm"
-                          value={item.qty}
-                          onChange={(e) =>
-                            updateItem(item.id, "qty", parseInt(e.target.value))
-                          }
-                        />
-                      </td>
-                      <td className="px-2 py-3 text-right bg-blue-50">
-                        <div className="flex flex-col items-end group">
-                          <div className="relative w-full">
-                            <input
-                              type="number"
-                              className={`w-full border rounded p-1 text-right font-mono font-bold outline-none transition-colors ${
-                                !isFreeText && item.manualPrice
-                                  ? "border-amber-400 bg-amber-50 text-amber-900"
-                                  : "border-blue-200 bg-white text-blue-900 focus:border-blue-500"
-                              }`}
-                              value={
-                                isFreeText
-                                  ? item.price || ""
-                                  : item.manualPrice || ""
-                              }
-                              onChange={(e) => {
-                                const val = e.target.value;
-                                if (isFreeText) {
-                                  updateItem(item.id, "price", val);
-                                } else {
-                                  updateItem(item.id, "manualPrice", val);
-                                }
-                              }}
-                              placeholder={
-                                isFreeText
-                                  ? "0.00"
-                                  : financials.unitPrice.toFixed(2)
-                              }
-                            />
-                            {/* כפתור איפוס שמופיע רק כשיש מחיר ידני */}
-                            {!isFreeText && item.manualPrice && (
-                              <button
-                                onClick={() =>
-                                  updateItem(item.id, "manualPrice", "")
-                                }
-                                className="absolute -left-2 top-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full w-4 h-4 flex items-center justify-center text-[10px] hover:bg-red-700 shadow-sm z-10"
-                                title="Reset to list price"
-                              >
-                                ×
-                              </button>
-                            )}
-                          </div>
-
-                          {/* הצגת מחיר המקור מתחת לתיבה באפור קטן */}
-                          {!isFreeText && item.manualPrice && (
-                            <div className="text-[10px] text-gray-400 font-medium mt-1">
-                              Orig:{" "}
-                              {formatCurrency(financials.unitPrice).replace(
-                                currencySymbol,
-                                ""
-                              )}
-                            </div>
-                          )}
-
-                          {/* חיווי הטרים (רק אם אין מחיר ידני) */}
-                          {isValve &&
-                            financials.trimAdder > 0 &&
-                            !item.manualPrice && (
-                              <div className="text-[9px] text-red-600 font-bold italic leading-tight">
-                                {item.trimMat === "Full Sea Water Trim"
-                                  ? "+SeaWater"
-                                  : "+HG Trim"}
-                              </div>
-                            )}
-                        </div>
-                      </td>
-                      <td className="px-2 py-3 bg-blue-50">
-                        <input
-                          type="number"
-                          className="w-full border rounded p-1 text-center text-red-600 font-bold bg-white"
-                          value={item.discount}
-                          disabled={isFreeText}
-                          onChange={(e) =>
-                            updateItem(
-                              item.id,
-                              "discount",
-                              parseFloat(e.target.value) || 0
-                            )
-                          }
-                        />
-                      </td>
-                      <td className="px-2 py-3 text-right font-bold text-lg text-black">
-                        {formatCurrency(financials.total, currencySymbol)}
-                      </td>
-                      <td className="px-2 py-3 text-center">
-                        <div className="flex flex-col gap-1 items-center">
-                          {!isValve && !isFreeText && (
-                            <button
-                              title="Merge into Valve above"
-                              onClick={() => toggleMerge(item.id, idx)}
-                              className={`p-1 rounded-full border ${
-                                item.isIncluded
-                                  ? "bg-blue-600 text-white border-blue-900"
-                                  : "bg-white text-gray-400 border-gray-300"
-                              }`}
-                            >
-                              🔗
-                            </button>
-                          )}
-                          <button
-                            onClick={() => removeItem(item.id)}
-                            className="text-red-300 hover:text-red-600 font-bold text-xl"
+                          <select
+                            className="text-xs border rounded"
+                            value={item.trimMat}
+                            onChange={(e) =>
+                              updateItem(item.id, "trimMat", e.target.value)
+                            }
                           >
-                            ×
-                          </button>
+                            <option value="">Trim...</option>
+                            {OPTIONS.trimMaterials.map((m) => (
+                              <option key={m} value={m}>
+                                {m}
+                              </option>
+                            ))}
+                          </select>
                         </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          )}
+                      )}
+                    </td>
+                    <td className="px-2 py-3 text-center">
+                      {isValve ? (
+                        <select
+                          className="border rounded p-1"
+                          value={item.size}
+                          onChange={(e) =>
+                            updateItem(item.id, "size", e.target.value)
+                          }
+                        >
+                          <option value="">DN...</option>
+                          {OPTIONS.sizes.map((s) => (
+                            <option key={s} value={s}>
+                              {s}
+                            </option>
+                          ))}
+                        </select>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                    <td className="px-2 py-3">
+                      <input
+                        type="number"
+                        className="w-full border rounded p-1 text-center font-bold"
+                        value={item.qty}
+                        onChange={(e) =>
+                          updateItem(
+                            item.id,
+                            "qty",
+                            parseInt(e.target.value) || 1
+                          )
+                        }
+                      />
+                    </td>
+                    <td className="px-2 py-3 text-right bg-blue-50">
+                      <input
+                        type="number"
+                        className="w-full border rounded p-1 text-right font-mono"
+                        value={
+                          isFreeText ? item.price || "" : item.manualPrice || ""
+                        }
+                        onChange={(e) =>
+                          updateItem(
+                            item.id,
+                            isFreeText ? "price" : "manualPrice",
+                            e.target.value
+                          )
+                        }
+                        placeholder={financials.unitPrice.toFixed(2)}
+                      />
+                    </td>
+                    <td className="px-2 py-3 bg-blue-50">
+                      <input
+                        type="number"
+                        className="w-full border rounded p-1 text-center text-red-600 font-bold"
+                        value={item.discount}
+                        onChange={(e) =>
+                          updateItem(
+                            item.id,
+                            "discount",
+                            parseFloat(e.target.value) || 0
+                          )
+                        }
+                        disabled={isFreeText}
+                      />
+                    </td>
+                    <td className="px-2 py-3 text-right font-bold text-lg">
+                      {formatCurrency(financials.total, currencySymbol)}
+                    </td>
+                    <td className="px-2 py-3 text-center">
+                      <div className="flex flex-col gap-1">
+                        {!isValve && !isFreeText && (
+                          <button
+                            onClick={() => toggleMerge(item.id, idx)}
+                            className={`p-1 rounded-full border ${
+                              item.isIncluded
+                                ? "bg-blue-600 text-white"
+                                : "bg-white text-gray-400"
+                            }`}
+                          >
+                            🔗
+                          </button>
+                        )}
+                        <button
+                          onClick={() => removeItem(item.id)}
+                          className="text-red-300 hover:text-red-600 font-bold text-xl"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
-        {/* Commercial Terms Editor */}
-        <div className="bg-gray-100 p-4 md:p-6 border-t mt-4">
-          <h4 className="text-sm font-bold text-black mb-2 uppercase">
-            Commercial Terms
-          </h4>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
-            <div>
-              <label className="block text-xs font-bold text-black">
-                Payment
-              </label>
-              <select
-                className="w-full border rounded p-1 text-black mb-1"
-                value={
-                  PAYMENT_PRESETS.includes(terms.payment)
-                    ? terms.payment
-                    : "OTHER"
-                }
-                onChange={(e) => {
-                  if (e.target.value === "OTHER")
-                    setTerms({ ...terms, payment: "" });
-                  else setTerms({ ...terms, payment: e.target.value });
-                }}
-              >
-                {PAYMENT_PRESETS.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-                <option value="OTHER">OTHER (Type below)</option>
-              </select>
-              {!PAYMENT_PRESETS.includes(terms.payment) && (
-                <input
-                  className="w-full border rounded p-1 text-black bg-white"
-                  placeholder="Type payment terms..."
-                  value={terms.payment}
-                  onChange={(e) =>
-                    setTerms({ ...terms, payment: e.target.value })
-                  }
-                />
-              )}
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-black">
-                Delivery
-              </label>
-              <select
-                className="w-full border rounded p-1 text-black mb-1"
-                value={
-                  DELIVERY_PRESETS.includes(terms.delivery)
-                    ? terms.delivery
-                    : "OTHER"
-                }
-                onChange={(e) => {
-                  if (e.target.value === "OTHER")
-                    setTerms({ ...terms, delivery: "" });
-                  else setTerms({ ...terms, delivery: e.target.value });
-                }}
-              >
-                {DELIVERY_PRESETS.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-                <option value="OTHER">OTHER (Type below)</option>
-              </select>
-              {!DELIVERY_PRESETS.includes(terms.delivery) && (
-                <input
-                  className="w-full border rounded p-1 text-black bg-white"
-                  placeholder="Type delivery terms..."
-                  value={terms.delivery}
-                  onChange={(e) =>
-                    setTerms({ ...terms, delivery: e.target.value })
-                  }
-                />
-              )}
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-black">
-                Lead Time
-              </label>
-              <input
-                className="w-full border rounded p-1 text-black"
-                value={terms.leadTime}
-                onChange={(e) =>
-                  setTerms({ ...terms, leadTime: e.target.value })
-                }
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-black">
-                Validity
-              </label>
-              <input
-                className="w-full border rounded p-1 text-black"
-                value={terms.validity}
-                onChange={(e) =>
-                  setTerms({ ...terms, validity: e.target.value })
-                }
-              />
-            </div>
+        <div className="bg-gray-100 p-4 md:p-6 border-t">
+          <h4 className="text-sm font-bold uppercase mb-2">Commercial Terms</h4>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <input
+              className="p-2 border rounded"
+              value={terms.payment}
+              onChange={(e) => setTerms({ ...terms, payment: e.target.value })}
+              placeholder="Payment"
+            />
+            <input
+              className="p-2 border rounded"
+              value={terms.delivery}
+              onChange={(e) => setTerms({ ...terms, delivery: e.target.value })}
+              placeholder="Delivery"
+            />
+            <input
+              className="p-2 border rounded"
+              value={terms.leadTime}
+              onChange={(e) => setTerms({ ...terms, leadTime: e.target.value })}
+              placeholder="Lead Time"
+            />
+            <input
+              className="p-2 border rounded"
+              value={terms.validity}
+              onChange={(e) => setTerms({ ...terms, validity: e.target.value })}
+              placeholder="Validity"
+            />
           </div>
         </div>
-        {/* Footer Totals & Export Buttons */}
-        <div className="bg-gray-200 p-4 md:p-6 border-t shadow-inner">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
-            {/* שורת כפתורים עם הפרדה חכמה */}
-            <div className="flex flex-wrap gap-2 w-full md:flex-1 items-center">
-              <button
-                onClick={handleExportPDF}
-                className="bg-orange-700 hover:bg-indigo-800 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
-              >
-                Export PDF
-              </button>
-              <button
-                onClick={handleExportExcel}
-                className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
-              >
-                Export Excel
-              </button>
-              <button
-                onClick={handleSmartSave}
-                className="bg-yellow-400 hover:bg-yellow-500 text-blue-900 font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95 border border-blue-900/20"
-              >
-                📂 SMART SAVE (PDF + EXCEL)
-              </button>
 
-              {/* הרווח הזה דוחף את הכפתור הבא ימינה ככל האפשר */}
-              <div className="flex-grow"></div>
-
-              <button
-                onClick={handleCleanAll}
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm transition-transform active:scale-95"
-              >
-                CLEAN ALL
-              </button>
+        <div className="bg-gray-200 p-4 md:p-6 border-t flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex flex-wrap gap-2 items-center flex-grow">
+            <button
+              onClick={handleExportPDF}
+              className="bg-orange-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm"
+            >
+              Export PDF
+            </button>
+            <button
+              onClick={handleExportExcel}
+              className="bg-green-600 text-white font-bold py-2 px-6 rounded shadow-md text-sm"
+            >
+              Export Excel
+            </button>
+            <button
+              onClick={handleSmartSave}
+              className="bg-yellow-400 text-blue-900 font-bold py-2 px-6 rounded shadow-md text-sm"
+            >
+              📂 SMART SAVE
+            </button>
+            <div className="flex-grow"></div>
+            <button
+              onClick={handleCleanAll}
+              className="bg-red-600 text-white font-bold py-2 px-6 rounded shadow-md text-sm"
+            >
+              CLEAN ALL
+            </button>
+          </div>
+          <div className="flex flex-col items-end w-full md:w-72">
+            <div className="flex justify-between w-full text-sm">
+              <span>Subtotal:</span>
+              <span className="font-bold">
+                {formatCurrency(subTotal, currencySymbol)}
+              </span>
             </div>
-
-            {/* אזור הסיכומים בצד ימין */}
-            <div className="flex flex-col items-end w-full md:w-auto">
-              <div className="flex justify-between w-full md:w-72 text-sm text-black mb-1">
-                <span>Subtotal:</span>
-                <span className="font-mono font-bold">
-                  {formatCurrency(subTotal, currencySymbol)}
-                </span>
-              </div>
-
-              <div className="flex justify-between w-full md:w-72 text-sm text-black border-b border-gray-400 pb-2 mb-2 italic">
-                <div className="flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    checked={includePacking}
-                    onChange={(e) => setIncludePacking(e.target.checked)}
-                    className="w-4 h-4"
-                  />
-                  <span>Packing & Handling (3.5%):</span>
-                </div>
-                <span
-                  className={`font-mono ${
-                    !includePacking ? "text-gray-400 line-through" : "font-bold"
-                  }`}
-                >
-                  {formatCurrency(packingCost, currencySymbol)}
-                </span>
-              </div>
-
-              <div className="flex justify-between w-full md:w-72 items-center">
-                <span className="text-xl font-black text-blue-900 uppercase leading-none">
-                  Grand Total:
-                </span>
-                <span className="text-2xl font-black text-blue-900 font-mono leading-none">
-                  {formatCurrency(grandTotal, currencySymbol)}
-                </span>
-              </div>
+            <div className="flex justify-between w-full text-sm border-b border-gray-400 pb-2 mb-2 italic">
+              <label className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  checked={includePacking}
+                  onChange={(e) => setIncludePacking(e.target.checked)}
+                />
+                Packing (3.5%):
+              </label>
+              <span
+                className={
+                  !includePacking ? "text-gray-400 line-through" : "font-bold"
+                }
+              >
+                {formatCurrency(packingCost, currencySymbol)}
+              </span>
+            </div>
+            <div className="flex justify-between w-full items-center">
+              <span className="text-xl font-black text-blue-900 uppercase">
+                Grand Total:
+              </span>
+              <span className="text-2xl font-black text-blue-900 font-mono">
+                {formatCurrency(grandTotal, currencySymbol)}
+              </span>
             </div>
           </div>
         </div>
