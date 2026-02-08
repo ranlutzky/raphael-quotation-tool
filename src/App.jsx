@@ -3170,9 +3170,13 @@ export default function QuotationApp() {
                 return (
                   <tr
                     key={item.id}
-                    className={`border-b hover:bg-gray-50 ${
-                      item.isIncluded ? "bg-blue-50 opacity-60 italic" : ""
-                    }`}
+                    className={`border-b transition-colors ${
+                      item.isIncluded
+                        ? "bg-blue-50/50 opacity-70 italic"
+                        : idx % 2 === 0
+                        ? "bg-white"
+                        : "bg-gray-50/50"
+                    } hover:bg-blue-100/50`}
                   >
                     <td className="px-2 py-3 text-xs font-bold uppercase">
                       {item.category}
