@@ -2886,27 +2886,19 @@ export default function QuotationApp() {
     if (!("showDirectoryPicker" in window))
       return alert("Use Chrome/Edge on Desktop.");
 
-    // 1. יצירת שם ברירת המחדל
     const defaultName = getGenerateFileName(cust.name, ref);
 
-    // 2. קבלת השם מהמשתמש
     const userInput = window.prompt(
-      "Enter filename (Letters and numbers only):",
+      "Enter filename (Safe characters only):",
       defaultName
     );
 
-    // 3. עצירה אם המשתמש ביטל או השאיר ריק
     if (!userInput || userInput.trim() === "") return;
 
-    // 4. ניקוי אגרסיבי של שם הקובץ (מסיר רווחים כפולים ותווים בעייתיים)
-    const customName = userInput
-      .trim()
-      .replace(/[/\\?%*:|"<>]/g, "-") // החלפת תווים אסורים במקף
-      .replace(/\s+/g, "_"); // החלפת רווחים בקו תחתוני (מונע בעיות דפדפן)
+    // התיקון שהוספת
+    const customName = getGenerateFileName(userInput.trim(), "");
 
     saveCustomerToList(cust.name);
-
-    // קריאה לפונקציית השיטס המעודכנת (מצד 1)
     sendToGoogleSheet({
       date: new Date().toLocaleDateString("en-GB"),
       reference: ref,
@@ -2916,46 +2908,38 @@ export default function QuotationApp() {
       preparedBy: salesPerson,
       contact: cust.contactName,
       status: "Sent",
-      country: cust.country, // הוספנו את המדינה גם כאן
+      country: cust.country,
     });
 
     try {
       // פתיחת בחירת התיקייה
       const dirHandle = await window.showDirectoryPicker();
 
-      // יצירת ה-PDF
+      // פונקציית עזר פנימית לכתיבה בטוחה
+      const writeFile = async (name, blob) => {
+        const fileHandle = await dirHandle.getFileHandle(name, {
+          create: true,
+        });
+        const writable = await fileHandle.createWritable();
+        await writable.write(blob);
+        await writable.close();
+      };
+
       const pdfBlob = await createGlobalPDFBlob();
-      const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
-        create: true,
-      });
-      const pdfW = await pdfH.createWritable();
-      await pdfW.write(pdfBlob);
-      await pdfW.close();
+      await writeFile(`${customName}.pdf`, pdfBlob);
 
-      // יצירת האקסל
       const excelBlob = createGlobalExcelBlob();
-      const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
-        create: true,
-      });
-      const xlsW = await xlsH.createWritable();
-      await xlsW.write(excelBlob);
-      await xlsW.close();
+      await writeFile(`${customName}.xlsx`, excelBlob);
 
-      // יצירת ה-JSON
       const jsonBlob = createGlobalJsonBlob();
-      const jsonH = await dirHandle.getFileHandle(`${customName}.json`, {
-        create: true,
-      });
-      const jsonW = await jsonH.createWritable();
-      await jsonW.write(jsonBlob);
-      await jsonW.close();
+      await writeFile(`${customName}.json`, jsonBlob);
 
       alert("Success! Files saved as: " + customName);
     } catch (err) {
       if (err.name !== "AbortError") {
         console.error(err);
         alert(
-          "Saving failed! Please ensure the files are not open in another program and that the name is valid."
+          `Error: ${err.message}. Try a different filename or close open files.`
         );
       }
     }
