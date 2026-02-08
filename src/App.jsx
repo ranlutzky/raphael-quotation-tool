@@ -3330,38 +3330,44 @@ export default function QuotationApp() {
                         disabled={isFreeText}
                       />
                     </td>
+
+                    {/* --- שלב 1: החזרת עמודת ה-TOTAL --- */}
+                    <td className="px-2 py-3 text-right font-bold text-gray-700 border border-gray-300">
+                      {formatCurrency(financials.total, currencySymbol)}
+                    </td>
+
+                    {/* --- שלב 2: עמודת פעולות (שכפול ומחיקה) --- */}
                     <td className="px-2 py-3 text-center border border-gray-300">
                       <div className="flex flex-col gap-2 items-center justify-center">
-                        {/* כפתור איחוד (Merge/Include) */}
+                        {/* כפתור איחוד */}
                         {!isValve && !isFreeText && (
                           <button
                             onClick={() => toggleMerge(item.id, idx)}
-                            className={`p-1 rounded-full border transition-colors ${
+                            className={`p-1 rounded-full border ${
                               item.isIncluded
-                                ? "bg-blue-600 text-white border-blue-600"
-                                : "bg-white text-gray-400 border-gray-300 hover:border-blue-400"
+                                ? "bg-blue-600 text-white"
+                                : "bg-white text-gray-400 border-gray-200"
                             }`}
-                            title="Include in previous item"
                             type="button"
                           >
                             🔗
                           </button>
                         )}
 
-                        {/* כפתור שכפול שורה (Duplicate) */}
+                        {/* כפתור שכפול */}
                         <button
                           onClick={() => duplicateRow(idx)}
-                          className="text-blue-500 hover:text-blue-700 text-lg hover:scale-125 transition-transform"
+                          className="text-blue-500 hover:scale-125 transition-transform"
                           title="Duplicate Row"
                           type="button"
                         >
                           👯
                         </button>
 
-                        {/* כפתור מחיקת שורה (Remove) */}
+                        {/* כפתור מחיקה */}
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-red-300 hover:text-red-600 font-bold text-xl transition-colors"
+                          className="text-red-300 hover:text-red-600 font-bold text-xl"
                           title="Remove Item"
                           type="button"
                         >
