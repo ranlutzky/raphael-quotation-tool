@@ -2445,6 +2445,17 @@ export default function QuotationApp() {
     ]);
   };
 
+  const duplicateRow = (index) => {
+    const itemToCopy = { ...items[index] };
+
+    // יצירת מזהה ייחודי חדש לעותק כדי שלא ימחוק את המקור
+    itemToCopy.id = Date.now() + Math.random();
+
+    const newItems = [...items];
+    // הכנסת העותק מיד מתחת לשורה המקורית
+    newItems.splice(index + 1, 0, itemToCopy);
+    setItems(newItems);
+  };
   const updateItem = (id, field, value) =>
     setItems(items.map((i) => (i.id === id ? { ...i, [field]: value } : i)));
   const removeItem = (id) => setItems(items.filter((i) => i.id !== id));
@@ -3008,7 +3019,7 @@ export default function QuotationApp() {
               <div className="flex gap-2">
                 <button
                   onClick={handleExportPDF}
-                  className="bg-orange-600 text-white font-bold py-1 px-4 rounded text-sm"
+                  className="bg-slate-500 text-white font-bold py-1 px-4 rounded text-sm"
                 >
                   Export PDF
                 </button>
@@ -3319,26 +3330,40 @@ export default function QuotationApp() {
                         disabled={isFreeText}
                       />
                     </td>
-                    <td className="px-2 py-3 text-right font-bold text-lg">
-                      {formatCurrency(financials.total, currencySymbol)}
-                    </td>
-                    <td className="px-2 py-3 text-center">
-                      <div className="flex flex-col gap-1">
+                    <td className="px-2 py-3 text-center border border-gray-300">
+                      <div className="flex flex-col gap-2 items-center justify-center">
+                        {/* כפתור איחוד (Merge/Include) */}
                         {!isValve && !isFreeText && (
                           <button
                             onClick={() => toggleMerge(item.id, idx)}
-                            className={`p-1 rounded-full border ${
+                            className={`p-1 rounded-full border transition-colors ${
                               item.isIncluded
-                                ? "bg-blue-600 text-white"
-                                : "bg-white text-gray-400"
+                                ? "bg-blue-600 text-white border-blue-600"
+                                : "bg-white text-gray-400 border-gray-300 hover:border-blue-400"
                             }`}
+                            title="Include in previous item"
+                            type="button"
                           >
                             🔗
                           </button>
                         )}
+
+                        {/* כפתור שכפול שורה (Duplicate) */}
+                        <button
+                          onClick={() => duplicateRow(idx)}
+                          className="text-blue-500 hover:text-blue-700 text-lg hover:scale-125 transition-transform"
+                          title="Duplicate Row"
+                          type="button"
+                        >
+                          👯
+                        </button>
+
+                        {/* כפתור מחיקת שורה (Remove) */}
                         <button
                           onClick={() => removeItem(item.id)}
-                          className="text-red-300 hover:text-red-600 font-bold text-xl"
+                          className="text-red-300 hover:text-red-600 font-bold text-xl transition-colors"
+                          title="Remove Item"
+                          type="button"
                         >
                           ×
                         </button>
