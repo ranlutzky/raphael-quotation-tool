@@ -2898,8 +2898,11 @@ export default function QuotationApp() {
     // 3. עצירה אם המשתמש ביטל או השאיר ריק
     if (!userInput || userInput.trim() === "") return;
 
-    // 4. ניקוי השם שהמשתמש הזין מתווים אסורים (זה התיקון!)
-    const customName = userInput.replace(/[/\\?%*:|"<>]/g, "-").trim();
+    // 4. ניקוי אגרסיבי של שם הקובץ (מסיר רווחים כפולים ותווים בעייתיים)
+    const customName = userInput
+      .trim()
+      .replace(/[/\\?%*:|"<>]/g, "-") // החלפת תווים אסורים במקף
+      .replace(/\s+/g, "_"); // החלפת רווחים בקו תחתוני (מונע בעיות דפדפן)
 
     saveCustomerToList(cust.name);
 
