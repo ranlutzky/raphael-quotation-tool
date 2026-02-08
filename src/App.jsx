@@ -2762,6 +2762,20 @@ export default function QuotationApp() {
     return new Blob([wbOut], { type: "application/octet-stream" });
   };
 
+  const createGlobalJsonBlob = () => {
+    const dataToSave = {
+      items,
+      cust,
+      salesPerson,
+      currency,
+      terms,
+      ref,
+      grandTotal,
+    };
+    const jsonString = JSON.stringify(dataToSave, null, 2);
+    return new Blob([jsonString], { type: "application/json" });
+  };
+
   const toggleMerge = (id, index) => {
     if (
       !items.slice(0, index).some((x) => x.category === CATEGORIES.VALVES) &&
@@ -2893,6 +2907,15 @@ export default function QuotationApp() {
       const xlsW = await xlsH.createWritable();
       await xlsW.write(excelBlob);
       await xlsW.close();
+
+      // יצירת ה-JSON
+      const jsonBlob = createGlobalJsonBlob();
+      const jsonH = await dirHandle.getFileHandle(`${customName}.json`, {
+        create: true,
+      });
+      const jsonW = await jsonH.createWritable();
+      await jsonW.write(jsonBlob);
+      await jsonW.close();
 
       alert("Success! Both files saved as: " + customName);
     } catch (err) {
