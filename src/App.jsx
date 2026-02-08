@@ -2318,34 +2318,6 @@ const OPTIONS = {
   sizes: ['1.5"', '2"', '2.5"', '3"', '4"', '6"', '8"', '10"', '12"'],
 };
 
-const sendToGoogleSheet = async (data) => {
-  const SCRIPT_URL =
-    "https://script.google.com/macros/s/AKfycbzblZE9TLa5MTznVbKqK7uLZvM2NpGEA57CkeRzYAT4sR-sFzce3yg1HCihebF0T_wj/exec";
-
-  // יצירת חותמת זמן הכוללת שעה מדויקת
-  const now = new Date();
-  const timestamp =
-    now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString("en-GB");
-
-  // הוספת השעה והמדינה לנתונים שנשלחים
-  const enrichedData = {
-    ...data,
-    saveTime: timestamp, // שדה חדש לשעה
-    country: cust.country || "", // מוודא ששדה המדינה נלקח מהסטייט
-  };
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(enrichedData),
-    });
-  } catch (err) {
-    console.error("Sheet sync failed:", err);
-  }
-};
-
 export default function QuotationApp() {
   const loadSavedData = () => {
     try {
@@ -2394,6 +2366,32 @@ export default function QuotationApp() {
       validity: "30 Days",
     }
   );
+
+  const sendToGoogleSheet = async (data) => {
+    const SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbzblZE9TLa5MTznVbKqK7uLZvM2NpGEA57CkeRzYAT4sR-sFzce3yg1HCihebF0T_wj/exec";
+
+    const now = new Date();
+    const timestamp =
+      now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString("en-GB");
+
+    const enrichedData = {
+      ...data,
+      saveTime: timestamp,
+      country: cust.country || "",
+    };
+
+    try {
+      await fetch(SCRIPT_URL, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(enrichedData),
+      });
+    } catch (err) {
+      console.error("Sheet sync failed:", err);
+    }
+  };
 
   useEffect(() => {
     const dataToSave = {
