@@ -2876,14 +2876,17 @@ export default function QuotationApp() {
     // 1. יצירת שם ברירת המחדל
     const defaultName = getGenerateFileName(cust.name, ref);
 
-    // 2. קבלת השם מהמשתמש עם הודעת אזהרה
-    const customName = window.prompt(
-      "Enter filename (Please ensure any existing files with this name are closed):",
+    // 2. קבלת השם מהמשתמש
+    const userInput = window.prompt(
+      "Enter filename (Letters and numbers only):",
       defaultName
     );
 
-    // 3. עצירה אם לחצת על "ביטול" או שהשם ריק
-    if (!customName || customName.trim() === "") return;
+    // 3. עצירה אם המשתמש ביטל או השאיר ריק
+    if (!userInput || userInput.trim() === "") return;
+
+    // 4. ניקוי השם שהמשתמש הזין מתווים אסורים (זה התיקון!)
+    const customName = userInput.replace(/[/\\?%*:|"<>]/g, "-").trim();
 
     saveCustomerToList(cust.name);
     sendToGoogleSheet({
@@ -2897,11 +2900,10 @@ export default function QuotationApp() {
       contact: cust.contactName,
       status: "Sent",
     });
+
     try {
-      // פתיחת חלונית בחירת התיקייה
       const dirHandle = await window.showDirectoryPicker();
 
-      // יצירת ה-PDF
       const pdfBlob = await createGlobalPDFBlob();
       const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
         create: true,
@@ -2910,7 +2912,6 @@ export default function QuotationApp() {
       await pdfW.write(pdfBlob);
       await pdfW.close();
 
-      // יצירת האקסל
       const excelBlob = createGlobalExcelBlob();
       const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
         create: true,
@@ -2919,7 +2920,6 @@ export default function QuotationApp() {
       await xlsW.write(excelBlob);
       await xlsW.close();
 
-      // יצירת ה-JSON
       const jsonBlob = createGlobalJsonBlob();
       const jsonH = await dirHandle.getFileHandle(`${customName}.json`, {
         create: true,
@@ -2928,13 +2928,12 @@ export default function QuotationApp() {
       await jsonW.write(jsonBlob);
       await jsonW.close();
 
-      alert("Success! Both files saved as: " + customName);
+      alert("Success! Files saved as: " + customName);
     } catch (err) {
       if (err.name !== "AbortError") {
         console.error(err);
-        // הודעת שגיאה מפורטת למקרה שהקובץ פתוח
         alert(
-          "Saving failed! Please make sure the PDF or Excel files are not currently open in another program and try again."
+          "Saving failed! Please ensure the files are not open in another program."
         );
       }
     }
