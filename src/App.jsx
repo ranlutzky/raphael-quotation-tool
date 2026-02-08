@@ -2765,35 +2765,48 @@ export default function QuotationApp() {
   const currencySymbol = currency === "USD" ? "$" : "€";
 
   const handleExportPDF = async () => {
-    saveCustomerToList(cust.name);
-    const blob = await createGlobalPDFBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
+    try {
+      saveCustomerToList(cust.name);
+      const blob = await createGlobalPDFBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
 
-    // שימוש בפונקציה החדשה ליצירת השם האוטומטי
-    const fileName = getGenerateFileName(cust.name, ref);
-    link.download = `${fileName}.pdf`;
+      // שימוש בפונקציה החדשה ליצירת השם האוטומטי
+      const fileName = getGenerateFileName(cust.name, ref);
+      link.download = `${fileName}.pdf`;
 
-    link.click();
-    URL.revokeObjectURL(url);
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert(
+        "Saving PDF failed! Please ensure no file with the same name is currently open in another program and try again."
+      );
+    }
   };
 
   const handleExportExcel = () => {
-    saveCustomerToList(cust.name);
-    const blob = createGlobalExcelBlob();
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
+    try {
+      saveCustomerToList(cust.name);
+      const blob = createGlobalExcelBlob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
 
-    // שימוש בפונקציה החדשה ליצירת השם האוטומטי
-    const fileName = getGenerateFileName(cust.name, ref);
-    link.download = `${fileName}.xlsx`;
+      // שימוש בפונקציה החדשה ליצירת השם האוטומטי
+      const fileName = getGenerateFileName(cust.name, ref);
+      link.download = `${fileName}.xlsx`;
 
-    link.click();
-    URL.revokeObjectURL(url);
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err);
+      alert(
+        "Saving Excel failed! Please ensure no file with the same name is currently open in another program and try again."
+      );
+    }
   };
-
   const handleSmartSave = async () => {
     if (!("showDirectoryPicker" in window))
       return alert("Use Chrome/Edge on Desktop.");
@@ -2801,10 +2814,13 @@ export default function QuotationApp() {
     // 1. יצירת שם ברירת המחדל
     const defaultName = getGenerateFileName(cust.name, ref);
 
-    // 2. קבלת השם מהמשתמש - כאן הקוד עוצר ומחכה לאישור שלך
-    const customName = window.prompt("Enter filename:", defaultName);
+    // 2. קבלת השם מהמשתמש עם הודעת אזהרה
+    const customName = window.prompt(
+      "Enter filename (Please ensure any existing files with this name are closed):",
+      defaultName
+    );
 
-    // 3. עצירה מוחלטת אם לחצת על "ביטול" או שהשם ריק
+    // 3. עצירה אם לחצת על "ביטול" או שהשם ריק
     if (!customName || customName.trim() === "") return;
 
     saveCustomerToList(cust.name);
@@ -2815,7 +2831,6 @@ export default function QuotationApp() {
 
       // יצירת ה-PDF
       const pdfBlob = await createGlobalPDFBlob();
-      // שימוש בשם שכתבת ידנית עבור הקובץ הראשון
       const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
         create: true,
       });
@@ -2825,7 +2840,6 @@ export default function QuotationApp() {
 
       // יצירת האקסל
       const excelBlob = createGlobalExcelBlob();
-      // שימוש באותו שם בדיוק עבור הקובץ השני
       const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
         create: true,
       });
@@ -2835,10 +2849,12 @@ export default function QuotationApp() {
 
       alert("Success! Both files saved as: " + customName);
     } catch (err) {
-      // טיפול במקרה של ביטול הבחירה בתיקייה
       if (err.name !== "AbortError") {
         console.error(err);
-        alert("Saving failed. Please try again.");
+        // הודעת שגיאה מפורטת למקרה שהקובץ פתוח
+        alert(
+          "Saving failed! Please make sure the PDF or Excel files are not currently open in another program and try again."
+        );
       }
     }
   };
