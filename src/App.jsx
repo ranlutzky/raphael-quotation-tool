@@ -3419,7 +3419,7 @@ export default function QuotationApp() {
           <div className="flex flex-wrap gap-2 items-center flex-grow">
             <button
               onClick={handleExportPDF}
-              className="bg-orange-700 text-white font-bold py-2 px-6 rounded shadow-md text-sm"
+              className="bg-slate-500 text-white font-bold py-2 px-6 rounded shadow-md text-sm"
             >
               Export PDF
             </button>
