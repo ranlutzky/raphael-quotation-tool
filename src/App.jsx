@@ -2321,12 +2321,25 @@ const OPTIONS = {
 const sendToGoogleSheet = async (data) => {
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbzblZE9TLa5MTznVbKqK7uLZvM2NpGEA57CkeRzYAT4sR-sFzce3yg1HCihebF0T_wj/exec";
+
+  // יצירת חותמת זמן הכוללת שעה מדויקת
+  const now = new Date();
+  const timestamp =
+    now.toLocaleDateString("en-GB") + " " + now.toLocaleTimeString("en-GB");
+
+  // הוספת השעה והמדינה לנתונים שנשלחים
+  const enrichedData = {
+    ...data,
+    saveTime: timestamp, // שדה חדש לשעה
+    country: cust.country || "", // מוודא ששדה המדינה נלקח מהסטייט
+  };
+
   try {
     await fetch(SCRIPT_URL, {
       method: "POST",
       mode: "no-cors",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify(enrichedData),
     });
   } catch (err) {
     console.error("Sheet sync failed:", err);
@@ -2889,6 +2902,8 @@ export default function QuotationApp() {
     const customName = userInput.replace(/[/\\?%*:|"<>]/g, "-").trim();
 
     saveCustomerToList(cust.name);
+
+    // קריאה לפונקציית השיטס המעודכנת (מצד 1)
     sendToGoogleSheet({
       date: new Date().toLocaleDateString("en-GB"),
       reference: ref,
@@ -2896,14 +2911,16 @@ export default function QuotationApp() {
       amount: grandTotal.toFixed(2),
       currency: currency === "USD" ? "$" : "€",
       preparedBy: salesPerson,
-      country: "",
       contact: cust.contactName,
       status: "Sent",
+      country: cust.country, // הוספנו את המדינה גם כאן
     });
 
     try {
+      // פתיחת בחירת התיקייה
       const dirHandle = await window.showDirectoryPicker();
 
+      // יצירת ה-PDF
       const pdfBlob = await createGlobalPDFBlob();
       const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
         create: true,
@@ -2912,6 +2929,7 @@ export default function QuotationApp() {
       await pdfW.write(pdfBlob);
       await pdfW.close();
 
+      // יצירת האקסל
       const excelBlob = createGlobalExcelBlob();
       const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
         create: true,
@@ -2920,6 +2938,7 @@ export default function QuotationApp() {
       await xlsW.write(excelBlob);
       await xlsW.close();
 
+      // יצירת ה-JSON
       const jsonBlob = createGlobalJsonBlob();
       const jsonH = await dirHandle.getFileHandle(`${customName}.json`, {
         create: true,
@@ -2933,7 +2952,7 @@ export default function QuotationApp() {
       if (err.name !== "AbortError") {
         console.error(err);
         alert(
-          "Saving failed! Please ensure the files are not open in another program."
+          "Saving failed! Please ensure the files are not open in another program and that the name is valid."
         );
       }
     }
@@ -3070,6 +3089,12 @@ export default function QuotationApp() {
                 setCust({ ...cust, contactName: e.target.value })
               }
               placeholder="Contact Person"
+            />
+            <input
+              className="p-2 border rounded"
+              value={cust.country || ""}
+              onChange={(e) => setCust({ ...cust, country: e.target.value })}
+              placeholder="Country"
             />
             <input
               className="p-2 border rounded"
