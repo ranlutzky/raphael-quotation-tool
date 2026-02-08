@@ -3,6 +3,15 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 
+// פונקציית עזר לבניית שם הקובץ: שם לקוח_רפרנס
+const getGenerateFileName = (customerName, reference) => {
+  const name = customerName || "Customer";
+  const ref = reference || "NoRef";
+  // ניקוי תווים אסורים לשימוש בשמות קבצים
+  const safeName = `${name}_${ref}`.replace(/[/\\?%*:|"<>]/g, "-");
+  return safeName;
+};
+
 // --- 1. CONSTANTS & HELPER FUNCTIONS ---
 const CATEGORIES = {
   VALVES: "Valves",
@@ -2761,7 +2770,11 @@ export default function QuotationApp() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `Quotation_${ref}.pdf`;
+
+    // שימוש בפונקציה החדשה ליצירת השם האוטומטי
+    const fileName = getGenerateFileName(cust.name, ref);
+    link.download = `${fileName}.pdf`;
+
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -2772,7 +2785,11 @@ export default function QuotationApp() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `Quotation_${ref}.xlsx`;
+
+    // שימוש בפונקציה החדשה ליצירת השם האוטומטי
+    const fileName = getGenerateFileName(cust.name, ref);
+    link.download = `${fileName}.xlsx`;
+
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -2780,27 +2797,49 @@ export default function QuotationApp() {
   const handleSmartSave = async () => {
     if (!("showDirectoryPicker" in window))
       return alert("Use Chrome/Edge on Desktop.");
-    const customName = window.prompt("Enter filename:", `Quotation_${ref}`);
-    if (!customName) return;
+
+    // 1. יצירת שם ברירת המחדל
+    const defaultName = getGenerateFileName(cust.name, ref);
+
+    // 2. קבלת השם מהמשתמש - כאן הקוד עוצר ומחכה לאישור שלך
+    const customName = window.prompt("Enter filename:", defaultName);
+
+    // 3. עצירה מוחלטת אם לחצת על "ביטול" או שהשם ריק
+    if (!customName || customName.trim() === "") return;
+
     saveCustomerToList(cust.name);
+
     try {
+      // פתיחת חלונית בחירת התיקייה
       const dirHandle = await window.showDirectoryPicker();
+
+      // יצירת ה-PDF
       const pdfBlob = await createGlobalPDFBlob();
+      // שימוש בשם שכתבת ידנית עבור הקובץ הראשון
       const pdfH = await dirHandle.getFileHandle(`${customName}.pdf`, {
         create: true,
       });
       const pdfW = await pdfH.createWritable();
       await pdfW.write(pdfBlob);
       await pdfW.close();
+
+      // יצירת האקסל
+      const excelBlob = createGlobalExcelBlob();
+      // שימוש באותו שם בדיוק עבור הקובץ השני
       const xlsH = await dirHandle.getFileHandle(`${customName}.xlsx`, {
         create: true,
       });
       const xlsW = await xlsH.createWritable();
-      await xlsW.write(createGlobalExcelBlob());
+      await xlsW.write(excelBlob);
       await xlsW.close();
-      alert("Files Saved Successfully!");
+
+      alert("Success! Both files saved as: " + customName);
     } catch (err) {
-      if (err.name !== "AbortError") alert("Error saving.");
+      // טיפול במקרה של ביטול הבחירה בתיקייה
+      if (err.name !== "AbortError") {
+        console.error(err);
+        alert("Saving failed. Please try again.");
+      }
     }
   };
 
