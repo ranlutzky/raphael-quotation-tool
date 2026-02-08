@@ -2318,6 +2318,21 @@ const OPTIONS = {
   sizes: ['1.5"', '2"', '2.5"', '3"', '4"', '6"', '8"', '10"', '12"'],
 };
 
+const sendToGoogleSheet = async (data) => {
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbzblZE9TLa5MTznVbKqK7uLZvM2NpGEA57CkeRzYAT4sR-sFzce3yg1HCihebF0T_wj/exec";
+  try {
+    await fetch(SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+  } catch (err) {
+    console.error("Sheet sync failed:", err);
+  }
+};
+
 export default function QuotationApp() {
   const loadSavedData = () => {
     try {
@@ -2767,6 +2782,17 @@ export default function QuotationApp() {
   const handleExportPDF = async () => {
     try {
       saveCustomerToList(cust.name);
+      sendToGoogleSheet({
+        date: new Date().toLocaleDateString("en-GB"),
+        reference: ref,
+        customer: cust.name,
+        amount: grandTotal.toFixed(2),
+        currency: currency === "USD" ? "$" : "€",
+        preparedBy: salesPerson,
+        country: "", // ניתן להוסיף שדה מדינה בעתיד
+        contact: cust.contactName,
+        status: "Sent",
+      });
       const blob = await createGlobalPDFBlob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -2789,6 +2815,17 @@ export default function QuotationApp() {
   const handleExportExcel = () => {
     try {
       saveCustomerToList(cust.name);
+      sendToGoogleSheet({
+        date: new Date().toLocaleDateString("en-GB"),
+        reference: ref,
+        customer: cust.name,
+        amount: grandTotal.toFixed(2),
+        currency: currency === "USD" ? "$" : "€",
+        preparedBy: salesPerson,
+        country: "",
+        contact: cust.contactName,
+        status: "Sent",
+      });
       const blob = createGlobalExcelBlob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -2824,7 +2861,17 @@ export default function QuotationApp() {
     if (!customName || customName.trim() === "") return;
 
     saveCustomerToList(cust.name);
-
+    sendToGoogleSheet({
+      date: new Date().toLocaleDateString("en-GB"),
+      reference: ref,
+      customer: cust.name,
+      amount: grandTotal.toFixed(2),
+      currency: currency === "USD" ? "$" : "€",
+      preparedBy: salesPerson,
+      country: "",
+      contact: cust.contactName,
+      status: "Sent",
+    });
     try {
       // פתיחת חלונית בחירת התיקייה
       const dirHandle = await window.showDirectoryPicker();
