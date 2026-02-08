@@ -2929,6 +2929,26 @@ export default function QuotationApp() {
     }
   };
 
+  const handleImportJson = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const importedData = JSON.parse(event.target.result);
+        if (importedData.items) setItems(importedData.items);
+        if (importedData.cust) setCust(importedData.cust);
+        if (importedData.currency) setCurrency(importedData.currency);
+        if (importedData.terms) setTerms(importedData.terms);
+        alert("Quotation imported successfully!");
+      } catch (err) {
+        alert("Failed to parse JSON file.");
+      }
+    };
+    reader.readAsText(file);
+  };
+
   return (
     <div
       className="min-h-screen bg-gray-50 p-2 md:p-8 font-sans text-gray-900"
@@ -3005,6 +3025,15 @@ export default function QuotationApp() {
               >
                 📂 SMART SAVE (PDF + EXCEL)
               </button>
+              <label className="bg-pink-500 text-white font-bold py-2 px-4 rounded shadow-md text-sm cursor-pointer hover:bg-pink-600 flex items-center justify-center">
+                IMPORT JSON
+                <input
+                  type="file"
+                  accept=".json"
+                  onChange={handleImportJson}
+                  className="hidden"
+                />
+              </label>
             </div>
           </div>
         </div>
