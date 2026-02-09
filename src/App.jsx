@@ -2881,63 +2881,82 @@ export default function QuotationApp() {
     }
   };
   const handleSmartSave = async () => {
-    if (!("showDirectoryPicker" in window))
-      return alert("Use Chrome/Edge on Desktop.");
-
-    const defaultName = getGenerateFileName(cust.name, ref);
-
-    const userInput = window.prompt(
-      "Enter filename (Safe characters only):",
-      defaultName
-    );
-
-    if (!userInput || userInput.trim() === "") return;
-
-    // התיקון שהוספת
-    const customName = getGenerateFileName(userInput.trim(), "");
-
-    saveCustomerToList(cust.name);
-    sendToGoogleSheet({
-      date: new Date().toLocaleDateString("en-GB"),
-      reference: ref,
-      customer: cust.name,
-      amount: grandTotal.toFixed(2),
-      currency: currency === "USD" ? "$" : "€",
-      preparedBy: salesPerson,
-      contact: cust.contactName,
-      status: "Sent",
-      country: cust.country,
-    });
+    // 1. בדיקת תמיכה בדפדפן
+    if (!("showSaveFilePicker" in window))
+      return alert("Please use Chrome or Edge on Desktop for this feature.");
 
     try {
-      // פתיחת בחירת התיקייה
-      const dirHandle = await window.showDirectoryPicker();
+      // 2. הכנת שם ברירת מחדל (מנוקה מתווים אסורים)
+      const baseName = getGenerateFileName(cust.name, ref);
 
-      // פונקציית עזר פנימית לכתיבה בטוחה
-      const writeFile = async (name, blob) => {
-        const fileHandle = await dirHandle.getFileHandle(name, {
-          create: true,
-        });
-        const writable = await fileHandle.createWritable();
-        await writable.write(blob);
-        await writable.close();
-      };
+      // 3. שליחת נתונים לגוגל שיטס (מתבצע ראשון כדי להבטיח תיעוד)
+      saveCustomerToList(cust.name);
+      await sendToGoogleSheet({
+        date: new Date().toLocaleDateString("en-GB"),
+        reference: ref,
+        customer: cust.name,
+        amount: grandTotal.toFixed(2),
+        currency: currency === "USD" ? "$" : "€",
+        preparedBy: salesPerson,
+        contact: cust.contactName,
+        status: "Sent",
+      });
 
+      // 4. שמירת PDF - כאן המשתמש יכול לשנות את השם בחלונית המערכת
+      const pdfHandle = await window.showSaveFilePicker({
+        suggestedName: `${baseName}.pdf`,
+        types: [
+          {
+            description: "PDF Document",
+            accept: { "application/pdf": [".pdf"] },
+          },
+        ],
+      });
       const pdfBlob = await createGlobalPDFBlob();
-      await writeFile(`${customName}.pdf`, pdfBlob);
+      const pdfWritable = await pdfHandle.createWritable();
+      await pdfWritable.write(pdfBlob);
+      await pdfWritable.close();
 
+      // 5. שמירת Excel - משתמש באותו שם בסיס
+      const excelHandle = await window.showSaveFilePicker({
+        suggestedName: `${baseName}.xlsx`,
+        types: [
+          {
+            description: "Excel Workbook",
+            accept: {
+              "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+                [".xlsx"],
+            },
+          },
+        ],
+      });
       const excelBlob = createGlobalExcelBlob();
-      await writeFile(`${customName}.xlsx`, excelBlob);
+      const excelWritable = await excelHandle.createWritable();
+      await excelWritable.write(excelBlob);
+      await excelWritable.close();
 
+      // 6. שמירת JSON - לגיבוי
+      const jsonHandle = await window.showSaveFilePicker({
+        suggestedName: `${baseName}.json`,
+        types: [
+          {
+            description: "JSON File",
+            accept: { "application/json": [".json"] },
+          },
+        ],
+      });
       const jsonBlob = createGlobalJsonBlob();
-      await writeFile(`${customName}.json`, jsonBlob);
+      const jsonWritable = await jsonHandle.createWritable();
+      await jsonWritable.write(jsonBlob);
+      await jsonWritable.close();
 
-      alert("Success! Files saved as: " + customName);
+      alert("Success! Data synced to Sheets and all files saved.");
     } catch (err) {
+      // התעלמות ממקרה שהמשתמש פשוט לחץ על "Cancel" בחלונית השמירה
       if (err.name !== "AbortError") {
         console.error(err);
         alert(
-          `Error: ${err.message}. Try a different filename or close open files.`
+          `Storage Error: ${err.message}. Please ensure no files with the same name are open.`
         );
       }
     }
